@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221211548) do
+ActiveRecord::Schema.define(version: 20150319203631) do
 
   create_table "cities", force: :cascade do |t|
     t.string   "name"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20150221211548) do
     t.boolean  "fair_trade"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.boolean  "current"
   end
 
   create_table "roasters", force: :cascade do |t|

@@ -29,34 +29,6 @@
   <!-- cycle through flavors -->
 <% end %>
 
-<!-- COFFEE FORM  -->
 <div id="coffee_form">
-  <%= form_for( :coffee_info, method: :get ) do |f| %>
-
-    <%= f.label(:search, 'Search specific flavors:') %>
-    <%= f.text_field(:search) %><br \>
-
-    <%= f.label(:origin, 'Origin') %>
-    <%= f.select(:origin, @origins) %><br \>
-
-    <%= f.label(:roasters, 'Roasters') %>
-    <%= f.select(:roasters, @roasters) %><br \>
-
-    <%= f.label(:process, 'Process') %>
-    <%= f.select(:process, @process) %><br \>
-
-    <%= f.label(:blend, 'Blend') %>
-    <%= f.check_box(:blend) %><br \>
-
-    <%= f.label(:decaf, 'Decaf') %>
-    <%= f.check_box(:decaf) %><br \>
-    
-    <%= f.label(:organic, 'Organic') %>
-    <%= f.check_box(:organic) %><br \>
-
-    <%= f.label(:direct_trade, 'Direct Trade') %>
-    <%= f.check_box(:direct_trade) %><br \>
-
-    <%= f.submit "Find Coffee" %>
-  <% end %>
+  <%= render 'shared/form' %>
 </div>

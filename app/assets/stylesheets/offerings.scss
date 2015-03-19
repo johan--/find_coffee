@@ -2,16 +2,26 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+//@font-face{
+//  font-family: "Thonburi-Bold";
+//  src: url('Thonburi-Bold.ttf'),
+//  url('Thonburi-Bold.eot'); /* IE */
+//}
+
+html {
+  height: 100%;
+}
 
 body {
   background-image: url("coffee_3.jpg");
   background-repeat: no-repeat;
   font-family: sans-serif;
+  height: 100%;
   color: white;
   position: fixed;
 }
 
-a {
+a, .popOutCheckbox {
   text-decoration: none;
   &:link {
     color: #EEEEEE;
@@ -61,7 +71,7 @@ div {
     font-size: 1.7em;
     font-family: sunn, sans-serif;
     position: fixed;
-    width: 250px;
+    width: 650px;
     top: 300px;
     right: 25px;
     line-height: 1.4em;
@@ -71,13 +81,16 @@ div {
   /*  results page  */
   &#offering_container {
     position: relative;
-    /*background-color: #333333;*/
     background-color: rgba(0, 0, 0, 0.7);
     width: 60%;
+    min-height: 600px;
+    height: 600px;
     margin-top: 30px;
     left: 30px;
     top: 40px;
     border-radius: 5px;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   &#coffeeName {
@@ -142,6 +155,10 @@ div {
     a {
     } 
   }
+}
+
+.hide {
+  display: none;
 }
 
 h3,h6 {

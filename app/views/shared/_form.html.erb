@@ -1,0 +1,38 @@
+<%= form_for( :coffee_info, method: :get ) do |f| %>
+
+  <%= f.label(:search, 'Search specific flavors:') %>
+  <%= f.text_field(:search) %><br \>
+
+  <div id="origin" class="popOutCheckbox">Select Origins</div>
+  <div class="hide">
+    <% @origins.each do |origin| %>
+      <%= f.label(origin) %>
+      <%= f.check_box(origin) %>
+    <% end %><br \>
+  </div>
+
+  <div id="roaster" class="popOutCheckbox">Select Roasters</div>
+  <div class="hide">
+    <% @roasters.each do |roaster| %>
+      <%= f.label(roaster) %>
+      <%= f.check_box(roaster) %>
+    <% end %><br \>
+  </div>
+  
+  <%= f.label(:process, 'Process') %>
+  <%= f.select(:process, @process) %><br \>
+
+  <%= f.label(:blend, 'Blend') %>
+  <%= f.check_box(:blend) %><br \>
+
+  <%= f.label(:decaf, 'Decaf') %>
+  <%= f.check_box(:decaf) %><br \>
+  
+  <%= f.label(:organic, 'Organic') %>
+  <%= f.check_box(:organic) %><br \>
+
+  <%= f.label(:direct, 'Direct Trade') %>
+  <%= f.check_box(:direct) %><br \>
+
+  <%= f.submit "Find Coffee" %>
+<% end %>

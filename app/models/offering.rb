@@ -1,7 +1,7 @@
 class Offering < ActiveRecord::Base
   belongs_to :roaster
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :roaster_id, presence: true
 
 
@@ -37,14 +37,18 @@ class Offering < ActiveRecord::Base
 
   # Build up longer search query to split on ;,
   def self.search_all query
-    search_items = query.split(/[;,]/)
-    sql = "flavors LIKE '%#{search_items[0]}%'"
-    if search_items.length > 1
-      1.upto(search_items.length - 1) do |i|
-        sql += " OR flavors LIKE '%#{search_items[i]}%'"
+    if query == ""
+      Offering.all
+    else
+      search_items = query.split(/[;,]/)
+      sql = "flavors LIKE '%#{search_items[0]}%'"
+      if search_items.length > 1
+        1.upto(search_items.length - 1) do |i|
+          sql += " OR flavors LIKE '%#{search_items[i]}%'"
+        end
       end
+      Offering.where(sql)
     end
-    Offering.where(sql)
   end
 
   # Return all offerings of certain process.
@@ -52,15 +56,18 @@ class Offering < ActiveRecord::Base
     Offering.where("process LIKE '%#{process}%'")
   end
 
-  # Filter down offerings based on selected checkboxes.
+  # build custom query depending on selected checkboxes
   def self.checkboxes decaf, blend, organic, direct
-    Offering.where(decaf: decaf).where(blend: blend)
-            .where(organic: organic).where(direct_trade: direct)
+    args = [['decaf', decaf], ['blend', blend],
+            ['organic', organic], ['direct_trade', direct]]
+    query = "Offering.all"
+    args.each do |category|
+      if category[1].nil?
+        next
+      else
+        query += ".where(#{category[0]}: '#{category[1]}')"
+      end
+    end
+    return eval(query)
   end
-
-
-  # TODO:
-  # change search to be for flavors, flavors_brief, farm, producer,
-  #                         name, roaster, etc.
-  # filter based on selected region
 end

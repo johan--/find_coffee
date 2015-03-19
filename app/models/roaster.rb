@@ -3,4 +3,10 @@ class Roaster < ActiveRecord::Base
   belongs_to :city
 
   validates :name, presence: true
+
+  # Returns all current roasters.
+  def self.all_roasters
+    Roaster.uniq.pluck(:name)
+  end
+
 end

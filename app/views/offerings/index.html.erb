@@ -1,0 +1,62 @@
+<div id="logo">
+  <%= link_to 'Find Coffee', root_path %>
+</div>
+
+<!-- RESULTS -->
+<% if !@offerings.nil? %>
+  <% if @offerings.length > 0 %>
+    <div id="results">
+      <%= will_paginate %>
+      <ul>
+        <% @offerings.each do |result| %>
+          <% name = "#{result.name.titleize} | " +
+                    "#{result.origin} | " +
+                    "#{result.roaster.name}" %>
+          <%= link_to( name, offering_path(result)) %><br \>
+        <% end %>
+      </ul>
+      <%= will_paginate %>
+    </div>
+  <% else %>
+    <div id="noresults">
+      <p> No coffees match that search criteria.</p>
+    </div>
+  <% end %>
+<% else %>
+  <div id="welcome">
+    <h3>Find the newest coffees from the best roasters all over the country.</h3>
+  </div>
+  <!-- cycle through flavors -->
+<% end %>
+
+<!-- COFFEE FORM  -->
+<div id="coffee_form">
+  <%= form_for( :coffee_info, method: :get ) do |f| %>
+
+    <%= f.label(:search, 'Search specific flavors:') %>
+    <%= f.text_field(:search) %><br \>
+
+    <%= f.label(:origin, 'Origin') %>
+    <%= f.select(:origin, @origins) %><br \>
+
+    <%= f.label(:roasters, 'Roasters') %>
+    <%= f.select(:roasters, @roasters) %><br \>
+
+    <%= f.label(:process, 'Process') %>
+    <%= f.select(:process, @process) %><br \>
+
+    <%= f.label(:blend, 'Blend') %>
+    <%= f.check_box(:blend) %><br \>
+
+    <%= f.label(:decaf, 'Decaf') %>
+    <%= f.check_box(:decaf) %><br \>
+    
+    <%= f.label(:organic, 'Organic') %>
+    <%= f.check_box(:organic) %><br \>
+
+    <%= f.label(:direct_trade, 'Direct Trade') %>
+    <%= f.check_box(:direct_trade) %><br \>
+
+    <%= f.submit "Find Coffee" %>
+  <% end %>
+</div>

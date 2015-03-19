@@ -1,0 +1,150 @@
+// Place all the styles related to the Offerings controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+body {
+  background-image: url("coffee_3.jpg");
+  background-repeat: no-repeat;
+  font-family: sans-serif;
+  color: white;
+  position: fixed;
+}
+
+a {
+  text-decoration: none;
+  &:link {
+    color: #EEEEEE;
+  }
+  &:visited {
+    color: #FFFF88;
+  }
+  &:hover {
+    color: #FFAA66;
+  }
+}
+
+div {
+
+  /*  home page  */
+  &#logo {
+    position: fixed;
+    right: 35px;
+    font-size: 3em;
+    font-family: bizon, sans-serif;
+    a {
+      &:link, &:visited, &:hover {
+        text-decoration: none;
+        color: white;
+        font-size: 1.2em;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &#results, &#noresults, &#welcome {
+    line-height: 1.4em;
+    height: 60%;
+    font-family: sunn, sans-serif;
+    font-size: 3em;
+  }
+
+  &#welcome {
+    position: relative;
+    top: 150px;
+    left: 130px;
+    font-size: 3.5em;
+  }
+
+
+  &#coffee_form {
+    font-size: 1.7em;
+    font-family: sunn, sans-serif;
+    position: fixed;
+    width: 250px;
+    top: 300px;
+    right: 25px;
+    line-height: 1.4em;
+    text-align: right;
+  }
+
+  /*  results page  */
+  &#offering_container {
+    position: relative;
+    /*background-color: #333333;*/
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 60%;
+    margin-top: 30px;
+    left: 30px;
+    top: 40px;
+    border-radius: 5px;
+  }
+
+  &#coffeeName {
+    font-family: sunn, sans-serif;
+    font-size: 2em;
+    float: left;
+  }
+
+  &#roasterName {
+    font-family: bizon, sans-serif;
+    position: relative;
+    top: 15px;
+    left: 10px;
+  }
+
+  &#title {
+    font-size: 1.4em;
+    padding-left: 15px;
+    padding-bottom: 20px;
+  }
+
+  &#flavors {
+    font-size: 1em;
+    padding-left: 15px;
+    clear: both;
+    position: relative;
+    top: 10px;
+  }
+
+  
+  &#description {
+    h4 {
+      margin-bottom: 0;
+      font-family: sunn, sans-serif;
+      font-size: 1.7em;
+    }
+    position: relative;
+    top: 10px;
+    font-size: 0.9em;
+    line-height: 1.75em;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  &#stats {
+    h4 {
+      margin-bottom: 5px;
+      font-family: sunn, sans-serif;
+      font-size: 1.7em;
+    }
+    padding-left: 20px;
+    font-size: 0.9em;
+    line-height: 1.5em;
+  }
+
+  &#buyInfo {
+    position: relative;
+    padding-left: 20px;
+    div#price {
+    }
+
+    a {
+    } 
+  }
+}
+
+h3,h6 {
+  display: inline;
+}
+

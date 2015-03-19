@@ -1,0 +1,38 @@
+<div id="logo">
+  <%= link_to "Find Coffee", root_path %>
+</div>
+
+<div id="offering_container">
+  <div id="title">
+    <div id="coffeeName">
+      <%= @offering.name.downcase %>
+    </div>
+    <div id="roasterName">
+      <%= @offering.roaster.name %>
+    </div>
+  </div>
+
+  <div id="flavors">
+    <%= @offering.flavors_brief || @offering.flavors || 'n/a' %>
+  </div>
+
+  <div id="description">
+  <h4>Description</h4>
+    <%= @offering.description %>
+  </div>
+ 
+  <div id="stats">
+    <h4>Stats</h4>
+    <% @stats.each do |stat| %>
+      <%= stat.titleize %><br \>
+    <% end %>
+  </div>
+
+  <div id="buyInfo">
+    <div id="price">
+      <!-- insert price -->
+      <%= "$20.00" %>
+    </div>
+    <%= link_to "Buy Here", @offering.link_to_buy %>
+  </div>
+</div>

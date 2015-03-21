@@ -3,16 +3,10 @@ TODO:
 SITE:
 
   - change it so that fonts aren't required from my hdd
-  - create fake db with direct, blend, decaf, organic values set
-      - add links and prices as well
   - make following search items work:
       - origin
       - roaster
-      - blend/decaf/organic/direct_trade + more than one
-      - only return coffees that are currently available
-  - make form remain on page when looking at individual coffees
   - make price button look better
-  - figure out why that one origin isn't being split into two
   - change db/offering model so that blend origins aren't listed as unique:
     i.e. if a blend has kenya/guat and those coffees alreay exist in db, don't list it
     it a blend has kenya/guat/timor and only timor is unique, show timor,
@@ -33,9 +27,5 @@ myDB:
 
   todo - today:
 
-  - put form on #show action
-  - update rails db:
-        - some coffees are blend/decaf/organic/direct/currently available, some aren't
-        - add fake prices/ links to all coffees:
-  - change model/controller to only return coffees that are currently available
+  - 
   - fix price button

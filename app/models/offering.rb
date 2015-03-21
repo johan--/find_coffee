@@ -8,9 +8,7 @@ class Offering < ActiveRecord::Base
   # Returns all current available unique origins.
   def self.all_origins
     unique = Offering.uniq.pluck(:origin).compact
-    unique.unshift("Choose an origin")
     unique.each do |x|
-      # why is 'Colombia, Rwanda' staying?
       if (x.include?(";") || x.include?(","))
         origins = x.split(/[;,]/)
         origins.each { |origin| unique << origin.strip }
@@ -35,16 +33,20 @@ class Offering < ActiveRecord::Base
     flavors.uniq
   end
 
-  # Build up longer search query to split on ;,
+  # search all offerings by name or flavor
+  # TODO: currently returns offerings that match any 
+  # of words entered.  change to narrow down
   def self.search_all query
     if query == ""
       Offering.all
     else
       search_items = query.split(/[;,]/)
-      sql = "flavors LIKE '%#{search_items[0]}%'"
+      sql = "flavors LIKE '%#{search_items[0]}%'" +
+            " OR name LIKE '%#{search_items[0]}%'"
       if search_items.length > 1
         1.upto(search_items.length - 1) do |i|
-          sql += " OR flavors LIKE '%#{search_items[i]}%'"
+          sql += (" AND flavors LIKE '%#{search_items[i]}%'" +
+                  " AND name LIKE '#{search_items[i]}%'")
         end
       end
       Offering.where(sql)

@@ -17,7 +17,8 @@ class OfferingsController < ApplicationController
                         .search_all(info[:search])
                         .where(current: 'true')
       @search = @search.all_of_process(info[:process]) if info[:process] != 'Any'
-      @offerings = @search.paginate(page: params[:page], per_page: 8)
+      @offerings = @search.order(created_at: :desc)
+                          .paginate(page: params[:page], per_page: 8)
     end
   end
 

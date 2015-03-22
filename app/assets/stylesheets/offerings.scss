@@ -34,135 +34,133 @@ a, .popOutCheckbox {
   }
 }
 
-div {
 
-  /*  home page  */
-  &#logo {
-    position: fixed;
-    right: 35px;
-    font-size: 3em;
-    font-family: bizon, sans-serif;
-    a {
-      &:link, &:visited, &:hover {
-        text-decoration: none;
-        color: white;
-        font-size: 1.2em;
-        font-weight: 700;
-      }
+/*  home page  */
+#logo {
+  position: fixed;
+  right: 35px;
+  font-size: 3em;
+  font-family: bizon, sans-serif;
+  a {
+    &:link, &:visited, &:hover {
+      text-decoration: none;
+      color: white;
+      font-size: 1.2em;
+      font-weight: 700;
     }
   }
+}
 
-  &#results, &#noresults, &#welcome {
-    line-height: 1.4em;
-    height: 60%;
+#results, #noresults, #welcome {
+  line-height: 1.4em;
+  height: 60%;
+  font-family: sunn, sans-serif;
+  font-size: 3em;
+}
+
+#welcome {
+  position: relative;
+  top: 150px;
+  left: 130px;
+  font-size: 3.5em;
+}
+
+
+#coffee_form {
+  font-size: 1.7em;
+  font-family: sunn, sans-serif;
+  position: fixed;
+  width: 650px;
+  top: 300px;
+  right: 25px;
+  line-height: 1.4em;
+  text-align: right;
+}
+
+/*  results page  */
+#offering_container {
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 60%;
+  padding: 15px;
+  min-height: 500px;
+  height: 500px;
+  margin-top: 30px;
+  left: 30px;
+  top: 40px;
+  border-radius: 5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+#coffeeName {
+  font-family: sunn, sans-serif;
+  font-size: 2em;
+  display: inline-block;
+  float: left;
+}
+
+#roasterName {
+  font-family: bizon, sans-serif;
+  display: inline-block;
+  float: right;
+  position: relative;
+  top: 15px;
+  left: 15px;
+}
+
+#released {
+  font-family: bizon, sans-serif;
+  float: right
+}
+
+#title {
+  font-size: 1.4em;
+  padding-left: 15px;
+  padding-bottom: 20px;
+  float: left;
+}
+
+#flavors {
+  font-size: 1em;
+  line-height: 1.5em;
+  padding-left: 15px;
+  clear: both;
+  position: relative;
+  top: 10px;
+}
+
+
+#description {
+  h4 {
+    margin-bottom: 0;
     font-family: sunn, sans-serif;
-    font-size: 3em;
-  }
-
-  &#welcome {
-    position: relative;
-    top: 150px;
-    left: 130px;
-    font-size: 3.5em;
-  }
-
-
-  &#coffee_form {
     font-size: 1.7em;
+  }
+  position: relative;
+  top: 10px;
+  font-size: 0.9em;
+  line-height: 1.75em;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#stats {
+  h4 {
+    margin-bottom: 5px;
     font-family: sunn, sans-serif;
-    position: fixed;
-    width: 650px;
-    top: 300px;
-    right: 25px;
-    line-height: 1.4em;
-    text-align: right;
+    font-size: 1.7em;
   }
+  padding-left: 20px;
+  font-size: 0.9em;
+  line-height: 1.5em;
+}
 
-  /*  results page  */
-  &#offering_container {
-    position: relative;
-    background-color: rgba(0, 0, 0, 0.7);
-    width: 60%;
-    padding: 15px;
-    min-height: 500px;
-    height: 500px;
-    margin-top: 30px;
-    left: 30px;
-    top: 40px;
-    border-radius: 5px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-
-  &#coffeeName {
-    font-family: sunn, sans-serif;
-    font-size: 2em;
-    display: inline-block;
-    float: left;
-  }
-
-  &#roasterName {
-    font-family: bizon, sans-serif;
-    display: inline-block;
-    float: right;
-    position: relative;
-    top: 15px;
-    left: 15px;
-  }
-
-  &#released {
-    font-family: bizon, sans-serif;
-    float: right
-  }
-
-  &#title {
-    font-size: 1.4em;
-    padding-left: 15px;
-    padding-bottom: 20px;
-    float: left;
-  }
-
-  &#flavors {
-    font-size: 1em;
-    line-height: 1.5em;
-    padding-left: 15px;
-    clear: both;
-    position: relative;
-    top: 10px;
-  }
-
-  
-  &#description {
-    h4 {
-      margin-bottom: 0;
-      font-family: sunn, sans-serif;
-      font-size: 1.7em;
-    }
-    position: relative;
-    top: 10px;
-    font-size: 0.9em;
-    line-height: 1.75em;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  &#stats {
-    h4 {
-      margin-bottom: 5px;
-      font-family: sunn, sans-serif;
-      font-size: 1.7em;
-    }
-    padding-left: 20px;
-    font-size: 0.9em;
-    line-height: 1.5em;
-  }
-
-  &#buyInfo {
-    position: relative;
-    padding-left: 20px;
-    padding-bottom: 20px;
-    div#price {
-    }
+#buyInfo {
+  position: relative;
+  padding-left: 20px;
+  padding-bottom: 20px;
+  div#price {
   }
 }
 

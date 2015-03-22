@@ -12,6 +12,10 @@
     </div>
   </div>
 
+  <div id="released">
+    <p>Released: <%= @released %>
+  </div>
+
   <div id="flavors">
     <%= @offering.flavors_brief || @offering.flavors || 'n/a' %>
   </div>
@@ -23,17 +27,23 @@
  
   <div id="stats">
     <h4>Stats</h4>
-    <% @stats.each do |stat| %>
-      <%= stat.titleize %><br \>
-    <% end %>
+    <ul>
+      <% @stats.each do |category, value| %>
+        <% unless value.nil? %>
+          <li><%= "#{category}: #{value.titleize}" %></li>  
+        <% end %>
+      <% end %>
+    </ul>
   </div>
 
   <div id="buyInfo">
-    <div id="price">
-      <!-- insert price -->
-      <%= "$20.00" %>
-    </div>
-    <%= link_to "Buy Here", @offering.link_to_buy %>
+    <% unless @offering.price.nil? %>
+      <div id="price">
+        <%= "#{@offering.price}" %>
+      </div><br \>
+    <% end %>
+    <%= link_to "Buy from #{@offering.roaster.name}'s online store.",
+                @offering.link_to_buy %>
   </div>
 </div>
 

@@ -83,8 +83,9 @@ div {
     position: relative;
     background-color: rgba(0, 0, 0, 0.7);
     width: 60%;
-    min-height: 600px;
-    height: 600px;
+    padding: 15px;
+    min-height: 500px;
+    height: 500px;
     margin-top: 30px;
     left: 30px;
     top: 40px;
@@ -96,24 +97,34 @@ div {
   &#coffeeName {
     font-family: sunn, sans-serif;
     font-size: 2em;
+    display: inline-block;
     float: left;
   }
 
   &#roasterName {
     font-family: bizon, sans-serif;
+    display: inline-block;
+    float: right;
     position: relative;
     top: 15px;
-    left: 10px;
+    left: 15px;
+  }
+
+  &#released {
+    font-family: bizon, sans-serif;
+    float: right
   }
 
   &#title {
     font-size: 1.4em;
     padding-left: 15px;
     padding-bottom: 20px;
+    float: left;
   }
 
   &#flavors {
     font-size: 1em;
+    line-height: 1.5em;
     padding-left: 15px;
     clear: both;
     position: relative;
@@ -149,11 +160,9 @@ div {
   &#buyInfo {
     position: relative;
     padding-left: 20px;
+    padding-bottom: 20px;
     div#price {
     }
-
-    a {
-    } 
   }
 }
 

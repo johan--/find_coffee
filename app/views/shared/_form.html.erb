@@ -3,24 +3,14 @@
   <%= f.label(:search, 'Search specific flavors:') %>
   <%= f.text_field(:search) %><br \>
 
-  <div id="origin" class="popOutCheckbox">Select Origins</div>
-  <div class="hide">
-    <% @origins.each do |origin| %>
-      <%= f.label(origin) %>
-      <%= f.check_box(origin) %>
-    <% end %><br \>
-  </div>
+  <%= f.label(:origin, 'Choose Origin') %>
+  <%= f.select(:origin, @origins.unshift('Any')) %><br \>
 
-  <div id="roaster" class="popOutCheckbox">Select Roasters</div>
-  <div class="hide">
-    <% @roasters.each do |roaster| %>
-      <%= f.label(roaster) %>
-      <%= f.check_box(roaster) %>
-    <% end %><br \>
-  </div>
+  <%= f.label(:roaster, 'Choose Roaster') %>
+  <%= f.select(:roaster, @roasters.unshift('Any')) %><br \>
   
   <%= f.label(:process, 'Process') %>
-  <%= f.select(:process, @process) %><br \>
+  <%= f.select(:process, [ 'Any', 'Washed', 'Natural', 'Honey' ]) %><br \>
 
   <%= f.label(:blend, 'Blend') %>
   <%= f.check_box(:blend) %><br \>

@@ -1,14 +1,14 @@
 /** @jsx React.DOM */
 
 var React    = require('react'),
-    ReactApp = React.createFactory(require('./components/ReactApp'));
+    ReactApp = require('./components/ReactApp.jsx');
+
 
 module.exports = function(app) {
 
   app.use('/', function(req, res, next) {
-    // Generate markup.
-    var reactHTML = React.renderToString(ReactApp({}));
-    // Output HTML
+    var reactHTML = React.renderToString(<ReactApp />);
+
     res.render('index', { reactOutput: reactHTML });
   });
 };

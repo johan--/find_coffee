@@ -1,8 +1,10 @@
 doctype html
 html
   head
+    link(href="../public/stylesheets/style.css")
     title Find Coffee
   body
     h3 Hello!
-    .mount-point!= reactOutput
+    #mount-point!= reactOutput
+    #client-point
     script(src="/main.js")

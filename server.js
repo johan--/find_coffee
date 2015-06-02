@@ -1,12 +1,11 @@
 var express   = require('express'),
     mongoose  = require('mongoose'),
     https     = require('https'),
-    React     = require('react'),
     path      = require('path'),
     fs        = require('fs'),
     app       = express();
 
-require('node-jsx').install({extension: '.jsx'});
+require('node-jsx').install();
 
 // Setup https server.
 var credentials = {
@@ -21,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Views
 app.set('views', path.join(__dirname, './app/views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 
 // Routes
 require('./app/routes')(app);

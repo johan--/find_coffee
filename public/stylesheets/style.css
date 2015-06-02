@@ -1,0 +1,16 @@
+body {
+  padding: 50px;
+}
+
+a {
+  color: lightcyan;
+}
+
+a:hover {
+  color: darkcyan;
+}
+
+header {
+  position: fixed;
+  border: 1px solid red;
+}

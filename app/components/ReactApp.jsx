@@ -1,16 +1,19 @@
 /** @jsx React.DOM */
 
-var React = require('react');
+var React    = require('react'),
+    MyHeader = require('./myHeader.jsx');
 
 module.exports = React.createClass({
 
   componentDidMount: function() {
-    console.log('mounted!');
+    console.log('app mounted!');
   },
 
   render: function() {
     return (
-        <div id="test">Test</div>
+        <div>
+          <MyHeader user={{ name: 'Bill' }} loggedIn={false} />
+        </div>
     );
   }
 

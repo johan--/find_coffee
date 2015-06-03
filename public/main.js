@@ -14,16 +14,14 @@ module.exports = React.createClass({displayName: "exports",
 
 var React = require('react');
 
-var flavors = ['banana', 'cherry', 'pineapple'];
-var origins = ['panama', 'guat', 'nyc'];
-var roasters = ['halfwit', 'intelli', 'mtrop'];
-var process = ['natural', 'washed'];
+var origins  = ['panama', 'guat', 'nyc'],
+    roasters = ['halfwit', 'intelli', 'mtrop'],
+    process  = ['natural', 'washed'];
 
 module.exports = React.createClass({displayName: "exports",
 
   getInitialState: function() {
     return {
-      flavor:  flavors[0],
       origin:  origins[0],
       roaster: roasters[0],
       process: process[0],
@@ -40,9 +38,9 @@ module.exports = React.createClass({displayName: "exports",
     return (
         React.createElement("form", null, 
           this.renderTextInput('flavor', 'Search flavors...'), 
-          this.renderSelect('origin', 'Choose Origin', origins), 
-          this.renderSelect('roaster', 'Choose Roaster', roasters), 
-          this.renderSelect('process', 'Choose Process', process), 
+          this.renderSelect('origin', 'Origin', origins), 
+          this.renderSelect('roaster', 'Roaster', roasters), 
+          this.renderSelect('process', 'Process', process), 
           this.renderCheckbox('blend', 'Blend'), 
           this.renderCheckbox('decaf', 'Decaf'), 
           this.renderCheckbox('organic', 'Organic'), 
@@ -94,7 +92,7 @@ module.exports = React.createClass({displayName: "exports",
 
   render: function() {
 
-    if (this.props.greeting) {
+    if (this.props.homePage) {
       var msg = 'Search the newest coffees from the best roasters ' +
                 'all over the country.'
       var greeting = React.createElement("h3", null, msg);
@@ -118,11 +116,17 @@ var React      = require('react'),
 
 module.exports = React.createClass({displayName: "exports",
 
+  getInitialState: function() {
+    return {
+      coffees: this.props.coffees
+    };
+  },
+
   render: function() {
     return (
         React.createElement("div", null, 
-          React.createElement(MyHeader, {user: { name: 'Bill'}, loggedIn: true}), 
-          React.createElement(Content, {greeting: true})
+          React.createElement(MyHeader, {user: this.props.user}), 
+          React.createElement(Content, {homePage: this.props.homePage})
         )
     );
   }
@@ -140,7 +144,7 @@ module.exports = React.createClass({displayName: "exports",
   render: function() {
     var text, name;
 
-    if (this.props.loggedIn) {
+    if (this.props.user) {
       name = 'logoutBtn';
       text = 'Logout';
     } else {
@@ -151,7 +155,7 @@ module.exports = React.createClass({displayName: "exports",
     return (
         React.createElement("header", null, 
           React.createElement("ul", null, 
-            React.createElement("li", null, "Hello, ", this.props.user.name, "."), 
+            React.createElement("li", null, "Hello, ", this.props.user, "."), 
             React.createElement("li", null, React.createElement(Button, {name: name, text: text}))
           )
         )
@@ -166,7 +170,8 @@ module.exports = React.createClass({displayName: "exports",
 var React    = require('react'),
     ReactApp = require('./components/ReactApp.jsx');
 
-React.render(React.createElement(ReactApp, null), document.getElementById('mount-point'));
+React.render(React.createElement(ReactApp, {user: "Nathan", homePage: true}),
+    document.getElementById('mount-point'));
 
 },{"./components/ReactApp.jsx":4,"react":162}],7:[function(require,module,exports){
 // shim for using process in browser

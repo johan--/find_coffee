@@ -6,7 +6,7 @@ var React    = require('react'),
 module.exports = function(app) {
 
   app.use('/', function(req, res, next) {
-    var reactHTML = React.renderToString(<ReactApp />);
+    var reactHTML = React.renderToString(<ReactApp user="Sara" homePage={true}/>);
 
     res.render('index', { reactOutput: reactHTML });
   });

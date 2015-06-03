@@ -1,5 +1,4 @@
 var express   = require('express'),
-    mongoose  = require('mongoose'),
     https     = require('https'),
     path      = require('path'),
     fs        = require('fs'),
@@ -15,12 +14,10 @@ var credentials = {
 
 var httpsServer = https.createServer(credentials, app);
 
-// Static assets
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Views
+// Views & Static assets
 app.set('views', path.join(__dirname, './app/views'));
 app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 require('./app/routes')(app);

@@ -15,8 +15,8 @@ module.exports = React.createClass({
   render: function() {
     return (
         <div>
-          <MyHeader user={{ name: 'Bill' }} loggedIn={true} />
-          <Content greeting={true} />
+          <MyHeader user={this.props.user} />
+          <Content homePage={this.props.homePage} />
         </div>
     );
   }

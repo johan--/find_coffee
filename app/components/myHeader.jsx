@@ -8,7 +8,7 @@ module.exports = React.createClass({
   render: function() {
     var text, name;
 
-    if (this.props.loggedIn) {
+    if (this.props.user) {
       name = 'logoutBtn';
       text = 'Logout';
     } else {
@@ -19,7 +19,7 @@ module.exports = React.createClass({
     return (
         <header>
           <ul>
-            <li>Hello, {this.props.user.name}.</li>
+            <li>Hello, {this.props.user}.</li>
             <li><Button name={name} text={text} /></li>
           </ul>
         </header>

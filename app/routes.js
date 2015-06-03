@@ -3,7 +3,6 @@
 var React    = require('react'),
     ReactApp = require('./components/ReactApp.jsx');
 
-
 module.exports = function(app) {
 
   app.use('/', function(req, res, next) {

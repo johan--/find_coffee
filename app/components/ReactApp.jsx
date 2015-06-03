@@ -1,18 +1,22 @@
 /** @jsx React.DOM */
 
-var React    = require('react'),
-    MyHeader = require('./myHeader.jsx');
+var React      = require('react'),
+    MyHeader   = require('./myHeader.jsx'),
+    Content    = require('./Content.jsx');
 
 module.exports = React.createClass({
 
-  componentDidMount: function() {
-    console.log('app mounted!');
+  getInitialState: function() {
+    return {
+      coffees: this.props.coffees
+    };
   },
 
   render: function() {
     return (
         <div>
-          <MyHeader user={{ name: 'Bill' }} loggedIn={false} />
+          <MyHeader user={{ name: 'Bill' }} loggedIn={true} />
+          <Content greeting={true} />
         </div>
     );
   }

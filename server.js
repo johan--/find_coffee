@@ -24,9 +24,7 @@ require('./app/routes')(app);
 
 // 404
 app.get('*', function(req, res) {
-  res.json({
-    "route": "Sorry this page does not exist!"
-  });
+  res.end('404');
 });
 
 // Start

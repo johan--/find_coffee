@@ -1,9 +1,13 @@
 var mongoose = require('mongoose'),
     Schema   = mongoose.Schema;
 
-var OfferingSchema = mongoose.Schema({
+var OfferingSchema = Schema({
 
-  roastery:  { type: Schema.ObjectId, ref: 'Roastery' },
+  //roastery:  { type: Schema.ObjectId, ref: 'Roastery' },
+  roastery:  {
+    _id:  { type: Schema.ObjectId, ref: 'Roastery' },
+    name: { type: String } 
+  },
   name:      { type: String, unique: true },
   start:       Date,
   end:         Date,

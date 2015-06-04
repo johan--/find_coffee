@@ -16,7 +16,7 @@ module.exports = React.createClass({
     return (
         <div>
           <MyHeader user={this.props.user} />
-          <Content homePage={this.props.homePage} />
+          <Content offerings={this.props.offerings} homePage={this.props.homePage} />
         </div>
     );
   }

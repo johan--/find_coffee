@@ -4,16 +4,14 @@ var React    = require('react'),
     ReactApp = require('./components/ReactApp.jsx'),
     mongoose = require('mongoose');
 
-// Connect to Mongo.
+// Connect to Mongo / load models.
 mongoose.connect('mongodb://localhost/getCoffee');
-
-// Load models
 require(__dirname + '/models/Offering.js');
 require(__dirname + '/models/Roastery.js');
 
-var Offering = mongoose.model('Offering');
-
-module.exports = function(app) {
+// Load all offerings and render app
+function renderApp(app) {
+  var Offering = mongoose.model('Offering');
 
   app.use('/', function(req, res, next) {
 
@@ -22,11 +20,12 @@ module.exports = function(app) {
       if (err) { console.error(err) }
 
       // Render to string.
-      var myApp = <ReactApp user="Nathan" coffees={offerings} homepage={true}/>,
+      var myApp = <ReactApp user="Nathan" offerings={offerings} homepage={true}/>,
           html  = React.renderToString(myApp);
 
       res.render('index', { reactOutput: html });
     });
-
   });
-};
+}
+
+module.exports = renderApp;

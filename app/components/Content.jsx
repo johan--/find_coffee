@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React      = require('react'),
+    OfferingList = require('./OfferingList.jsx');
     CoffeeForm = require('./CoffeeForm.jsx');
 
 module.exports = React.createClass({
@@ -16,7 +17,7 @@ module.exports = React.createClass({
     return (
       <section id="mainContent">
         {greeting}
-        <CoffeeForm />
+        <OfferingList offerings={this.props.offerings} />
       </section>
     );
   }

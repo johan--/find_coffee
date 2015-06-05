@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
-
 var React    = require('react'),
-    ReactApp = require('./components/ReactApp.jsx'),
-    mongoose = require('mongoose');
+    Router   = require('react-router'),
+    mongoose = require('mongoose'),
+    routes   = require('./reactRoutes.jsx');
 
 // Connect to Mongo / load models.
 mongoose.connect('mongodb://localhost/getCoffee');
@@ -13,17 +13,21 @@ require(__dirname + '/models/Roastery.js');
 function renderApp(app) {
   var Offering = mongoose.model('Offering');
 
-  app.use('/', function(req, res, next) {
+  app.use(function(req, res) {
+    var router = Router.create({ location: req.url, routes: routes });
 
     // Load all offerings.
     Offering.find({}, function(err, offerings) {
-      if (err) { console.error(err) }
+      if (err) return err;
 
       // Render to string.
-      var myApp = <ReactApp user="Nathan" offerings={offerings} homepage={true}/>,
-          html  = React.renderToString(myApp);
-
-      res.render('index', { reactOutput: html });
+      router.run(function(Handler) {
+        var html = React.renderToString(<Handler offerings={offerings} />);
+        return res.render('index', {
+          jsonProps: JSON.stringify({ offerings: offerings, name: 'Nathan' }),
+          reactOutput: html
+        });
+      });
     });
   });
 }

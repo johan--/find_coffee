@@ -1,7 +1,15 @@
 /** @jsx React.DOM */
+var React  = require('react'),
+    Router = require('react-router');
 
-var React    = require('react'),
-    ReactApp = require('./components/ReactApp.jsx');
+var routes = require('./reactRoutes.jsx');
 
-React.render(<ReactApp user="Nathan" homePage={true}/>,
-    document.getElementById('mount-point'));
+// Get props.
+var props = JSON.parse(document.getElementById('props').innerHTML),
+    offerings = props.offerings,
+    name      = props.name;
+
+Router.run(routes, Router.HistoryLocation, function(Handler) {
+    React.render(<Handler user={name} offerings={offerings}/>,
+        document.getElementById('mount-point'));
+});

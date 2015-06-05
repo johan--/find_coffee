@@ -1,5 +1,4 @@
 /** @jsx React.DOM */
-
 var React    = require('react'),
     Offering = require('./Offering.jsx');
 

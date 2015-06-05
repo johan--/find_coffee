@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
-
 var React      = require('react'),
-    OfferingList = require('./OfferingList.jsx');
+    OfferingList = require('./OfferingList.jsx'),
     CoffeeForm = require('./CoffeeForm.jsx');
 
 module.exports = React.createClass({

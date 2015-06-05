@@ -22,16 +22,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 require('./app/routes')(app);
 
-// 404
-app.get('*', function(req, res) {
-  res.end('404');
-});
-
 // Start
-httpsServer.listen(8000, function(err) {
-  if (err) { console.error(err); }
-  console.log('HTTPS server listening on port 8000...');
-});
+httpsServer.listen(8000);
+console.log('HTTPS server listening on port 8000...');
 
 // Expose
 module.exports = app;

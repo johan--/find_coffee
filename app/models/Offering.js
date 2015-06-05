@@ -3,7 +3,6 @@ var mongoose = require('mongoose'),
 
 var OfferingSchema = Schema({
 
-  //roastery:  { type: Schema.ObjectId, ref: 'Roastery' },
   roastery:  {
     _id:  { type: Schema.ObjectId, ref: 'Roastery' },
     name: { type: String } 

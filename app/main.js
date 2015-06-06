@@ -9,7 +9,14 @@ var props = JSON.parse(document.getElementById('props').innerHTML),
     offerings = props.offerings,
     name      = props.name;
 
-Router.run(routes, Router.HistoryLocation, function(Handler) {
-    React.render(<Handler user={name} offerings={offerings}/>,
-        document.getElementById('mount-point'));
+window.OFFERINGS = {};
+
+offerings.forEach(function(offering) {
+  window.OFFERINGS[offering._id] = offering;
+});
+
+Router.run(routes, Router.HistoryLocation, function(Handler, state) {
+  var params = state.params;
+  React.render(<Handler params={params} user={name} offerings={offerings}/>,
+      document.getElementById('mount-point'));
 });

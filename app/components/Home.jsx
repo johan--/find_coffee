@@ -1,17 +1,16 @@
 /** @jsx React.DOM */
 var React        = require('react'),
     RouteHandler = require('react-router').RouteHandler,
-    MyHeader     = require('./myHeader.jsx');
+    CoffeeForm   = require('./CoffeeForm.jsx');
 
 module.exports = React.createClass({
 
   render: function() {
+    var msg = "Search the latest coffees from the country's best roasters.";
     return (
         <div>
-          <MyHeader user={this.props.user} />
-          <section id="mainContent">
-            <RouteHandler {...this.props} />
-          </section>
+          <h3>{msg}</h3>;
+          <CoffeeForm />
         </div>
     );
   }

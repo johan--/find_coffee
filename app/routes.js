@@ -22,7 +22,9 @@ function renderApp(app) {
 
       // Render to string.
       router.run(function(Handler) {
-        var html = React.renderToString(<Handler offerings={offerings} />);
+        var handler = <Handler user="Nathan" offerings={offerings} />,
+            html    = React.renderToString(handler);
+
         return res.render('index', {
           jsonProps: JSON.stringify({ offerings: offerings, name: 'Nathan' }),
           reactOutput: html

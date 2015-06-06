@@ -5,18 +5,23 @@ var React = require('react'),
 module.exports = React.createClass({
 
   render: function() {
-    var self = this;
-    var offerings = this.props.offerings.map(function(offering) {
-      return <OfferingListItem
-               params={self.props.params}
-               offering={offering} 
-               key={offering._id}
-             />;
-    });
+    var offerings    = this.props.offerings,
+        allOfferings = [],
+        self         = this;
+
+    for (offering in offerings) {
+      allOfferings.push(
+        <OfferingListItem
+          params={self.props.params}
+          offering={offerings[offering]}
+          key={offering}
+        />
+      );
+    }
 
     return (
       <ul>
-        {offerings}
+        {allOfferings}
       </ul>
     );
   }

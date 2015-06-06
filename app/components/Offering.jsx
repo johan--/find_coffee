@@ -9,23 +9,22 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    var _id = this.props.params._id,
+    var _id  = this.props.params._id,
         self = this;
 
-    // Handle server render.
+    // If offerings/:id is rendered server side,
+    // need to pull offering object from Mongo.
     if (typeof window === 'undefined') {
+      var Offering = mongoose.model('Offering');
 
-      Offering = mongoose.model('Offering');
-      var obj_id = "ObjectId(" + _id + ")";
-
-      Offering.find({ _id: obj_id }, function(err, offering) {
+      Offering.find({ _id: _id }, function(err, offering) {
         if (err) { throw err; }
         self.setState({ offering: offering });
       });
 
     // Handle client render.
     } else {
-      this.setState({ offering: window.OFFERINGS[_id]});
+      this.setState({ offering: this.props.offerings[_id] });
     }
   },
 

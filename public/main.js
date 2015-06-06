@@ -146,25 +146,22 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   componentDidMount: function() {
-    var _id = this.props.params._id,
+    var _id  = this.props.params._id,
         self = this;
 
-    // Handle server render.
+    // If offerings/:id is rendered server side,
+    // need to pull offering object from Mongo.
     if (typeof window === 'undefined') {
+      var Offering = mongoose.model('Offering');
 
-      Offering = mongoose.model('Offering');
-      var obj_id = "ObjectId(" + _id + ")";
-
-      Offering.find({ _id: obj_id }, function(err, offering) {
+      Offering.find({ _id: _id }, function(err, offering) {
         if (err) { throw err; }
-        console.log(offering);
         self.setState({ offering: offering });
       });
 
     // Handle client render.
     } else {
-      this.setState({ offering: window.OFFERINGS[_id]});
-//    this.setState({ offering: {name: 'abc', description: 'xyz'}});
+      this.setState({ offering: this.props.offerings[_id] });
     }
   },
 
@@ -205,18 +202,23 @@ var React = require('react'),
 module.exports = React.createClass({displayName: "exports",
 
   render: function() {
-    var self = this;
-    var offerings = this.props.offerings.map(function(offering) {
-      return React.createElement(OfferingListItem, {
-               params: self.props.params, 
-               offering: offering, 
-               key: offering._id}
-             );
-    });
+    var offerings    = this.props.offerings,
+        allOfferings = [],
+        self         = this;
+
+    for (offering in offerings) {
+      allOfferings.push(
+        React.createElement(OfferingListItem, {
+          params: self.props.params, 
+          offering: offerings[offering], 
+          key: offering}
+        )
+      );
+    }
 
     return (
       React.createElement("ul", null, 
-        offerings
+        allOfferings
       )
     );
   }
@@ -303,18 +305,10 @@ var React  = require('react'),
 
 var routes = require('./reactRoutes.jsx');
 
-console.log('main.js running');
-
 // Get props.
-var props = JSON.parse(document.getElementById('props').innerHTML),
+var props     = JSON.parse(document.getElementById('props').innerHTML),
     offerings = props.offerings,
     name      = props.name;
-
-window.OFFERINGS = {};
-
-offerings.forEach(function(offering) {
-  window.OFFERINGS[offering._id] = offering;
-});
 
 Router.run(routes, Router.HistoryLocation, function(Handler, state) {
   var params = state.params;

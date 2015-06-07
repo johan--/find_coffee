@@ -38,15 +38,21 @@ module.exports = React.createClass({
   },
 
   renderTextInput: function(name, label) {
-    return <input type="text" name={name} placeholder={label}></input>;
+    return (
+      <input className="textbox" type="text" name={name} placeholder={label}></input>
+    );
   },
 
   renderCheckbox: function(name, value) {
-    return <input type="checkbox" name={name} value={value}>{value}</input>;
+    return (
+      <input className="checkbox" type="checkbox" name={name} value={value}>
+        {value}
+      </input>
+    );
   },
 
   renderSubmit: function(label) {
-    return <input type="submit" value={label}></input>;
+    return <input className="submit" type="submit" value={label}></input>;
   },
 
   renderSelect: function(id, label, values) {

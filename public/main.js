@@ -83,15 +83,21 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   renderTextInput: function(name, label) {
-    return React.createElement("input", {type: "text", name: name, placeholder: label});
+    return (
+      React.createElement("input", {className: "textbox", type: "text", name: name, placeholder: label})
+    );
   },
 
   renderCheckbox: function(name, value) {
-    return React.createElement("input", {type: "checkbox", name: name, value: value}, value);
+    return (
+      React.createElement("input", {className: "checkbox", type: "checkbox", name: name, value: value}, 
+        value
+      )
+    );
   },
 
   renderSubmit: function(label) {
-    return React.createElement("input", {type: "submit", value: label});
+    return React.createElement("input", {className: "submit", type: "submit", value: label});
   },
 
   renderSelect: function(id, label, values) {
@@ -126,7 +132,7 @@ module.exports = React.createClass({displayName: "exports",
     var msg = "Search the latest coffees from the country's best roasters.";
     return (
         React.createElement("div", null, 
-          React.createElement("h3", null, msg), ";", 
+          React.createElement("h1", null, msg), 
           React.createElement(CoffeeForm, null)
         )
     );
@@ -239,12 +245,12 @@ module.exports = React.createClass({displayName: "exports",
         roaster  = offering.roastery.name;
 
     return (
-        React.createElement("li", null, 
-          React.createElement(Link, {to: "offering", params: {_id: _id}}, 
-            React.createElement("span", null, name, " | ", roaster)
-          )
+      React.createElement("li", null, 
+        React.createElement(Link, {to: "offering", params: {_id: _id}}, 
+          React.createElement("span", null, name, " | ", roaster)
         )
-      );
+      )
+    );
   }
 });
 
@@ -305,7 +311,7 @@ var React  = require('react'),
 
 var routes = require('./reactRoutes.jsx');
 
-// Get props.
+// Get props from server rendered HTML.
 var props     = JSON.parse(document.getElementById('props').innerHTML),
     offerings = props.offerings,
     name      = props.name;

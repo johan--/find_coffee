@@ -10,7 +10,7 @@ module.exports = React.createClass({
     return (
       <div>
         <CoffeeForm />
-        <RouteHandler {...this.props} />
+        <RouteHandler perPage={10} {...this.props} />
       </div>
     );
   }

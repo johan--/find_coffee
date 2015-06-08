@@ -20,19 +20,13 @@ function renderApp(app) {
     Offering.find({}, function(err, offerings) {
       if (err) return err;
 
-      // Use obj instead of array for easy lookup in props.
-      var obj = {};
-      offerings.forEach(function(offering) {
-        obj[offering._id] = offering;
-      });
-
       // Render to string.
       router.run(function(Handler) {
-        var handler = <Handler user="Nathan" offerings={obj} />,
+        var handler = <Handler user="Nathan" offerings={offerings} />,
             html    = React.renderToString(handler);
 
         return res.render('index', {
-          jsonProps: JSON.stringify({ offerings: obj, name: 'Nathan' }),
+          jsonProps: JSON.stringify({ offerings: offerings, name: 'Nathan' }),
           reactOutput: html
         });
       });

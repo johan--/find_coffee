@@ -12,7 +12,7 @@ module.exports = React.createClass({
         roaster  = offering.roastery.name;
 
     return (
-      <li>
+      <li className="offering">
         <Link to="offering" params={{_id: _id}}>
           <span>{name} | {roaster}</span>
         </Link>

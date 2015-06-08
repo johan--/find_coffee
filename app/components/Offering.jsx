@@ -24,7 +24,17 @@ module.exports = React.createClass({
 
     // Handle client render.
     } else {
-      this.setState({ offering: this.props.offerings[_id] });
+      var offerings = this.props.offerings,
+          len = offerings.length,
+          i = 0;
+
+      // Find offering in offering array using param _id.
+      for (i; i < len; i++) {
+        if (offerings[i]._id === _id) {
+          this.setState({ offering: offerings[i] });
+          break;
+        }
+      }
     }
   },
 

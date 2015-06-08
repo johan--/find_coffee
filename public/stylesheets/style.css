@@ -9,10 +9,13 @@ body {
 
 a {
   color: #99CCEE;
+  color: #FFFFEE;
+  color: white;
 }
 
 a:hover {
   color: darkcyan;
+  color: #FFEECC;
 }
 
 ul {
@@ -24,7 +27,7 @@ ul {
 header {
   background-color: black;
   font-size: 1.2em;
-  font-family: 'Reenie Beanie', cursive;
+  font-family: 'Reenie Beanie', sans-serif;
   position: fixed;
   border-bottom: 1px solid #ddd;
   height: 45px;
@@ -33,7 +36,7 @@ header {
 
 header button {
   font-size: 1.2em;
-  font-family: 'Reenie Beanie', cursive;
+  font-family: 'Reenie Beanie', sans-serif;
   color: white;
   background-color: transparent;
   border: 0;
@@ -53,7 +56,7 @@ header li {
 /* Main
  *******************************/
 #mainContent {
-  font-family: 'Amatic SC', cursive;
+  font-family: 'Amatic SC', sans-serif;
   position: fixed;
   top: 45px;
   padding: 25px;
@@ -66,6 +69,10 @@ h1 {
   position: relative;
   top: 110px;
   font-size:  2.35em; 
+}
+
+.offerings li {
+  font-size: 1.4em;
 }
 
 /* Form
@@ -102,4 +109,17 @@ form .submit {
   display: block;
   margin-right: auto;
   margin-left: auto;
+}
+
+/* Pagination
+ *******************************/
+.pagination > *,
+.pages li {
+  display: inline;
+  margin: 0 10px;
+}
+
+li .active {
+  color: cyan;
+  font-size: 16px;
 }

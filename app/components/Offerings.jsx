@@ -5,12 +5,32 @@ var React        = require('react'),
 
 module.exports = React.createClass({
 
-  render: function() {
+  getInitialState: function() {
+    return {
+      offerings: this.props.offerings
+    };
+  },
 
+  handleSubmit: function(values) {
+    $.ajax({
+      url : "https://localhost:8000/offerings/find",
+      type: "POST",
+      contentType: 'application/json',
+      data : JSON.stringify(values),
+      success: function(data, textStatus, jqXHR) {
+        // this.setState({ offerings: data })
+      }.bind(this),
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error(errorThrown);
+      }
+    });
+  },
+
+  render: function() {
     return (
       <div>
-        <CoffeeForm />
-        <RouteHandler perPage={10} {...this.props} />
+        <CoffeeForm handleSubmit={this.handleSubmit}  />
+        <RouteHandler perPage={10} offerings={this.state.offerings} />
       </div>
     );
   }

@@ -44,7 +44,8 @@ module.exports = React.createClass({
       return (
         <div>
           <h3>{offering.name}</h3>
-          <p>{offering.description}</p>
+          <p>{offering.background}</p>
+          <p>{offering.flavors}</p>
         </div>
       );
     } else {

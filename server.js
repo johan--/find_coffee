@@ -1,10 +1,13 @@
-var express   = require('express'),
-    https     = require('https'),
-    path      = require('path'),
-    fs        = require('fs'),
-    app       = express();
+var bodyParser = require('body-parser'),
+    express    = require('express'),
+    https      = require('https'),
+    path       = require('path'),
+    fs         = require('fs'),
+    app        = express();
 
 require('node-jsx').install();
+
+app.use(bodyParser.json());
 
 // Setup https server.
 var credentials = {

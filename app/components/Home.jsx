@@ -6,13 +6,7 @@ var React        = require('react'),
 module.exports = React.createClass({
 
   render: function() {
-    var msg = "Search the latest coffees from the country's best roasters.";
-    return (
-        <div>
-          <h1>{msg}</h1>
-          <CoffeeForm />
-        </div>
-    );
+    return <h1>Search the latest coffees from the country&#39;s best roasters.</h1>;
   }
 
 });

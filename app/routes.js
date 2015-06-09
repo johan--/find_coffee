@@ -1,19 +1,28 @@
 /** @jsx React.DOM */
 var React    = require('react'),
     Router   = require('react-router'),
-    mongoose = require('mongoose'),
-    routes   = require('./reactRoutes.jsx');
+    routes   = require('./reactRoutes.jsx'),
+    Offering = require('./db.js').Offering;
 
-// Connect to Mongo / load models.
-mongoose.connect('mongodb://localhost/getCoffee');
-require(__dirname + '/models/Offering.js');
-require(__dirname + '/models/Roastery.js');
+module.exports = function(app) {
 
-// Load all offerings and render app
-function renderApp(app) {
-  var Offering = mongoose.model('Offering');
+  // Query the db to get matched coffees.
+  app.post('/offerings/find', function(req, res, next) {
+    var values = req.body;
+    
+    Offering
+      .find({})
+      .where({ origin: /colombia/i })
+      .exec(function(err, results){
+        if (err) throw err;
+        if (results.length) {
+          res.json(JSON.stringify(results)); 
+        }
+      });
+  });
 
-  app.use(function(req, res) {
+  // Respond to all other requests with React.
+  app.get('*', function(req, res) {
     var router = Router.create({ location: req.url, routes: routes });
 
     // Load all offerings.
@@ -22,16 +31,15 @@ function renderApp(app) {
 
       // Render to string.
       router.run(function(Handler) {
-        var handler = <Handler user="Nathan" offerings={offerings} />,
+        var handler = <Handler user='' offerings={offerings} />,
             html    = React.renderToString(handler);
 
         return res.render('index', {
-          jsonProps: JSON.stringify({ offerings: offerings, name: 'Nathan' }),
+          jsonProps: JSON.stringify({ offerings: offerings, user: '' }),
           reactOutput: html
         });
       });
     });
   });
-}
+};
 
-module.exports = renderApp;

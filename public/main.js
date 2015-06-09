@@ -15,14 +15,14 @@ module.exports = React.createClass({displayName: "exports",
 /** @jsx React.DOM */
 var React        = require('react'),
     RouteHandler = require('react-router').RouteHandler,
-    MyHeader     = require('./myHeader.jsx');
+    Header     = require('./Header.jsx');
 
 module.exports = React.createClass({displayName: "exports",
 
   render: function() {
     return (
         React.createElement("div", null, 
-          React.createElement(MyHeader, {user: this.props.user}), 
+          React.createElement(Header, {user: this.props.user}), 
           React.createElement("section", {id: "mainContent"}, 
             React.createElement(RouteHandler, React.__spread({},  this.props))
           )
@@ -32,7 +32,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"./myHeader.jsx":11,"react":304,"react-router":117}],3:[function(require,module,exports){
+},{"./Header.jsx":5,"react":304,"react-router":117}],3:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react');
 
@@ -46,9 +46,10 @@ module.exports = React.createClass({displayName: "exports",
 /** @jsx React.DOM */
 var React = require('react');
 
+// TODO: pull all current roasters/origins from db
 var origins  = ['panama', 'guat', 'nyc'],
     roasters = ['halfwit', 'intelli', 'mtrop'],
-    process  = ['natural', 'washed'];
+    process  = ['Any', 'Washed', 'Honey', 'Natural'];
 
 module.exports = React.createClass({displayName: "exports",
 
@@ -60,44 +61,76 @@ module.exports = React.createClass({displayName: "exports",
     };
   },
 
-  handleChange: function(e) {
+  handleSelectChange: function(e) {
     var state = {};
     state[e.target.id] = e.target.value;
     this.setState(state);
   },
 
+  handleSubmit: function(e) {
+    e.preventDefault();
+    this.props.handleSubmit(this.getFormValues());
+  },
+
+  getFormValues: function() {
+    var values = {
+      search:  this.refs.search.getDOMNode().value,
+      origin:  this.refs.origin.getDOMNode().value,
+      roaster: this.refs.roaster.getDOMNode().value,
+      process: this.refs.process.getDOMNode().value,
+      blend:   this.refs.blend.getDOMNode().checked,
+      decaf:   this.refs.decaf.getDOMNode().checked,
+      organic: this.refs.organic.getDOMNode().checked,
+      direct:  this.refs.direct.getDOMNode().checked,
+    };
+    return values;
+  },
+
   render: function() {
     return (
-        React.createElement("form", null, 
-          this.renderTextInput('flavor', 'Search flavors...'), 
+        React.createElement("form", {onSubmit: this.handleSubmit}, 
+          this.renderTextInput('search', 'Search flavors...'), 
           this.renderSelect('origin', 'Origin', origins), 
           this.renderSelect('roaster', 'Roaster', roasters), 
           this.renderSelect('process', 'Process', process), 
           this.renderCheckbox('blend', 'Blend'), 
           this.renderCheckbox('decaf', 'Decaf'), 
           this.renderCheckbox('organic', 'Organic'), 
-          this.renderCheckbox('dirTrade', 'Direct Trade'), 
-          this.renderSubmit('Find Coffee')
+          this.renderCheckbox('direct', 'Direct Trade'), 
+          this.renderSubmit('Find coffee')
         )
      );
   },
 
   renderTextInput: function(name, label) {
     return (
-      React.createElement("input", {className: "textbox", type: "text", name: name, placeholder: label})
+      React.createElement("input", {
+        ref: name, 
+        id: "textbox", 
+        type: "text", 
+        name: name, 
+        placeholder: label}
+      )
     );
   },
 
   renderCheckbox: function(name, value) {
     return (
-      React.createElement("input", {className: "checkbox", type: "checkbox", name: name, value: value}, 
+      React.createElement("input", {id: name, 
+        className: "checkbox", 
+        type: "checkbox", 
+        name: name, 
+        ref: name, 
+        value: value}, 
         value
       )
     );
   },
 
   renderSubmit: function(label) {
-    return React.createElement("input", {className: "submit", type: "submit", value: label});
+    return (
+      React.createElement("input", {className: "submit", type: "submit", ref: "submit", value: label})
+      );
   },
 
   renderSelect: function(id, label, values) {
@@ -108,7 +141,11 @@ module.exports = React.createClass({displayName: "exports",
     return (
       React.createElement("div", {className: "formGroup"}, 
         this.renderLabel(id, label), 
-        React.createElement("select", {onChange: this.handleChange, value: this.state.value, id: id}, 
+        React.createElement("select", {
+          onChange: this.handleSelectChange, 
+          ref: id, 
+          value: this.state.value, 
+          id: id}, 
           options
         )
       )
@@ -122,6 +159,37 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"react":304}],5:[function(require,module,exports){
 /** @jsx React.DOM */
+var React  = require('react'),
+    Button = require('./Button.jsx');
+
+module.exports = React.createClass({displayName: "exports",
+
+  render: function() {
+    var loggedInUser = this.props.user;
+
+    if (loggedInUser) {
+      var greeting = React.createElement("li", null, 'Hello, ' + loggedInUser),
+          buttons  = React.createElement("li", null, React.createElement(Button, {name: "logout", text: "Logout"}));
+    } else {
+      var greeting = React.createElement("li", null, "Welcome!"),
+          buttons  = [React.createElement("li", null, React.createElement(Button, {name: "login", text: "Login"})),
+                      React.createElement("li", null, React.createElement(Button, {name: "signup", text: "Sign Up"}))];
+    }
+
+    return (
+        React.createElement("header", null, 
+          React.createElement("ul", null, 
+            greeting, 
+            buttons
+          )
+        )
+    );
+  }
+
+});
+
+},{"./Button.jsx":3,"react":304}],6:[function(require,module,exports){
+/** @jsx React.DOM */
 var React        = require('react'),
     RouteHandler = require('react-router').RouteHandler,
     CoffeeForm   = require('./CoffeeForm.jsx');
@@ -129,18 +197,12 @@ var React        = require('react'),
 module.exports = React.createClass({displayName: "exports",
 
   render: function() {
-    var msg = "Search the latest coffees from the country's best roasters.";
-    return (
-        React.createElement("div", null, 
-          React.createElement("h1", null, msg), 
-          React.createElement(CoffeeForm, null)
-        )
-    );
+    return React.createElement("h1", null, "Search the latest coffees from the country's best roasters.");
   }
 
 });
 
-},{"./CoffeeForm.jsx":4,"react":304,"react-router":117}],6:[function(require,module,exports){
+},{"./CoffeeForm.jsx":4,"react":304,"react-router":117}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     mongoose = require('mongoose');
@@ -187,7 +249,8 @@ module.exports = React.createClass({displayName: "exports",
       return (
         React.createElement("div", null, 
           React.createElement("h3", null, offering.name), 
-          React.createElement("p", null, offering.description)
+          React.createElement("p", null, offering.background), 
+          React.createElement("p", null, offering.flavors)
         )
       );
     } else {
@@ -196,7 +259,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"mongoose":23,"react":304}],7:[function(require,module,exports){
+},{"mongoose":23,"react":304}],8:[function(require,module,exports){
 /** @jsx React.DOM */
 var React     = require('react'),
     NotFound  = require('./404.jsx');
@@ -210,7 +273,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"./404.jsx":1,"react":304}],8:[function(require,module,exports){
+},{"./404.jsx":1,"react":304}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     ReactPaginate = require('react-paginate'),
@@ -247,7 +310,7 @@ var OfferingsList = React.createClass({displayName: "OfferingsList",
     var offerings = this.props.offerings,
         perPage   = this.props.perPage;
 
-    return { 
+    return {
       offerings: offerings.slice(0, perPage),
       pageNum: (offerings.length / perPage)
     };
@@ -282,7 +345,7 @@ var OfferingsList = React.createClass({displayName: "OfferingsList",
 
 module.exports = OfferingsList;
 
-},{"./OfferingListItem.jsx":9,"react":304,"react-paginate":90}],9:[function(require,module,exports){
+},{"./OfferingListItem.jsx":10,"react":304,"react-paginate":90}],10:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     Router = require('react-router'),
@@ -306,7 +369,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"react":304,"react-router":117}],10:[function(require,module,exports){
+},{"react":304,"react-router":117}],11:[function(require,module,exports){
 /** @jsx React.DOM */
 var React        = require('react'),
     RouteHandler = require('react-router').RouteHandler,
@@ -314,49 +377,39 @@ var React        = require('react'),
 
 module.exports = React.createClass({displayName: "exports",
 
-  render: function() {
+  getInitialState: function() {
+    return {
+      offerings: this.props.offerings
+    };
+  },
 
+  handleSubmit: function(values) {
+    $.ajax({
+      url : "https://localhost:8000/offerings/find",
+      type: "POST",
+      contentType: 'application/json',
+      data : JSON.stringify(values),
+      success: function(data, textStatus, jqXHR) {
+        // this.setState({ offerings: data })
+      }.bind(this),
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error(errorThrown);
+      }
+    });
+  },
+
+  render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(CoffeeForm, null), 
-        React.createElement(RouteHandler, React.__spread({perPage: 10},  this.props))
+        React.createElement(CoffeeForm, {handleSubmit: this.handleSubmit}), 
+        React.createElement(RouteHandler, {perPage: 10, offerings: this.state.offerings})
       )
     );
   }
 
 });
 
-},{"./CoffeeForm.jsx":4,"react":304,"react-router":117}],11:[function(require,module,exports){
-/** @jsx React.DOM */
-var React  = require('react'),
-    Button = require('./Button.jsx');
-
-module.exports = React.createClass({displayName: "exports",
-
-  render: function() {
-    var text, name;
-
-    if (this.props.user) {
-      name = 'logoutBtn';
-      text = 'Logout';
-    } else {
-      name = 'loginBtn';
-      text = 'Login';
-    }
-
-    return (
-        React.createElement("header", null, 
-          React.createElement("ul", null, 
-            React.createElement("li", null, "Hello, ", this.props.user, "."), 
-            React.createElement("li", null, React.createElement(Button, {name: name, text: text}))
-          )
-        )
-    );
-  }
-
-});
-
-},{"./Button.jsx":3,"react":304}],12:[function(require,module,exports){
+},{"./CoffeeForm.jsx":4,"react":304,"react-router":117}],12:[function(require,module,exports){
 /** @jsx React.DOM */
 var React  = require('react'),
     Router = require('react-router');
@@ -366,11 +419,11 @@ var routes = require('./reactRoutes.jsx');
 // Get props from server rendered HTML.
 var props     = JSON.parse(document.getElementById('props').innerHTML),
     offerings = props.offerings,
-    name      = props.name;
+    user      = props.user;
 
 Router.run(routes, Router.HistoryLocation, function(Handler, state) {
   var params = state.params;
-  React.render(React.createElement(Handler, {params: params, user: name, offerings: offerings}),
+  React.render(React.createElement(Handler, {params: params, user: user, offerings: offerings}),
       document.getElementById('mount-point'));
 });
 
@@ -405,7 +458,7 @@ module.exports = [
   )
 ];
 
-},{"./components/404.jsx":1,"./components/App.jsx":2,"./components/Home.jsx":5,"./components/Offering.jsx":6,"./components/Offering404.jsx":7,"./components/OfferingList.jsx":8,"./components/Offerings.jsx":10,"react":304,"react-router":117}],14:[function(require,module,exports){
+},{"./components/404.jsx":1,"./components/App.jsx":2,"./components/Home.jsx":6,"./components/Offering.jsx":7,"./components/Offering404.jsx":8,"./components/OfferingList.jsx":9,"./components/Offerings.jsx":11,"react":304,"react-router":117}],14:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *

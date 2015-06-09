@@ -1,9 +1,10 @@
 /** @jsx React.DOM */
 var React = require('react');
 
+// TODO: pull all current roasters/origins from db
 var origins  = ['panama', 'guat', 'nyc'],
     roasters = ['halfwit', 'intelli', 'mtrop'],
-    process  = ['natural', 'washed'];
+    process  = ['Any', 'Washed', 'Honey', 'Natural'];
 
 module.exports = React.createClass({
 
@@ -15,44 +16,76 @@ module.exports = React.createClass({
     };
   },
 
-  handleChange: function(e) {
+  handleSelectChange: function(e) {
     var state = {};
     state[e.target.id] = e.target.value;
     this.setState(state);
   },
 
+  handleSubmit: function(e) {
+    e.preventDefault();
+    this.props.handleSubmit(this.getFormValues());
+  },
+
+  getFormValues: function() {
+    var values = {
+      search:  this.refs.search.getDOMNode().value,
+      origin:  this.refs.origin.getDOMNode().value,
+      roaster: this.refs.roaster.getDOMNode().value,
+      process: this.refs.process.getDOMNode().value,
+      blend:   this.refs.blend.getDOMNode().checked,
+      decaf:   this.refs.decaf.getDOMNode().checked,
+      organic: this.refs.organic.getDOMNode().checked,
+      direct:  this.refs.direct.getDOMNode().checked,
+    };
+    return values;
+  },
+
   render: function() {
     return (
-        <form>
-          {this.renderTextInput('flavor', 'Search flavors...')}
+        <form onSubmit={this.handleSubmit} >
+          {this.renderTextInput('search', 'Search flavors...')}
           {this.renderSelect('origin', 'Origin', origins)}
           {this.renderSelect('roaster', 'Roaster', roasters)}
           {this.renderSelect('process', 'Process', process)}
           {this.renderCheckbox('blend', 'Blend')}
           {this.renderCheckbox('decaf', 'Decaf')}
           {this.renderCheckbox('organic', 'Organic')}
-          {this.renderCheckbox('dirTrade', 'Direct Trade')}
-          {this.renderSubmit('Find Coffee')}
+          {this.renderCheckbox('direct', 'Direct Trade')}
+          {this.renderSubmit('Find coffee')}
         </form>
      );
   },
 
   renderTextInput: function(name, label) {
     return (
-      <input className="textbox" type="text" name={name} placeholder={label}></input>
+      <input
+        ref={name}
+        id="textbox"
+        type="text"
+        name={name}
+        placeholder={label}>
+      </input>
     );
   },
 
   renderCheckbox: function(name, value) {
     return (
-      <input className="checkbox" type="checkbox" name={name} value={value}>
+      <input id={name}
+        className="checkbox"
+        type="checkbox"
+        name={name}
+        ref={name}
+        value={value}>
         {value}
       </input>
     );
   },
 
   renderSubmit: function(label) {
-    return <input className="submit" type="submit" value={label}></input>;
+    return (
+      <input className="submit" type="submit" ref="submit" value={label}></input>
+      );
   },
 
   renderSelect: function(id, label, values) {
@@ -63,7 +96,11 @@ module.exports = React.createClass({
     return (
       <div className="formGroup">
         {this.renderLabel(id, label)}
-        <select onChange={this.handleChange} value={this.state.value} id={id}>
+        <select
+          onChange={this.handleSelectChange}
+          ref={id}
+          value={this.state.value}
+          id={id}>
           {options}
         </select>
       </div>

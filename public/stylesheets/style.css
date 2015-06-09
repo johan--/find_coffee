@@ -1,5 +1,5 @@
 body {
-  background-image: url("/images/background.jpg");
+  background-image: url("/images/background_2.png");
   background-repeat: no-repeat;
   color: white;
   margin: 0;
@@ -25,17 +25,15 @@ ul {
 /* Header
  *******************************/
 header {
-  background-color: black;
-  font-size: 1.2em;
+  font-size: 1.3em;
   font-family: 'Reenie Beanie', sans-serif;
   position: fixed;
-  border-bottom: 1px solid #ddd;
   height: 45px;
   width: 100%;
 }
 
 header button {
-  font-size: 1.2em;
+  font-size: 1.3em;
   font-family: 'Reenie Beanie', sans-serif;
   color: white;
   background-color: transparent;
@@ -67,8 +65,8 @@ header li {
 
 h1 {
   position: relative;
-  top: 110px;
-  font-size:  2.35em; 
+  top: 85px;
+  font-size:  3.35em; 
 }
 
 .offerings li {
@@ -96,7 +94,7 @@ form label {
   margin-right: 10px;
 }
 
-form .textbox {
+form #textbox {
   border: 1px solid #ccc;
   border-radius: 2px;
   padding: 3px;
@@ -109,6 +107,13 @@ form .submit {
   display: block;
   margin-right: auto;
   margin-left: auto;
+}
+
+/* Offering List
+ *******************************/
+.offerings {
+  position: relative;
+  left: -300px;
 }
 
 /* Pagination

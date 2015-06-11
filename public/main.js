@@ -47,8 +47,8 @@ module.exports = React.createClass({displayName: "exports",
 var React = require('react');
 
 // TODO: pull all current roasters/origins from db
-var origins  = ['panama', 'guat', 'nyc'],
-    roasters = ['halfwit', 'intelli', 'mtrop'],
+var origins  = ['Any', 'panama', 'guat', 'nyc'],
+    roasters = ['Any', 'halfwit', 'intelli', 'mtrop'],
     process  = ['Any', 'Washed', 'Honey', 'Natural'];
 
 module.exports = React.createClass({displayName: "exports",
@@ -316,6 +316,16 @@ var OfferingsList = React.createClass({displayName: "OfferingsList",
     };
   },
 
+  componentWillReceiveProps: function(newProps) {
+    var offerings = newProps.offerings,
+        perPage   = this.props.perPage;
+
+    this.setState({ 
+      offerings: offerings.slice(0, perPage),
+      pageNum: (offerings.length / perPage)
+    });
+  },
+
   handlePageClick: function(data) {
     var offerings = this.props.offerings,
         perPage   = this.props.perPage,
@@ -385,36 +395,41 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   handleSubmit: function(values) {
-    console.log('utils', utils);
 
-    // Filter offerings if rendering on client.
-    var offerings = this.state.offerings;
+    // Handle form submit if rendering on client.
+    if (typeof window !== 'undefined') {
 
-    var AllAvailable = new utils.AllAvailable(offerings);
+      // Use offerings from props for full list.
+      var offerings = this.props.offerings,
+          Available = new utils.Available(offerings);
 
-    AllAvailable.filter('blend', values.blend)
-                .filter('decaf', values.decaf)
-                .filter('direct', values.direct)
-                .filter('organic', values.organic)
-                .filter('origin', values.origin)
-                .filter('process', values.process)
-                .filter('roaster', values.roaster);
+      // Filter offerings based on form values.
+      Available.filter('ALL', values.search)
+               .filter('blend', values.blend)
+               .filter('decaf', values.decaf)
+               .filter('direct', values.direct)
+               .filter('organic', values.organic)
+               .filter('origin', values.origin)
+               .filter('process', values.process)
+               .filter('roaster', values.roaster);
 
-    console.log('allavailable', AllAvailable.offerings);
+      this.setState({offerings: Available.offerings});
 
-    // If rendering on server, get matches via post request.
-    $.ajax({
-      url : "https://localhost:8000/offerings/find",
-      type: "POST",
-      contentType: 'application/json',
-      data : JSON.stringify(values),
-      success: function(data, textStatus, jqXHR) {
-        // this.setState({ offerings: data })
-      }.bind(this),
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.error(errorThrown);
-      }
-    });
+    // Handle form submit if rendering on client.
+    } else {
+      $.ajax({
+        url : "https://localhost:8000/offerings/find",
+        type: "POST",
+        contentType: 'application/json',
+        data : JSON.stringify(values),
+        success: function(data, textStatus, jqXHR) {
+          this.setState({ offerings: JSON.parse(data) })
+        }.bind(this),
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.error(errorThrown);
+        }
+      });
+    }
   },
 
   render: function() {
@@ -478,41 +493,71 @@ module.exports = [
 ];
 
 },{"./components/404.jsx":1,"./components/App.jsx":2,"./components/Home.jsx":6,"./components/Offering.jsx":7,"./components/Offering404.jsx":8,"./components/OfferingList.jsx":9,"./components/Offerings.jsx":11,"react":305,"react-router":118}],14:[function(require,module,exports){
-function AllAvailable(offerings) {
-  this.offerings = offerings || [];
+function Available(offerings) {
+  if (typeof window === 'undefined') {
+    // If rendering on server, offerings will be database
+    // objects, and need to be converted before use.
+    this.offerings = offerings.map(function(o) { return o.toJSON() }) || [];
+  } else {
+    this.offerings = offerings || [];
+  }
 }
 
-AllAvailable.prototype.filter = function(cat, val) {
+// Filter offerings to include only those
+// that contain a matching value.
+Available.prototype.filter = function(cat, val) {
 
-  // Save prop for method chaining.
-  var result = [],
-      match  = new RegExp(val, 'i');
+  this.offerings = this.offerings.filter(function(offering) {
 
-  this.offerings.forEach(function(i) {
-    
-    // Check for strict equality.
-    if (i[cat] === val) {
-      result.push(i);
-    }
+    // Search all categories within offering for a match.
+    if (cat === 'ALL') {
+      var keys = Object.keys(offering);
 
-    // Check regexp match.
-    if (typeof i[cat] === 'string' && i[cat].match(match)) {
-      result.push(i);
-    }
-
-    // If array, check for match inside.
-    if (Array.isArray(i[cat])) {
-      if (i[cat].some(function(item) { return item.match(match) })) {
-        result.push(i);
+      for (var i = 0, len = keys.length; i < len; i++) {
+        if (containsValue(offering, keys[i], val)) {
+          return true;
+        }
       }
+      return false;
+
+    // Search given category within offering for a match.
+    } else {
+      return containsValue(offering, cat, val);
     }
   });
 
-  this.offerings = result;
   return this;
 };
 
-module.exports.AllAvailable = AllAvailable;
+// Helper that returns true if object contains value.
+function containsValue(object, key, value) {
+  var match = new RegExp(value, 'i');
+
+  // True if user wants any value or checkbox wasn't checked.
+  if (value === 'Any' || (typeof value === 'boolean' && !value)) { 
+    return true;
+  }
+
+  // Check strict equality.
+  if (object[key] === value) {
+    return true;
+  }
+
+  // Check regexp match.
+  if (typeof object[key] === 'string' && object[key].match(match)) {
+    return true;
+  }
+
+  // If array, check for match inside.
+  if (Array.isArray(object[key]) &&
+      object[key].some(function(item) { return item.match(match); })) {
+    return true;
+  }
+
+  return false;
+}
+
+module.exports.Available = Available;
 
 },{}],15:[function(require,module,exports){
 /*!

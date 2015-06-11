@@ -17,11 +17,13 @@ module.exports = React.createClass({
     // Handle form submit if rendering on client.
     if (typeof window !== 'undefined') {
 
-      var offerings = this.state.offerings,
+      // Use offerings from props for full list.
+      var offerings = this.props.offerings,
           Available = new utils.Available(offerings);
 
       // Filter offerings based on form values.
-      Available.filter('blend', values.blend)
+      Available.filter('ALL', values.search)
+               .filter('blend', values.blend)
                .filter('decaf', values.decaf)
                .filter('direct', values.direct)
                .filter('organic', values.organic)
@@ -39,7 +41,7 @@ module.exports = React.createClass({
         contentType: 'application/json',
         data : JSON.stringify(values),
         success: function(data, textStatus, jqXHR) {
-          // this.setState({ offerings: data })
+          this.setState({ offerings: JSON.parse(data) })
         }.bind(this),
         error: function (jqXHR, textStatus, errorThrown) {
           console.error(errorThrown);

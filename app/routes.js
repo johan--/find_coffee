@@ -2,23 +2,32 @@
 var React    = require('react'),
     Router   = require('react-router'),
     routes   = require('./reactRoutes.jsx'),
+    utils    = require('../lib/utils.js'),
     Offering = require('./db.js').Offering;
 
 module.exports = function(app) {
 
   // Query the db to get matched coffees.
   app.post('/offerings/find', function(req, res, next) {
-    var values = req.body;
     
-    Offering
-      .find({})
-      .where({ origin: /colombia/i })
-      .exec(function(err, results){
-        if (err) throw err;
-        if (results.length) {
-          res.json(JSON.stringify(results)); 
-        }
-      });
+    Offering.find({}).exec(function(err, offerings) {
+      if (err) throw err;
+
+      var Available = new utils.Available(offerings),
+          values    = req.body;
+
+      // Filter offerings based on form values.
+      Available.filter('ALL', values.search)
+               .filter('blend', values.blend)
+               .filter('decaf', values.decaf)
+               .filter('direct', values.direct)
+               .filter('organic', values.organic)
+               .filter('origin', values.origin)
+               .filter('process', values.process)
+               .filter('roaster', values.roaster);
+
+      return res.json(JSON.stringify(Available.offerings));
+    });
   });
 
   // Respond to all other requests with React.

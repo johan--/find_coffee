@@ -2,8 +2,8 @@
 var React = require('react');
 
 // TODO: pull all current roasters/origins from db
-var origins  = ['panama', 'guat', 'nyc'],
-    roasters = ['halfwit', 'intelli', 'mtrop'],
+var origins  = ['Any', 'panama', 'guat', 'nyc'],
+    roasters = ['Any', 'halfwit', 'intelli', 'mtrop'],
     process  = ['Any', 'Washed', 'Honey', 'Natural'];
 
 module.exports = React.createClass({

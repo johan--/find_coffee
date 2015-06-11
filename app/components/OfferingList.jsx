@@ -40,6 +40,16 @@ var OfferingsList = React.createClass({
     };
   },
 
+  componentWillReceiveProps: function(newProps) {
+    var offerings = newProps.offerings,
+        perPage   = this.props.perPage;
+
+    this.setState({ 
+      offerings: offerings.slice(0, perPage),
+      pageNum: (offerings.length / perPage)
+    });
+  },
+
   handlePageClick: function(data) {
     var offerings = this.props.offerings,
         perPage   = this.props.perPage,

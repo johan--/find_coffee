@@ -28,14 +28,21 @@ module.exports = function(app) {
     Offering.find({}, function(err, offerings) {
       if (err) return err;
 
-      // Render to string.
-      router.run(function(Handler) {
-        var handler = <Handler user='' offerings={offerings} />,
-            html    = React.renderToString(handler);
+      // Get roaster names.
+      Offering.distinct('roastery.name', function(err, roasters) {
 
-        return res.render('index', {
-          jsonProps: JSON.stringify({ offerings: offerings, user: '' }),
-          reactOutput: html
+        // Render to string.
+        router.run(function(Handler) {
+          var handler = <Handler user='' roasters={roasters} offerings={offerings} />,
+              html    = React.renderToString(handler);
+
+          return res.render('index', {
+            jsonProps: JSON.stringify({
+              offerings: offerings,
+              roasters: roasters,
+              user: '' }),
+            reactOutput: html
+          });
         });
       });
     });

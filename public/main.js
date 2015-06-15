@@ -48,7 +48,6 @@ var React = require('react');
 
 // TODO: pull all current roasters/origins from db
 var origins  = ['Any', 'panama', 'guat', 'nyc'],
-    roasters = ['Any', 'halfwit', 'intelli', 'mtrop'],
     process  = ['Any', 'Washed', 'Honey', 'Natural'];
 
 module.exports = React.createClass({displayName: "exports",
@@ -56,7 +55,6 @@ module.exports = React.createClass({displayName: "exports",
   getInitialState: function() {
     return {
       origin:  origins[0],
-      roaster: roasters[0],
       process: process[0],
     };
   },
@@ -91,7 +89,7 @@ module.exports = React.createClass({displayName: "exports",
         React.createElement("form", {onSubmit: this.handleSubmit}, 
           this.renderTextInput('search', 'Search flavors...'), 
           this.renderSelect('origin', 'Origin', origins), 
-          this.renderSelect('roaster', 'Roaster', roasters), 
+          this.renderSelect('roaster', 'Roaster', this.props.roasters), 
           this.renderSelect('process', 'Process', process), 
           this.renderCheckbox('blend', 'Blend'), 
           this.renderCheckbox('decaf', 'Decaf'), 
@@ -425,7 +423,7 @@ module.exports = React.createClass({displayName: "exports",
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(CoffeeForm, {handleSubmit: this.handleSubmit}), 
+        React.createElement(CoffeeForm, React.__spread({},  this.props, {handleSubmit: this.handleSubmit})), 
         React.createElement(RouteHandler, {perPage: 10, offerings: this.state.offerings})
       )
     );
@@ -443,11 +441,15 @@ var routes = require('./reactRoutes.jsx');
 // Get props from server rendered HTML.
 var props     = JSON.parse(document.getElementById('props').innerHTML),
     offerings = props.offerings,
+    roasters  = props.roasters,
     user      = props.user;
 
 Router.run(routes, Router.HistoryLocation, function(Handler, state) {
   var params = state.params;
-  React.render(React.createElement(Handler, {params: params, user: user, offerings: offerings}),
+  React.render(React.createElement(Handler, {params: params, 
+                        roasters: roasters, 
+                        user: user, 
+                        offerings: offerings}),
       document.getElementById('mount-point'));
 });
 
@@ -487,7 +489,7 @@ function Filter(offerings) {
   if (typeof window === 'undefined') {
     // If rendering on server, offerings will be database
     // objects, and need to be converted before use.
-    this.offerings = offerings.map(function(o) { return o.toJSON() }) || [];
+    this.offerings = offerings.map(function(o) { return o.toJSON(); }) || [];
   } else {
     this.offerings = offerings || [];
   }
@@ -527,37 +529,25 @@ Filter.prototype.processForm = function(inputs) {
       .filter('organic', inputs.organic)
       .filter('origin', inputs.origin)
       .filter('process', inputs.process)
-      .filter('roaster', inputs.roaster);
+      .filter('roastery', inputs.roaster);
 
   return this.offerings;
 };
 
 // Helper that returns true if object contains value.
 function containsValue(object, key, value) {
-  var match = new RegExp(value, 'i');
+  var property = key === 'roastery' ?  object.roastery.name : object[key],
+      RE = new RegExp(value, 'i');
 
-  // True if user wants any value or checkbox wasn't checked.
-  if (value === 'Any' || (typeof value === 'boolean' && !value)) { 
-    return true;
-  }
-
-  // Check strict equality.
-  if (object[key] === value) {
-    return true;
-  }
-
-  // Check regexp match.
-  if (typeof object[key] === 'string' && object[key].match(match)) {
-    return true;
-  }
-
-  // If array, check for match inside.
-  if (Array.isArray(object[key]) &&
-      object[key].some(function(item) { return item.match(match); })) {
-    return true;
-  }
-
-  return false;
+  return value === 'Any' || // User wants any value.
+         // Checkbox wasn't checked.
+         (typeof value === 'boolean' && !value) ||
+         // Strict equality match.
+         property === value ||
+         // String match.
+         (typeof property === 'string' && property.match(RE)) ||
+         // Item within array matches.
+         (Array.isArray(property) && property.some(function(item) { return item.match(RE); }));
 }
 
 module.exports.Filter = Filter;

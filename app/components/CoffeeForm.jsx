@@ -3,7 +3,6 @@ var React = require('react');
 
 // TODO: pull all current roasters/origins from db
 var origins  = ['Any', 'panama', 'guat', 'nyc'],
-    roasters = ['Any', 'halfwit', 'intelli', 'mtrop'],
     process  = ['Any', 'Washed', 'Honey', 'Natural'];
 
 module.exports = React.createClass({
@@ -11,7 +10,6 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       origin:  origins[0],
-      roaster: roasters[0],
       process: process[0],
     };
   },
@@ -46,7 +44,7 @@ module.exports = React.createClass({
         <form onSubmit={this.handleSubmit} >
           {this.renderTextInput('search', 'Search flavors...')}
           {this.renderSelect('origin', 'Origin', origins)}
-          {this.renderSelect('roaster', 'Roaster', roasters)}
+          {this.renderSelect('roaster', 'Roaster', this.props.roasters)}
           {this.renderSelect('process', 'Process', process)}
           {this.renderCheckbox('blend', 'Blend')}
           {this.renderCheckbox('decaf', 'Decaf')}

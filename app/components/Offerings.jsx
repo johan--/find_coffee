@@ -18,20 +18,10 @@ module.exports = React.createClass({
     if (typeof window !== 'undefined') {
 
       // Use offerings from props for full list.
-      var offerings = this.props.offerings,
-          Available = new utils.Available(offerings);
+      var Filter    = new utils.Filter(this.props.offerings),
+          available = Filter.processForm(values);
 
-      // Filter offerings based on form values.
-      Available.filter('ALL', values.search)
-               .filter('blend', values.blend)
-               .filter('decaf', values.decaf)
-               .filter('direct', values.direct)
-               .filter('organic', values.organic)
-               .filter('origin', values.origin)
-               .filter('process', values.process)
-               .filter('roaster', values.roaster);
-
-      this.setState({offerings: Available.offerings});
+      this.setState({offerings: available});
 
     // Handle form submit if rendering on client.
     } else {

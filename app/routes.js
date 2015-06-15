@@ -13,20 +13,10 @@ module.exports = function(app) {
     Offering.find({}).exec(function(err, offerings) {
       if (err) throw err;
 
-      var Available = new utils.Available(offerings),
-          values    = req.body;
+      var Filter    = new utils.Filter(offerings),
+          available = Filter.processForm(req.body);
 
-      // Filter offerings based on form values.
-      Available.filter('ALL', values.search)
-               .filter('blend', values.blend)
-               .filter('decaf', values.decaf)
-               .filter('direct', values.direct)
-               .filter('organic', values.organic)
-               .filter('origin', values.origin)
-               .filter('process', values.process)
-               .filter('roaster', values.roaster);
-
-      return res.json(JSON.stringify(Available.offerings));
+      return res.json(JSON.stringify(available));
     });
   });
 
@@ -51,4 +41,3 @@ module.exports = function(app) {
     });
   });
 };
-

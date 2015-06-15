@@ -400,20 +400,10 @@ module.exports = React.createClass({displayName: "exports",
     if (typeof window !== 'undefined') {
 
       // Use offerings from props for full list.
-      var offerings = this.props.offerings,
-          Available = new utils.Available(offerings);
+      var Filter    = new utils.Filter(this.props.offerings),
+          available = Filter.processForm(values);
 
-      // Filter offerings based on form values.
-      Available.filter('ALL', values.search)
-               .filter('blend', values.blend)
-               .filter('decaf', values.decaf)
-               .filter('direct', values.direct)
-               .filter('organic', values.organic)
-               .filter('origin', values.origin)
-               .filter('process', values.process)
-               .filter('roaster', values.roaster);
-
-      this.setState({offerings: Available.offerings});
+      this.setState({offerings: available});
 
     // Handle form submit if rendering on client.
     } else {
@@ -493,7 +483,7 @@ module.exports = [
 ];
 
 },{"./components/404.jsx":1,"./components/App.jsx":2,"./components/Home.jsx":6,"./components/Offering.jsx":7,"./components/Offering404.jsx":8,"./components/OfferingList.jsx":9,"./components/Offerings.jsx":11,"react":305,"react-router":118}],14:[function(require,module,exports){
-function Available(offerings) {
+function Filter(offerings) {
   if (typeof window === 'undefined') {
     // If rendering on server, offerings will be database
     // objects, and need to be converted before use.
@@ -503,9 +493,8 @@ function Available(offerings) {
   }
 }
 
-// Filter offerings to include only those
-// that contain a matching value.
-Available.prototype.filter = function(cat, val) {
+// Filter offerings to include only those that contain a matching value.
+Filter.prototype.filter = function(cat, val) {
 
   this.offerings = this.offerings.filter(function(offering) {
 
@@ -527,6 +516,20 @@ Available.prototype.filter = function(cat, val) {
   });
 
   return this;
+};
+
+// Apply the filter function to all inputs in form.
+Filter.prototype.processForm = function(inputs) {
+  this.filter('ALL', inputs.search)
+      .filter('blend', inputs.blend)
+      .filter('decaf', inputs.decaf)
+      .filter('direct', inputs.direct)
+      .filter('organic', inputs.organic)
+      .filter('origin', inputs.origin)
+      .filter('process', inputs.process)
+      .filter('roaster', inputs.roaster);
+
+  return this.offerings;
 };
 
 // Helper that returns true if object contains value.
@@ -557,7 +560,7 @@ function containsValue(object, key, value) {
   return false;
 }
 
-module.exports.Available = Available;
+module.exports.Filter = Filter;
 
 },{}],15:[function(require,module,exports){
 /*!

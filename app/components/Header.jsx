@@ -1,26 +1,33 @@
 /** @jsx React.DOM */
-var React  = require('react'),
-    Button = require('./Button.jsx');
+var React       = require('react'),
+    Button      = require('./Button.jsx'),
+    Link        = require('react-router').Link,
+    AuthService = require('../services/AuthService.js');
 
 module.exports = React.createClass({
 
-  render: function() {
-    var loggedInUser = this.props.user;
+  logout: function(e) {
+    e.preventDefault();
+    AuthService.logout();
+  },
 
-    if (loggedInUser) {
-      var greeting = <li>{'Hello, ' + loggedInUser}</li>,
-          buttons  = <li><Button name="logout" text="Logout" /></li>;
+  render: function() {
+    var user = this.props.user;
+
+    if (user) {
+      var greeting = <li>{'Hello, ' + user.username}</li>,
+          links  = <li><a href='' onClick={this.logout}>Logout</a></li>;
     } else {
       var greeting = <li>Welcome!</li>,
-          buttons  = [<li><Button name="login" text="Login" /></li>,
-                      <li><Button name="signup" text="Sign Up" /></li>];
+          links  = [<li><Link to="login">Login</Link></li>,
+                    <li><Link to="signup">Sign Up</Link></li>];
     }
 
     return (
         <header>
           <ul>
             {greeting}
-            {buttons}
+            {links}
           </ul>
         </header>
     );

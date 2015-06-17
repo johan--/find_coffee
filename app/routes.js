@@ -88,14 +88,11 @@ module.exports = function(app) {
 
         // Render to string.
         router.run(function(Handler) {
-          var handler = <Handler user='' roasters={roasters} offerings={offerings} />,
+          var handler = <Handler roasters={roasters} offerings={offerings} />,
               html    = React.renderToString(handler);
 
           return res.render('index', {
-            jsonProps: JSON.stringify({
-              offerings: offerings,
-              roasters: roasters,
-              user: '' }),
+            jsonProps: JSON.stringify({ offerings: offerings, roasters: roasters, }),
             reactOutput: html
           });
         });

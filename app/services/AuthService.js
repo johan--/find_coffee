@@ -4,7 +4,8 @@ var Constants    = require('../constants/Constants.js'),
 
 function handleAuth(options) {
   request.post(options, function(err, res, body) {
-    LoginActions.loginUser(res.body.token);
+    var parsedBody = JSON.parse(body);
+    LoginActions.loginUser((parsedBody.token));
   });
 }
 

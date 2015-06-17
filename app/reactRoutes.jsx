@@ -7,6 +7,8 @@ var React         = require('react'),
     Offering      = require('./components/Offering.jsx'),
     Offerings     = require('./components/Offerings.jsx'),
     Offering404   = require('./components/Offering404.jsx'),
+    Login         = require('./components/Login.jsx'),
+    Signup        = require('./components/Signup.jsx'),
     NotFound      = require('./components/404.jsx'),
     Route         = Router.Route,
     DefaultRoute  = Router.DefaultRoute,
@@ -22,6 +24,9 @@ module.exports = [
       <Route name="offering" path=":_id" handler={Offering} />
       <NotFoundRoute handler={Offering404} />
     </Route>
+
+    <Route name="login" handler={Login} />
+    <Route name="signup" handler={Signup} />
 
     <NotFoundRoute handler={NotFound} />
 

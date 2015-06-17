@@ -8,6 +8,7 @@ var bodyParser = require('body-parser'),
 require('node-jsx').install();
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Setup https server.
 var credentials = {

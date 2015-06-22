@@ -41,7 +41,7 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-        <form onSubmit={this.handleSubmit} >
+        <form className="offeringsForm" onSubmit={this.handleSubmit} >
           {this.renderTextInput('search', 'Search flavors...')}
           {this.renderSelect('origin', 'Origin', origins)}
           {this.renderSelect('roaster', 'Roaster', this.props.roasters)}
@@ -92,7 +92,7 @@ module.exports = React.createClass({
     });
 
     return (
-      <div className="formGroup">
+      <div className="form-group">
         {this.renderLabel(id, label)}
         <select
           onChange={this.handleSelectChange}

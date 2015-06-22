@@ -133,7 +133,7 @@ module.exports = React.createClass({displayName: "exports",
 
   render: function() {
     return (
-        React.createElement("form", {onSubmit: this.handleSubmit}, 
+        React.createElement("form", {className: "offeringsForm", onSubmit: this.handleSubmit}, 
           this.renderTextInput('search', 'Search flavors...'), 
           this.renderSelect('origin', 'Origin', origins), 
           this.renderSelect('roaster', 'Roaster', this.props.roasters), 
@@ -184,7 +184,7 @@ module.exports = React.createClass({displayName: "exports",
     });
 
     return (
-      React.createElement("div", {className: "formGroup"}, 
+      React.createElement("div", {className: "form-group"}, 
         this.renderLabel(id, label), 
         React.createElement("select", {
           onChange: this.handleSelectChange, 
@@ -244,12 +244,18 @@ module.exports = React.createClass({displayName: "exports",
 /** @jsx React.DOM */
 var React        = require('react'),
     RouteHandler = require('react-router').RouteHandler,
+    Link         = require('react-router').Link,
     CoffeeForm   = require('./CoffeeForm.jsx');
 
 module.exports = React.createClass({displayName: "exports",
 
   render: function() {
-    return React.createElement("h1", null, "Search the latest coffees from the country's best roasters.");
+    return (
+      React.createElement("div", null, 
+        React.createElement("h1", null, "Search the latest coffees from the country's best roasters."), 
+        React.createElement(Link, {className: "searchAll", to: "offerings"}, "Search all Offerings")
+      )
+    );
   }
 
 });
@@ -281,9 +287,9 @@ module.exports = React.createClass({displayName: "exports",
 
   render: function() {
     return (
-      React.createElement("div", {className: "login"}, 
+      React.createElement("div", null, 
         React.createElement("h1", null, "Login"), 
-        React.createElement("form", {onSubmit: this.handleSubmit}, 
+        React.createElement("form", {className: "login", onSubmit: this.handleSubmit}, 
           React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "username"}, "Username"), 
             React.createElement("input", {
@@ -568,9 +574,9 @@ module.exports = React.createClass({displayName: "exports",
 
   render: function() {
     return (
-      React.createElement("div", {className: "signup"}, 
+      React.createElement("div", null, 
         React.createElement("h1", null, "Sign Up"), 
-        React.createElement("form", {onSubmit: this.handleSubmit}, 
+        React.createElement("form", {className: "signup", onSubmit: this.handleSubmit}, 
           React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "username"}, "Username"), 
             React.createElement("input", {

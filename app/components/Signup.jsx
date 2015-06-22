@@ -25,9 +25,9 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div className="signup">
+      <div>
         <h1>Sign Up</h1>
-        <form onSubmit={this.handleSubmit} >
+        <form className="signup" onSubmit={this.handleSubmit} >
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input

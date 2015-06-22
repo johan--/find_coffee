@@ -25,15 +25,19 @@ var OfferingSchema = Schema({
   harvest:   { type: [], get: get, set: set },
 
   flavors:   { type: [], get: get, set: set },
-  description: String, // long description of flavors
-  background:  String, // background info on coffee
+  description: String, // Long description of flavors
+  background:  String, // Background info on coffee
 
-  blend:       Boolean,
-  decaf:       Boolean,
-  organic:     Boolean,
-  directTrade: Boolean,
-  fairTrade:   Boolean,
-  current:     Boolean
+  blend:       { type: Boolean, default: false },
+  decaf:       { type: Boolean, default: false },
+  organic:     { type: Boolean, default: false },
+  directTrade: { type: Boolean, default: false },
+  fairTrade:   { type: Boolean, default: false },
+  current:     { type: Boolean, default: true },
+  meta: {
+    created:     { type: Date, default: Date.now },
+    lastUpdated: Date
+  }
 });
 
 // getters & setters

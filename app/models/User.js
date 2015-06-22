@@ -6,9 +6,9 @@ var UserSchema = Schema({
   username:      { type: String, unique: true },
   email:         { type: String, default: '' },
   password:      { type: String, default: '' },
-  createdAt:     { type: Date, default: Date.now },
-  roasteries:    [{ _id: {type: Schema.ObjectId, ref: 'Roastery' } }],
-  offerings:     [{ _id: {type: Schema.ObjectId, ref: 'Offering' } }]
+  created:       { type: Date, default: Date.now },
+  roasteries:   [{ _id: {type: Schema.ObjectId, ref: 'Roastery' } }],
+  offerings:    [{ _id: {type: Schema.ObjectId, ref: 'Offering' } }]
 });
 
 // Methods

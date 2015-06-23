@@ -7,11 +7,11 @@ var OfferingSchema = Schema({
     _id:  { type: Schema.ObjectId, ref: 'Roastery' },
     name: { type: String } 
   },
-  name:      { type: String, unique: true },
-  start:       Date,
-  end:         Date,
-  price:       Number,
-  url:         String,
+  name:    String,
+  start:   Date,
+  end:     Date,
+  price:   Number,
+  url:     { type: String, unique: true },
 
   origin:    { type: [], get: get, set: set },
   region:    { type: [], get: get, set: set },
@@ -36,7 +36,7 @@ var OfferingSchema = Schema({
   current:     { type: Boolean, default: true },
   meta: {
     created:     { type: Date, default: Date.now },
-    lastUpdated: Date
+    lastUpdated: { type: Date, default: Date.now }
   }
 });
 

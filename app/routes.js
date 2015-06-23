@@ -1,11 +1,12 @@
 /** @jsx React.DOM */
-var React    = require('react'),
-    Router   = require('react-router'),
-    routes   = require('./reactRoutes.jsx'),
-    utils    = require('../lib/utils.js'),
-    jwt      = require('jsonwebtoken'),
-    Offering = require('./db.js').Offering,
-    User     = require('./db.js').User;
+var React        = require('react'),
+    Router       = require('react-router'),
+    routes       = require('./reactRoutes.jsx'),
+    utils        = require('../lib/utils.js'),
+    jwt          = require('jsonwebtoken'),
+    Offering     = require('./db.js').Offering,
+    User         = require('./db.js').User;
+    LoginActions = require('./actions/LoginActions.js');
 
 module.exports = function(app) {
 
@@ -77,7 +78,7 @@ module.exports = function(app) {
     var router = Router.create({ location: req.url, routes: routes });
 
     // Load all offerings.
-    Offering.find({}, function(err, offerings) {
+    Offering.find({}, {}, { sort: {"lastUpdated": -1 }}, function(err, offerings) {
       if (err) return err;
 
       // Get roaster names.
@@ -85,6 +86,12 @@ module.exports = function(app) {
 
         // Add any option to roasters.
         roasters.unshift('Any');
+
+        // Check for jwt cookie.
+        var cookieToken = req.cookies.jwt;
+        if (cookieToken) {
+          LoginActions.loginUser(cookieToken);
+        }
 
         // Render to string.
         router.run(function(Handler) {

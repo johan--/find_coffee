@@ -7,6 +7,7 @@ var UserSchema = Schema({
   email:         { type: String, default: '' },
   password:      { type: String, default: '' },
   created:       { type: Date, default: Date.now },
+  admin:         { type: Boolean, default: false },
   roasteries:   [{ _id: {type: Schema.ObjectId, ref: 'Roastery' } }],
   offerings:    [{ _id: {type: Schema.ObjectId, ref: 'Offering' } }]
 });

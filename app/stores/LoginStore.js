@@ -1,8 +1,8 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher'),
     EventEmitter  = require('events').EventEmitter,
     Constants     = require('../constants/Constants.js'),
-    assign        = require('object-assign'),
-    jwt_decode    = require('jwt-decode');
+    jwt           = require('jsonwebtoken'),
+    assign        = require('object-assign');
 
 var CHANGE_EVENT = 'change',
     _user        = null,
@@ -47,14 +47,19 @@ AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
     case Constants.LOGIN_USER:
-      localStorage.setItem('jwt', action.token);
+      // This action is only called on the server if a jwt cookie exists.
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('jwt', action.token);
+        Cookies.set('jwt', action.token);
+      }
       LoginStore.setToken(action.token);
-      LoginStore.setUser(jwt_decode(action.token));
+      LoginStore.setUser(jwt.decode(action.token));
       LoginStore.emitChange();
       break;
 
     case Constants.LOGOUT_USER:
       localStorage.removeItem('jwt');
+      Cookies.expire('jwt');
       LoginStore.setToken(null);
       LoginStore.setUser(null);
       LoginStore.emitChange();

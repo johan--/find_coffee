@@ -1,12 +1,14 @@
-var bodyParser = require('body-parser'),
-    express    = require('express'),
-    https      = require('https'),
-    path       = require('path'),
-    fs         = require('fs'),
-    app        = express();
+var cookieParser = require('cookie-parser'),
+    bodyParser   = require('body-parser'),
+    express      = require('express'),
+    https        = require('https'),
+    path         = require('path'),
+    fs           = require('fs'),
+    app          = express();
 
 require('node-jsx').install();
 
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 

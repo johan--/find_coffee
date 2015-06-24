@@ -3,9 +3,17 @@ var AppDispatcher  = require('../dispatcher/AppDispatcher.js'),
 
 module.exports = {
 
-  // Login user
-  loginUser: function(token) {
-    AppDispatcher.dispatch({
+  // Login user on server.
+  loginUserServer: function(token) {
+    AppDispatcher.handleServerAction({
+      actionType: Constants.LOGIN_USER,
+      token: token
+    });
+  },
+
+  // Login user on client.
+  loginUserClient: function(token) {
+    AppDispatcher.handleViewAction({
       actionType: Constants.LOGIN_USER,
       token: token
     });
@@ -13,7 +21,7 @@ module.exports = {
 
   // Logout user
   logoutUser: function() {
-    AppDispatcher.dispatch({
+    AppDispatcher.handleViewAction({
       actionType: Constants.LOGOUT_USER
     });
   }

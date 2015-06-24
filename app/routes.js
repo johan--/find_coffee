@@ -5,8 +5,9 @@ var React        = require('react'),
     utils        = require('../lib/utils.js'),
     jwt          = require('jsonwebtoken'),
     Offering     = require('./db.js').Offering,
-    User         = require('./db.js').User;
-    LoginActions = require('./actions/LoginActions.js');
+    User         = require('./db.js').User,
+    LoginActions = require('./actions/LoginActions.js'),
+    RouterContainer = require('./services/RouterContainer.js');
 
 module.exports = function(app) {
 
@@ -73,9 +74,17 @@ module.exports = function(app) {
     });
   });
 
+  // Logout
+  app.post('/logout', function(req, res) {
+    LoginActions.logoutUser();
+  });
+
   // Respond to all other requests with React.
   app.get('*', function(req, res) {
+
+    // Create router and store for use in transitions.
     var router = Router.create({ location: req.url, routes: routes });
+    RouterContainer.set(router);
 
     // Load all offerings.
     Offering.find({}, {}, { sort: {"lastUpdated": -1 }}, function(err, offerings) {
@@ -90,7 +99,7 @@ module.exports = function(app) {
         // Check for jwt cookie.
         var cookieToken = req.cookies.jwt;
         if (cookieToken) {
-          LoginActions.loginUser(cookieToken);
+          LoginActions.loginUserServer(cookieToken);
         }
 
         // Render to string.

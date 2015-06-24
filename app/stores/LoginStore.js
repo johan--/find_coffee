@@ -2,7 +2,8 @@ var AppDispatcher = require('../dispatcher/AppDispatcher'),
     EventEmitter  = require('events').EventEmitter,
     Constants     = require('../constants/Constants.js'),
     jwt           = require('jsonwebtoken'),
-    assign        = require('object-assign');
+    assign        = require('object-assign'),
+    RouterContainer = require('../services/RouterContainer.js');
 
 var CHANGE_EVENT = 'change',
     _user        = null,
@@ -16,14 +17,6 @@ var LoginStore = assign({}, EventEmitter.prototype, {
 
   setUser: function(user) {
     _user = user;
-  },
-
-  getToken: function() {
-    return _token;
-  },
-
-  setToken: function(token) {
-    _token = token;
   },
 
   isLoggedIn: function() {
@@ -43,7 +36,8 @@ var LoginStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-AppDispatcher.register(function(action) {
+AppDispatcher.register(function(payload) {
+  var action = payload.action;
 
   switch(action.actionType) {
     case Constants.LOGIN_USER:
@@ -52,15 +46,16 @@ AppDispatcher.register(function(action) {
         localStorage.setItem('jwt', action.token);
         Cookies.set('jwt', action.token);
       }
-      LoginStore.setToken(action.token);
       LoginStore.setUser(jwt.decode(action.token));
       LoginStore.emitChange();
       break;
 
     case Constants.LOGOUT_USER:
-      localStorage.removeItem('jwt');
-      Cookies.expire('jwt');
-      LoginStore.setToken(null);
+      // RouterContainer.get().transitionTo('/login');
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('jwt');
+        Cookies.expire('jwt');
+      }
       LoginStore.setUser(null);
       LoginStore.emitChange();
       break;

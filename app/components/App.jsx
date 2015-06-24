@@ -5,6 +5,8 @@ var React        = require('react'),
     AuthService  = require('../services/AuthService.js'),
     LoginStore   = require('../stores/LoginStore.js');
 
+var ENV = typeof window === 'undefined' ? 'server' : 'client';
+
 module.exports = React.createClass({
 
   getInitialState: function() {

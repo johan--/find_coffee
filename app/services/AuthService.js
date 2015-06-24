@@ -5,7 +5,7 @@ var Constants    = require('../constants/Constants.js'),
 function handleAuth(options) {
   request.post(options, function(err, res, body) {
     var parsedBody = JSON.parse(body);
-    LoginActions.loginUser((parsedBody.token));
+    LoginActions.loginUserClient(parsedBody.token);
   });
 }
 
@@ -35,7 +35,15 @@ module.exports = {
 
   // Logout
   logout: function() {
+    var options = { url: Constants.LOGOUT_URL };
+
+    // Logout on client.
     LoginActions.logoutUser();
+
+    // Logout on server.
+    request.post(options, function(err, res, body) {
+      // Logged out.
+    });
   }
 
 };

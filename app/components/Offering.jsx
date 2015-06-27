@@ -42,19 +42,17 @@ module.exports = React.createClass({
 
   // Return list of given offering information.
   _getInfo: function() {
-    // Return null if offering is empty.
     if (this._offeringIsEmpty()) { return null; }
-
-    return this._buildList(["origin", "region", "producer", "farm", "process",
-                            "sourced", "varietals", "method", "harvest" ]);
+    var categories = ["origin", "region", "producer", "farm", "process",
+                      "sourced", "varietals", "method", "harvest" ];
+    return this._buildList(categories);
   },
 
   // Return list of offering's boolean values. (blend, decaf, etc.)
   _getBooleans: function() {
-    // Return null if offering is empty.
     if (this._offeringIsEmpty()) { return null; }
-
-    return this._buildList(["blend", "decaf", "organic", "directTrade", "fairTrade"]);
+    var categories = ["blend", "decaf", "organic", "directTrade", "fairTrade"];
+    return this._buildList(categories);
   },
 
   // Build a list from the given categories.

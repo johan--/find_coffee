@@ -31,31 +31,50 @@ var List = React.createClass({
 var OfferingsList = React.createClass({
 
   getInitialState: function() {
-    var offerings = this.props.offerings,
+    return this._loadInitial();
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    this.setState(this._loadInitial(newProps));
+  },
+
+  _loadInitial: function(newProps) {
+    var offerings = (newProps && newProps.offerings) || this.props.offerings,
         perPage   = this.props.perPage;
 
     return {
       offerings: offerings.slice(0, perPage),
-      pageNum: (offerings.length / perPage)
+      pageNum: (offerings.length / perPage),
+      selected: 0
     };
-  },
-
-  componentWillReceiveProps: function(newProps) {
-    var offerings = newProps.offerings,
-        perPage   = this.props.perPage;
-
-    this.setState({ 
-      offerings: offerings.slice(0, perPage),
-      pageNum: (offerings.length / perPage)
-    });
   },
 
   handlePageClick: function(data) {
     var offerings = this.props.offerings,
         perPage   = this.props.perPage,
-        offset    = Math.ceil(data.selected * perPage);
+        selected  = data.selected,
+        offset    = Math.ceil(selected * perPage);
 
-    this.setState({ offerings: offerings.slice(offset, (offset + perPage)) });
+    this.setState({
+      offerings: offerings.slice(offset, (offset + perPage)),
+      selected: selected
+    });
+  },
+
+  _getButtons: function() {
+    var lastPage  = Math.ceil(this.props.offerings.length / this.props.perPage),
+        selected  = this.state.selected,
+        buttons   = { previous: true, next: true };
+
+    if (selected === 0) {
+      buttons.previous = false;
+    }
+
+    if (selected === lastPage - 1) {
+      buttons.next = false;
+    }
+
+    return buttons;
   },
 
   render: function () {
@@ -65,6 +84,7 @@ var OfferingsList = React.createClass({
         <ReactPaginate previousLabel={"previous"}
                        nextLabel={"next"}
                        breakLabel={<li className="break"><a href="">...</a></li>}
+                       buttons={this._getButtons()}
                        pageNum={this.state.pageNum}
                        marginPagesDisplayed={2}
                        pageRangeDisplayed={5}

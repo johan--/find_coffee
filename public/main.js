@@ -282,9 +282,11 @@ var React        = require('react'),
 module.exports = React.createClass({displayName: "exports",
 
   render: function() {
+    var msg = "Search the latest coffees from the country's best roasters.";
+
     return (
       React.createElement("div", null, 
-        React.createElement("h1", null, "Search the latest coffees from the country's best roasters."), 
+        React.createElement("h1", {className: "greeting"}, msg), 
         React.createElement(Link, {className: "searchAll", to: "offerings"}, "Search all Offerings")
       )
     );
@@ -355,18 +357,20 @@ var React = require('react'),
 module.exports = React.createClass({displayName: "exports",
 
   getInitialState: function() {
-    return { offering: null };
+    return {
+      offering: {}
+    };
   },
 
   componentDidMount: function() {
     var _id  = this.props.params._id,
         self = this;
 
-    // If offerings/:id is rendered server side,
-    // need to pull offering object from Mongo.
+    // Handle server render.
     if (typeof window === 'undefined') {
       var Offering = mongoose.model('Offering');
 
+      // Pull offering from Mongo.
       Offering.find({ _id: _id }, function(err, offering) {
         if (err) { throw err; }
         self.setState({ offering: offering });
@@ -388,18 +392,82 @@ module.exports = React.createClass({displayName: "exports",
     }
   },
 
+  // Return list of given offering information.
+  _getInfo: function() {
+    // Return null if offering is empty.
+    if (this._offeringIsEmpty()) { return null; }
+
+    return this._buildList(["origin", "region", "producer", "farm", "process",
+                            "sourced", "varietals", "method", "harvest" ]);
+  },
+
+  // Return list of offering's boolean values. (blend, decaf, etc.)
+  _getBooleans: function() {
+    // Return null if offering is empty.
+    if (this._offeringIsEmpty()) { return null; }
+
+    return this._buildList(["blend", "decaf", "organic", "directTrade", "fairTrade"]);
+  },
+
+  // Build a list from the given categories.
+  _buildList: function(categories) {
+    var offering  = this.state.offering,
+        listItems = [];
+
+    // Add categories to list if they contain a value.
+    categories.forEach(function(cat) {
+      var val = offering[cat];
+      
+      if (typeof val === 'boolean') {
+        val = val ? '\u2713' : null; // True = checkmark
+      }
+
+      // Ignore blank values or empty arrays.
+      if ((val && val.constructor === Array && val.length) ||
+          (val && val.constructor !== Array)) {
+
+
+        var category = React.createElement("span", {className: "category"}, cat, ":"),
+            value    = React.createElement("span", {className: "value"}, 
+                          val.constructor === Array ? val.join(', ') : val
+                       );
+
+        listItems.push(React.createElement("li", null, category, " ", value));
+      }
+    });
+    return React.createElement("ul", null, listItems);
+  },
+
+  // Helper that returns true if offering is blank.
+  _offeringIsEmpty: function() {
+    return Object.keys(this.state.offering).length === 0;
+  },
+
   render: function() {
-    if (this.state.offering) {
-      var offering = this.state.offering;
+    var offering   = this.state.offering,
+        flavors    = offering.flavors,
+        background = offering.background;
+
+    if (background) {
+      background = React.createElement("p", null, React.createElement("span", {className: "background"}, "Background:"), background);
+    }
+
+    if (flavors && flavors.length) {
+      flavors = React.createElement("p", null, React.createElement("span", {className: "flavors"}, "Flavors:"), flavors.join(', '));
+    }
+
+    if (this._offeringIsEmpty()) {
+      return React.createElement("div", {className: "overview"}, React.createElement("h1", null, "Loading..."));
+    } else {
       return (
-        React.createElement("div", null, 
-          React.createElement("h3", null, offering.name), 
-          React.createElement("p", null, offering.background), 
-          React.createElement("p", null, offering.flavors)
+        React.createElement("div", {className: "overview"}, 
+          React.createElement("h1", null, offering.name), 
+          background, 
+          flavors, 
+          this._getInfo(), 
+          this._getBooleans()
         )
       );
-    } else {
-      return React.createElement("div", null, "Loading...");
     }
   }
 });
@@ -788,14 +856,13 @@ module.exports = {
 
   // Logout
   logout: function() {
-    var options = { url: Constants.LOGOUT_URL };
 
     // Logout on client.
     LoginActions.logoutUser();
 
     // Logout on server.
-    request.post(options, function(err, res, body) {
-      // Logged out.
+    request.post({ url: Constants.LOGOUT_URL }, function(err, res, body) {
+      if (err) console.error(err);
     });
   }
 

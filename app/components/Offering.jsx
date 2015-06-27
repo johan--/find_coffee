@@ -5,18 +5,20 @@ var React = require('react'),
 module.exports = React.createClass({
 
   getInitialState: function() {
-    return { offering: null };
+    return {
+      offering: {}
+    };
   },
 
   componentDidMount: function() {
     var _id  = this.props.params._id,
         self = this;
 
-    // If offerings/:id is rendered server side,
-    // need to pull offering object from Mongo.
+    // Handle server render.
     if (typeof window === 'undefined') {
       var Offering = mongoose.model('Offering');
 
+      // Pull offering from Mongo.
       Offering.find({ _id: _id }, function(err, offering) {
         if (err) { throw err; }
         self.setState({ offering: offering });
@@ -38,18 +40,82 @@ module.exports = React.createClass({
     }
   },
 
+  // Return list of given offering information.
+  _getInfo: function() {
+    // Return null if offering is empty.
+    if (this._offeringIsEmpty()) { return null; }
+
+    return this._buildList(["origin", "region", "producer", "farm", "process",
+                            "sourced", "varietals", "method", "harvest" ]);
+  },
+
+  // Return list of offering's boolean values. (blend, decaf, etc.)
+  _getBooleans: function() {
+    // Return null if offering is empty.
+    if (this._offeringIsEmpty()) { return null; }
+
+    return this._buildList(["blend", "decaf", "organic", "directTrade", "fairTrade"]);
+  },
+
+  // Build a list from the given categories.
+  _buildList: function(categories) {
+    var offering  = this.state.offering,
+        listItems = [];
+
+    // Add categories to list if they contain a value.
+    categories.forEach(function(cat) {
+      var val = offering[cat];
+      
+      if (typeof val === 'boolean') {
+        val = val ? '\u2713' : null; // True = checkmark
+      }
+
+      // Ignore blank values or empty arrays.
+      if ((val && val.constructor === Array && val.length) ||
+          (val && val.constructor !== Array)) {
+
+
+        var category = <span className="category">{cat}:</span>,
+            value    = <span className="value">
+                          {val.constructor === Array ? val.join(', ') : val}
+                       </span>;
+
+        listItems.push(<li>{category} {value}</li>);
+      }
+    });
+    return <ul>{listItems}</ul>;
+  },
+
+  // Helper that returns true if offering is blank.
+  _offeringIsEmpty: function() {
+    return Object.keys(this.state.offering).length === 0;
+  },
+
   render: function() {
-    if (this.state.offering) {
-      var offering = this.state.offering;
+    var offering   = this.state.offering,
+        flavors    = offering.flavors,
+        background = offering.background;
+
+    if (background) {
+      background = <p><span className="background">Background:</span>{background}</p>;
+    }
+
+    if (flavors && flavors.length) {
+      flavors = <p><span className="flavors">Flavors:</span>{flavors.join(', ')}</p>;
+    }
+
+    if (this._offeringIsEmpty()) {
+      return <div className="overview"><h1>Loading...</h1></div>;
+    } else {
       return (
-        <div>
-          <h3>{offering.name}</h3>
-          <p>{offering.background}</p>
-          <p>{offering.flavors}</p>
+        <div className="overview">
+          <h1>{offering.name}</h1>
+          {background}
+          {flavors}
+          {this._getInfo()}
+          {this._getBooleans()}
         </div>
       );
-    } else {
-      return <div>Loading...</div>;
     }
   }
 });

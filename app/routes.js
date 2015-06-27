@@ -77,6 +77,7 @@ module.exports = function(app) {
   // Logout
   app.post('/logout', function(req, res) {
     LoginActions.logoutUser();
+    res.status(204);
   });
 
   // Respond to all other requests with React.

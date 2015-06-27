@@ -3,7 +3,6 @@ body {
   background-repeat: no-repeat;
   color: white;
   margin: 0;
-  padding: 0;
   font-color: black;
 }
 
@@ -54,13 +53,14 @@ header li {
 #mainContent {
   font-family: 'Amatic SC', sans-serif;
   position: fixed;
+  padding: 5px;
   top: 45px;
   width: 100%;
   height: 100%;
   text-align: center;
 }
 
-h1 {
+.greeting {
   position: relative;
   top: 85px;
   font-size:  3.35em; 
@@ -92,9 +92,7 @@ form {
 .offeringsForm {
   padding: 10px;
   border-radius: 4px;
-  /*border: 1px solid #999; */
   position: absolute;
-  /*background-color: rgba(255, 255, 255, 0.4); */
   top: 400px;
   right: 40px;
 }
@@ -122,11 +120,30 @@ form .submit {
   margin-left: auto;
 }
 
-/* Offering List
+/* Offering List / Offering
  *******************************/
-.offerings {
-  position: relative;
-  left: -300px;
+.offerings,
+.overview {
+  width: 60%;
+}
+
+.overview p {
+  font-size: 1.5em;
+}
+
+.overview ul {
+  margin-left: 20px;
+  text-align: left;
+}
+
+.overview li {
+  font-size: 1.3em;
+}
+
+.background,
+.flavors,
+.category {
+  margin-right: 10px;
 }
 
 /* Pagination

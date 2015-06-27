@@ -35,14 +35,13 @@ module.exports = {
 
   // Logout
   logout: function() {
-    var options = { url: Constants.LOGOUT_URL };
 
     // Logout on client.
     LoginActions.logoutUser();
 
     // Logout on server.
-    request.post(options, function(err, res, body) {
-      // Logged out.
+    request.post({ url: Constants.LOGOUT_URL }, function(err, res, body) {
+      if (err) console.error(err);
     });
   }
 

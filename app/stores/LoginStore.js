@@ -1,8 +1,8 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher'),
-    EventEmitter  = require('events').EventEmitter,
-    Constants     = require('../constants/Constants.js'),
-    jwt           = require('jsonwebtoken'),
-    assign        = require('object-assign'),
+var AppDispatcher   = require('../dispatcher/AppDispatcher'),
+    EventEmitter    = require('events').EventEmitter,
+    Constants       = require('../constants/Constants.js'),
+    jwt             = require('jsonwebtoken'),
+    assign          = require('object-assign'),
     RouterContainer = require('../services/RouterContainer.js');
 
 var CHANGE_EVENT = 'change',
@@ -51,7 +51,7 @@ AppDispatcher.register(function(payload) {
       break;
 
     case Constants.LOGOUT_USER:
-      // RouterContainer.get().transitionTo('/login');
+      RouterContainer.get().transitionTo('/login');
       if (typeof localStorage !== 'undefined') {
         localStorage.removeItem('jwt');
         Cookies.expire('jwt');

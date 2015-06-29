@@ -1,8 +1,9 @@
 /** @jsx React.DOM */
-var React        = require('react'),
-    RouteHandler = require('react-router').RouteHandler,
-    CoffeeForm   = require('./CoffeeForm.jsx'),
-    utils        = require('../../lib/utils.js');
+var React           = require('react'),
+    RouteHandler    = require('react-router').RouteHandler,
+    RouterContainer = require('../services/RouterContainer.js'),
+    CoffeeForm      = require('./CoffeeForm.jsx'),
+    utils           = require('../../lib/utils.js');
 
 module.exports = React.createClass({
 
@@ -13,6 +14,8 @@ module.exports = React.createClass({
   },
 
   handleSubmit: function(values) {
+    // TODO: only transition if not already on offerings page
+    RouterContainer.get().transitionTo('/offerings');
 
     // Handle form submit if rendering on client.
     if (typeof window !== 'undefined') {

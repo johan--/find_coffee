@@ -207,9 +207,6 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   renderSelect: function(id, label, values) {
-    console.log('id', id);
-    console.log('label', label);
-    console.log('values', values);
     var options = values.map(function(value) {
       return React.createElement("option", {key: value, value: value}, value)
     });
@@ -618,10 +615,11 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"react":667,"react-router":498}],14:[function(require,module,exports){
 /** @jsx React.DOM */
-var React        = require('react'),
-    RouteHandler = require('react-router').RouteHandler,
-    CoffeeForm   = require('./CoffeeForm.jsx'),
-    utils        = require('../../lib/utils.js');
+var React           = require('react'),
+    RouteHandler    = require('react-router').RouteHandler,
+    RouterContainer = require('../services/RouterContainer.js'),
+    CoffeeForm      = require('./CoffeeForm.jsx'),
+    utils           = require('../../lib/utils.js');
 
 module.exports = React.createClass({displayName: "exports",
 
@@ -632,6 +630,8 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   handleSubmit: function(values) {
+    // TODO: only transition if not already on offerings page
+    RouterContainer.get().transitionTo('/offerings');
 
     // Handle form submit if rendering on client.
     if (typeof window !== 'undefined') {
@@ -672,7 +672,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"../../lib/utils.js":23,"./CoffeeForm.jsx":6,"react":667,"react-router":498}],15:[function(require,module,exports){
+},{"../../lib/utils.js":23,"../services/RouterContainer.js":21,"./CoffeeForm.jsx":6,"react":667,"react-router":498}],15:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     AuthService = require('../services/AuthService.js');
@@ -908,11 +908,11 @@ module.exports = {
 };
 
 },{}],22:[function(require,module,exports){
-var AppDispatcher = require('../dispatcher/AppDispatcher'),
-    EventEmitter  = require('events').EventEmitter,
-    Constants     = require('../constants/Constants.js'),
-    jwt           = require('jsonwebtoken'),
-    assign        = require('object-assign'),
+var AppDispatcher   = require('../dispatcher/AppDispatcher'),
+    EventEmitter    = require('events').EventEmitter,
+    Constants       = require('../constants/Constants.js'),
+    jwt             = require('jsonwebtoken'),
+    assign          = require('object-assign'),
     RouterContainer = require('../services/RouterContainer.js');
 
 var CHANGE_EVENT = 'change',
@@ -961,7 +961,7 @@ AppDispatcher.register(function(payload) {
       break;
 
     case Constants.LOGOUT_USER:
-      // RouterContainer.get().transitionTo('/login');
+      RouterContainer.get().transitionTo('/login');
       if (typeof localStorage !== 'undefined') {
         localStorage.removeItem('jwt');
         Cookies.expire('jwt');

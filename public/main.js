@@ -424,7 +424,6 @@ module.exports = React.createClass({displayName: "exports",
       if ((val && val.constructor === Array && val.length) ||
           (val && val.constructor !== Array)) {
 
-
         var category = React.createElement("span", {className: "category"}, cat, ":"),
             value    = React.createElement("span", {className: "value"}, 
                           val.constructor === Array ? val.join(', ') : val

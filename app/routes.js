@@ -6,6 +6,7 @@ var React        = require('react'),
     jwt          = require('jsonwebtoken'),
     Offering     = require('./db.js').Offering,
     User         = require('./db.js').User,
+    async        = require('async'),
     LoginActions = require('./actions/LoginActions.js'),
     RouterContainer = require('./services/RouterContainer.js');
 
@@ -15,7 +16,7 @@ module.exports = function(app) {
     return jwt.sign(user, 'marzocco', { expiresInMinutes: 60 * 12 });
   }
 
-  // Query the db to get matched coffees.
+  // Query Mongo to get matched coffees.
   app.post('/offerings/find', function(req, res, next) {
     
     Offering.find({}).exec(function(err, offerings) {
@@ -83,19 +84,23 @@ module.exports = function(app) {
   // Respond to all other requests with React.
   app.get('*', function(req, res) {
 
-    // Create router and store for use in transitions.
-    var router = Router.create({ location: req.url, routes: routes });
-    RouterContainer.set(router);
+    async.series([
+        Offering.getRoasters.bind(Offering),
+        Offering.getOrigins.bind(Offering),
+        Offering.getOfferings.bind(Offering)
+      ],
 
-    // Load all offerings.
-    Offering.find({}, {}, { sort: {"lastUpdated": -1 }}, function(err, offerings) {
-      if (err) return err;
+      // Called once all info is loaded.
+      function(err, results) {
+        if (err) throw err;
 
-      // Get roaster names.
-      Offering.distinct('roastery.name', function(err, roasters) {
+        var roasters  = results[0],
+            origins   = results[1],
+            offerings = results[2];
 
-        // Add any option to roasters.
-        roasters.unshift('Any');
+        // Create router and store reference.
+        var router = Router.create({ location: req.url, routes: routes });
+        RouterContainer.set(router);
 
         // Check for jwt cookie.
         var cookieToken = req.cookies.jwt;
@@ -114,6 +119,5 @@ module.exports = function(app) {
           });
         });
       });
-    });
   });
 };

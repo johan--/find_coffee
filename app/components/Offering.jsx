@@ -72,7 +72,6 @@ module.exports = React.createClass({
       if ((val && val.constructor === Array && val.length) ||
           (val && val.constructor !== Array)) {
 
-
         var category = <span className="category">{cat}:</span>,
             value    = <span className="value">
                           {val.constructor === Array ? val.join(', ') : val}

@@ -40,7 +40,7 @@ var OfferingSchema = Schema({
   }
 });
 
-// getters & setters
+// Getters/Setters
 // =======================================================
 function get(val) {
   return val.join(', ');
@@ -49,5 +49,47 @@ function get(val) {
 function set(val) {
   return val.split(', ');
 }
+
+// Statics
+// =======================================================
+OfferingSchema.statics = {
+
+  // Return unique roasters.
+  getRoasters: function(cb) {
+    this.distinct('roastery.name', function(err, roasters) {
+      if (err) cb(err);
+
+      // Add 'Any' option.
+      roasters.unshift('Any');
+
+      cb(null, roasters);
+    });
+  },
+
+  // Return unique origins.
+  getOrigins: function(cb) {
+    this.distinct('origin', function(err, origins) {
+      if (err) cb(err);
+
+      // Add 'Any option.
+      origins.unshift('Any');
+
+      cb(null, origins);
+    });
+  },
+
+  // Return all offerings.
+  getOfferings: function(cb) {
+    var query      = {},
+        projection = {},
+        options    = { sort: {"lastUpdated": -1 }};
+    
+    this.find(query, projection, options, function(err, offerings) {
+      if (err) cb(err);
+      cb(null, offerings);
+    });
+  },
+
+};
 
 module.exports = mongoose.model('Offering', OfferingSchema);

@@ -1,8 +1,6 @@
 /** @jsx React.DOM */
 var React        = require('react'),
-    RouteHandler = require('react-router').RouteHandler,
-    Link         = require('react-router').Link,
-    CoffeeForm   = require('./CoffeeForm.jsx');
+    Link         = require('react-router').Link;
 
 module.exports = React.createClass({
 

@@ -8,7 +8,7 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      offerings: this.props.offerings
+      offerings: this.props.data.offerings
     };
   },
 
@@ -18,7 +18,7 @@ module.exports = React.createClass({
     if (typeof window !== 'undefined') {
 
       // Use offerings from props for full list.
-      var Filter    = new utils.Filter(this.props.offerings),
+      var Filter    = new utils.Filter(this.props.data.offerings),
           available = Filter.processForm(values);
 
       this.setState({offerings: available});
@@ -30,11 +30,13 @@ module.exports = React.createClass({
         type: "POST",
         contentType: 'application/json',
         data : JSON.stringify(values),
+
         success: function(data, textStatus, jqXHR) {
           this.setState({ offerings: JSON.parse(data) })
         }.bind(this),
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.error(errorThrown);
+
+        error: function (jqXHR, textStatus, error) {
+          console.error(error);
         }
       });
     }

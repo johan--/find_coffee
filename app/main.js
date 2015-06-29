@@ -5,9 +5,7 @@ var React  = require('react'),
     LoginActions = require('./actions/LoginActions.js');
 
 // Get props from server rendered HTML.
-var props     = JSON.parse(document.getElementById('props').innerHTML),
-    offerings = props.offerings,
-    roasters  = props.roasters;
+var data = JSON.parse(document.getElementById('props').innerHTML).data;
 
 // Create router.
 var router = Router.create({
@@ -26,6 +24,6 @@ if (token) {
 
 router.run(function(Handler, state) {
   var params = state.params;
-  React.render(<Handler params={params} roasters={roasters} offerings={offerings}/>,
+  React.render(<Handler params={params} data={data}/>,
       document.getElementById('mount-point'));
 });

@@ -10,15 +10,25 @@ var List = React.createClass({
         allOfferings = [],
         self         = this;
 
-    for (offering in offerings) {
+    offerings.forEach(function(offering, index) {
       allOfferings.push(
         <OfferingListItem
           params={self.props.params}
-          offering={offerings[offering]}
-          key={offering}
+          offering={offering}
+          key={index}
         />
       );
-    }
+    });
+
+//  for (offering in offerings) {
+//    allOfferings.push(
+//      <OfferingListItem
+//        params={self.props.params}
+//        offering={offerings[offering]}
+//        key={offering}
+//      />
+//    );
+//  }
 
     return (
       <ul className="offeringsList">

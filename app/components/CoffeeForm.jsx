@@ -1,17 +1,10 @@
 /** @jsx React.DOM */
 var React = require('react');
 
-// TODO: pull all current roasters/origins from db
-var origins  = ['Any', 'panama', 'guat', 'nyc'],
-    process  = ['Any', 'Washed', 'Honey', 'Natural'];
-
 module.exports = React.createClass({
 
   getInitialState: function() {
-    return {
-      origin:  origins[0],
-      process: process[0],
-    };
+    return { roaster: 'Any', origin: 'Any', process: 'Any' };
   },
 
   handleSelectChange: function(e) {
@@ -40,12 +33,17 @@ module.exports = React.createClass({
   },
 
   render: function() {
+    var data      = this.props.data,
+        origins   = data.origins,
+        roasters  = data.roasters,
+        processes = ['Any', 'Natural', 'Honey', 'Washed'];
+
     return (
         <form className="offeringsForm" onSubmit={this.handleSubmit} >
           {this.renderTextInput('search', 'Search flavors...')}
           {this.renderSelect('origin', 'Origin', origins)}
-          {this.renderSelect('roaster', 'Roaster', this.props.roasters)}
-          {this.renderSelect('process', 'Process', process)}
+          {this.renderSelect('roaster', 'Roaster', roasters)}
+          {this.renderSelect('process', 'Process', processes)}
           {this.renderCheckbox('blend', 'Blend')}
           {this.renderCheckbox('decaf', 'Decaf')}
           {this.renderCheckbox('organic', 'Organic')}

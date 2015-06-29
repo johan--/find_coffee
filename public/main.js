@@ -71,8 +71,6 @@ var React        = require('react'),
     AuthService  = require('../services/AuthService.js'),
     LoginStore   = require('../stores/LoginStore.js');
 
-var ENV = typeof window === 'undefined' ? 'server' : 'client';
-
 module.exports = React.createClass({displayName: "exports",
 
   getInitialState: function() {
@@ -125,17 +123,10 @@ module.exports = React.createClass({displayName: "exports",
 /** @jsx React.DOM */
 var React = require('react');
 
-// TODO: pull all current roasters/origins from db
-var origins  = ['Any', 'panama', 'guat', 'nyc'],
-    process  = ['Any', 'Washed', 'Honey', 'Natural'];
-
 module.exports = React.createClass({displayName: "exports",
 
   getInitialState: function() {
-    return {
-      origin:  origins[0],
-      process: process[0],
-    };
+    return { roaster: 'Any', origin: 'Any', process: 'Any' };
   },
 
   handleSelectChange: function(e) {
@@ -164,12 +155,17 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   render: function() {
+    var data      = this.props.data,
+        origins   = data.origins,
+        roasters  = data.roasters,
+        processes = ['Any', 'Natural', 'Honey', 'Washed'];
+
     return (
         React.createElement("form", {className: "offeringsForm", onSubmit: this.handleSubmit}, 
           this.renderTextInput('search', 'Search flavors...'), 
           this.renderSelect('origin', 'Origin', origins), 
-          this.renderSelect('roaster', 'Roaster', this.props.roasters), 
-          this.renderSelect('process', 'Process', process), 
+          this.renderSelect('roaster', 'Roaster', roasters), 
+          this.renderSelect('process', 'Process', processes), 
           this.renderCheckbox('blend', 'Blend'), 
           this.renderCheckbox('decaf', 'Decaf'), 
           this.renderCheckbox('organic', 'Organic'), 
@@ -211,6 +207,9 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   renderSelect: function(id, label, values) {
+    console.log('id', id);
+    console.log('label', label);
+    console.log('values', values);
     var options = values.map(function(value) {
       return React.createElement("option", {key: value, value: value}, value)
     });
@@ -275,9 +274,7 @@ module.exports = React.createClass({displayName: "exports",
 },{"../services/AuthService.js":20,"./Button.jsx":5,"react":667,"react-router":498}],8:[function(require,module,exports){
 /** @jsx React.DOM */
 var React        = require('react'),
-    RouteHandler = require('react-router').RouteHandler,
-    Link         = require('react-router').Link,
-    CoffeeForm   = require('./CoffeeForm.jsx');
+    Link         = require('react-router').Link;
 
 module.exports = React.createClass({displayName: "exports",
 
@@ -294,7 +291,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"./CoffeeForm.jsx":6,"react":667,"react-router":498}],9:[function(require,module,exports){
+},{"react":667,"react-router":498}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     AuthService = require('../services/AuthService.js');
@@ -496,15 +493,25 @@ var List = React.createClass({displayName: "List",
         allOfferings = [],
         self         = this;
 
-    for (offering in offerings) {
+    offerings.forEach(function(offering, index) {
       allOfferings.push(
         React.createElement(OfferingListItem, {
           params: self.props.params, 
-          offering: offerings[offering], 
-          key: offering}
+          offering: offering, 
+          key: index}
         )
       );
-    }
+    });
+
+//  for (offering in offerings) {
+//    allOfferings.push(
+//      <OfferingListItem
+//        params={self.props.params}
+//        offering={offerings[offering]}
+//        key={offering}
+//      />
+//    );
+//  }
 
     return (
       React.createElement("ul", {className: "offeringsList"}, 
@@ -620,7 +627,7 @@ module.exports = React.createClass({displayName: "exports",
 
   getInitialState: function() {
     return {
-      offerings: this.props.offerings
+      offerings: this.props.data.offerings
     };
   },
 
@@ -630,7 +637,7 @@ module.exports = React.createClass({displayName: "exports",
     if (typeof window !== 'undefined') {
 
       // Use offerings from props for full list.
-      var Filter    = new utils.Filter(this.props.offerings),
+      var Filter    = new utils.Filter(this.props.data.offerings),
           available = Filter.processForm(values);
 
       this.setState({offerings: available});
@@ -642,11 +649,13 @@ module.exports = React.createClass({displayName: "exports",
         type: "POST",
         contentType: 'application/json',
         data : JSON.stringify(values),
+
         success: function(data, textStatus, jqXHR) {
           this.setState({ offerings: JSON.parse(data) })
         }.bind(this),
-        error: function (jqXHR, textStatus, errorThrown) {
-          console.error(errorThrown);
+
+        error: function (jqXHR, textStatus, error) {
+          console.error(error);
         }
       });
     }
@@ -772,9 +781,7 @@ var React  = require('react'),
     LoginActions = require('./actions/LoginActions.js');
 
 // Get props from server rendered HTML.
-var props     = JSON.parse(document.getElementById('props').innerHTML),
-    offerings = props.offerings,
-    roasters  = props.roasters;
+var data = JSON.parse(document.getElementById('props').innerHTML).data;
 
 // Create router.
 var router = Router.create({
@@ -793,7 +800,7 @@ if (token) {
 
 router.run(function(Handler, state) {
   var params = state.params;
-  React.render(React.createElement(Handler, {params: params, roasters: roasters, offerings: offerings}),
+  React.render(React.createElement(Handler, {params: params, data: data}),
       document.getElementById('mount-point'));
 });
 

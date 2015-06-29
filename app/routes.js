@@ -85,18 +85,20 @@ module.exports = function(app) {
   app.get('*', function(req, res) {
 
     async.series([
-        Offering.getRoasters.bind(Offering),
-        Offering.getOrigins.bind(Offering),
-        Offering.getOfferings.bind(Offering)
+        Offering.getRoasters.bind(Offering), // Get unique roasters.
+        Offering.getOrigins.bind(Offering),  // Get unique origins.
+        Offering.getOfferings.bind(Offering) // Get all offerings.
       ],
 
       // Called once all info is loaded.
       function(err, results) {
         if (err) throw err;
 
-        var roasters  = results[0],
-            origins   = results[1],
-            offerings = results[2];
+        var data = {
+          roasters:  results[0],
+          origins:   results[1],
+          offerings: results[2]
+        };
 
         // Create router and store reference.
         var router = Router.create({ location: req.url, routes: routes });
@@ -110,11 +112,11 @@ module.exports = function(app) {
 
         // Render to string.
         router.run(function(Handler) {
-          var handler = <Handler roasters={roasters} offerings={offerings} />,
+          var handler = <Handler data={data} />,
               html    = React.renderToString(handler);
 
           return res.render('index', {
-            jsonProps: JSON.stringify({ offerings: offerings, roasters: roasters, }),
+            jsonProps: JSON.stringify({data: data}),
             reactOutput: html
           });
         });

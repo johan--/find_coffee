@@ -56,8 +56,9 @@ OfferingSchema.statics = {
 
   // Return unique roasters.
   getRoasters: function(cb) {
-    this.distinct('roastery.name', function(err, roasters) {
+    this.distinct('roastery.name', function(err, results) {
       if (err) cb(err);
+      var roasters = results.sort();
 
       // Add 'Any' option.
       roasters.unshift('Any');
@@ -68,10 +69,11 @@ OfferingSchema.statics = {
 
   // Return unique origins.
   getOrigins: function(cb) {
-    this.distinct('origin', function(err, origins) {
+    this.distinct('origin', function(err, results) {
       if (err) cb(err);
+      var origins = results.sort();
 
-      // Add 'Any option.
+      // Add 'Any' option.
       origins.unshift('Any');
 
       cb(null, origins);

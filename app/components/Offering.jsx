@@ -106,7 +106,7 @@ module.exports = React.createClass({
     } else {
       return (
         <div className="overview">
-          <h1>{offering.name}</h1>
+          <h1><a href={offering.url}>{offering.name}</a></h1>
           {background}
           {flavors}
           {this._getInfo()}

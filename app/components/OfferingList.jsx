@@ -1,7 +1,8 @@
 /** @jsx React.DOM */
 var React = require('react'),
     ReactPaginate = require('react-paginate'),
-    OfferingListItem = require('./OfferingListItem.jsx');
+    OfferingListItem = require('./OfferingListItem.jsx'),
+    NotFound = require('./404.jsx');
 
 var List = React.createClass({
 
@@ -12,23 +13,9 @@ var List = React.createClass({
 
     offerings.forEach(function(offering, index) {
       allOfferings.push(
-        <OfferingListItem
-          params={self.props.params}
-          offering={offering}
-          key={index}
-        />
+        <OfferingListItem params={self.props.params} offering={offering} key={index} />
       );
     });
-
-//  for (offering in offerings) {
-//    allOfferings.push(
-//      <OfferingListItem
-//        params={self.props.params}
-//        offering={offerings[offering]}
-//        key={offering}
-//      />
-//    );
-//  }
 
     return (
       <ul className="offeringsList">
@@ -87,23 +74,32 @@ var OfferingsList = React.createClass({
     return buttons;
   },
 
+  _noResults: function() {
+    return !this.state.offerings.length;
+  },
+
   render: function () {
-    return (
-      <div className="offerings">
-        <List offerings={this.state.offerings} />
-        <ReactPaginate previousLabel={"previous"}
-                       nextLabel={"next"}
-                       breakLabel={<li className="break"><a href="">...</a></li>}
-                       buttons={this._getButtons()}
-                       pageNum={this.state.pageNum}
-                       marginPagesDisplayed={2}
-                       pageRangeDisplayed={5}
-                       clickCallback={this.handlePageClick}
-                       containerClassName={"pagination"}
-                       subContainerClassName={"pages"}
-                       activeClass={"active"} />
-      </div>
-    );
+    if (this._noResults()) {
+      var msg = 'Oh no! Looks like nothing matched that search criteria.';
+      return <NotFound className="overview" msg={msg} />;
+    } else {
+      return (
+        <div className="offerings">
+          <List offerings={this.state.offerings} />
+          <ReactPaginate previousLabel={"previous"}
+                         nextLabel={"next"}
+                         breakLabel={<li className="break"><a href="">...</a></li>}
+                         buttons={this._getButtons()}
+                         pageNum={this.state.pageNum}
+                         marginPagesDisplayed={2}
+                         pageRangeDisplayed={5}
+                         clickCallback={this.handlePageClick}
+                         containerClassName={"pagination"}
+                         subContainerClassName={"pages"}
+                         activeClass={"active"} />
+        </div>
+      );
+    }
   }
 });
 

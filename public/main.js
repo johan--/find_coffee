@@ -35,8 +35,10 @@ var React   = require('react');
 module.exports = React.createClass({displayName: "exports",
 
   render: function() {
-    var msg = this.props.msg || '404. Not found.';
-    return React.createElement("h2", null, msg);
+    var msg = this.props.msg || '404. Not found.',
+        className = this.props.className || '';
+
+    return React.createElement("h2", {className: className}, msg);
   }
 
 });
@@ -452,7 +454,7 @@ module.exports = React.createClass({displayName: "exports",
     } else {
       return (
         React.createElement("div", {className: "overview"}, 
-          React.createElement("h1", null, offering.name), 
+          React.createElement("h1", null, React.createElement("a", {href: offering.url}, offering.name)), 
           background, 
           flavors, 
           this._getInfo(), 
@@ -481,7 +483,8 @@ module.exports = React.createClass({displayName: "exports",
 /** @jsx React.DOM */
 var React = require('react'),
     ReactPaginate = require('react-paginate'),
-    OfferingListItem = require('./OfferingListItem.jsx');
+    OfferingListItem = require('./OfferingListItem.jsx'),
+    NotFound = require('./404.jsx');
 
 var List = React.createClass({displayName: "List",
 
@@ -492,23 +495,9 @@ var List = React.createClass({displayName: "List",
 
     offerings.forEach(function(offering, index) {
       allOfferings.push(
-        React.createElement(OfferingListItem, {
-          params: self.props.params, 
-          offering: offering, 
-          key: index}
-        )
+        React.createElement(OfferingListItem, {params: self.props.params, offering: offering, key: index})
       );
     });
-
-//  for (offering in offerings) {
-//    allOfferings.push(
-//      <OfferingListItem
-//        params={self.props.params}
-//        offering={offerings[offering]}
-//        key={offering}
-//      />
-//    );
-//  }
 
     return (
       React.createElement("ul", {className: "offeringsList"}, 
@@ -567,29 +556,38 @@ var OfferingsList = React.createClass({displayName: "OfferingsList",
     return buttons;
   },
 
+  _noResults: function() {
+    return !this.state.offerings.length;
+  },
+
   render: function () {
-    return (
-      React.createElement("div", {className: "offerings"}, 
-        React.createElement(List, {offerings: this.state.offerings}), 
-        React.createElement(ReactPaginate, {previousLabel: "previous", 
-                       nextLabel: "next", 
-                       breakLabel: React.createElement("li", {className: "break"}, React.createElement("a", {href: ""}, "...")), 
-                       buttons: this._getButtons(), 
-                       pageNum: this.state.pageNum, 
-                       marginPagesDisplayed: 2, 
-                       pageRangeDisplayed: 5, 
-                       clickCallback: this.handlePageClick, 
-                       containerClassName: "pagination", 
-                       subContainerClassName: "pages", 
-                       activeClass: "active"})
-      )
-    );
+    if (this._noResults()) {
+      var msg = 'Oh no! Looks like nothing matched that search criteria.';
+      return React.createElement(NotFound, {className: "overview", msg: msg});
+    } else {
+      return (
+        React.createElement("div", {className: "offerings"}, 
+          React.createElement(List, {offerings: this.state.offerings}), 
+          React.createElement(ReactPaginate, {previousLabel: "previous", 
+                         nextLabel: "next", 
+                         breakLabel: React.createElement("li", {className: "break"}, React.createElement("a", {href: ""}, "...")), 
+                         buttons: this._getButtons(), 
+                         pageNum: this.state.pageNum, 
+                         marginPagesDisplayed: 2, 
+                         pageRangeDisplayed: 5, 
+                         clickCallback: this.handlePageClick, 
+                         containerClassName: "pagination", 
+                         subContainerClassName: "pages", 
+                         activeClass: "active"})
+        )
+      );
+    }
   }
 });
 
 module.exports = OfferingsList;
 
-},{"./OfferingListItem.jsx":13,"react":667,"react-paginate":298}],13:[function(require,module,exports){
+},{"./404.jsx":2,"./OfferingListItem.jsx":13,"react":667,"react-paginate":298}],13:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     Router = require('react-router'),

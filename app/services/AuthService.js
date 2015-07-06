@@ -4,8 +4,12 @@ var Constants    = require('../constants/Constants.js'),
 
 function handleAuth(options) {
   request.post(options, function(err, res, body) {
-    var parsedBody = JSON.parse(body);
-    LoginActions.loginUserClient(parsedBody.token);
+    if (res.statusCode >= 400) {
+      LoginActions.handleLoginError(body);
+    } else {
+      var parsedBody = JSON.parse(body);
+      LoginActions.loginUserClient(parsedBody.token);
+    }
   });
 }
 

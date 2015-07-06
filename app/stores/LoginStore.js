@@ -7,7 +7,7 @@ var AppDispatcher   = require('../dispatcher/AppDispatcher'),
 
 var CHANGE_EVENT = 'change',
     _user        = null,
-    _token       = null;
+    _error       = null;
 
 var LoginStore = assign({}, EventEmitter.prototype, {
 
@@ -17,6 +17,14 @@ var LoginStore = assign({}, EventEmitter.prototype, {
 
   setUser: function(user) {
     _user = user;
+  },
+
+  getError: function() {
+    return _error;
+  },
+
+  setError: function(err) {
+    _error = err;
   },
 
   isLoggedIn: function() {
@@ -46,6 +54,7 @@ AppDispatcher.register(function(payload) {
         localStorage.setItem('jwt', action.token);
         Cookies.set('jwt', action.token);
       }
+      LoginStore.setError(null);
       LoginStore.setUser(jwt.decode(action.token));
       LoginStore.emitChange();
       break;
@@ -56,7 +65,13 @@ AppDispatcher.register(function(payload) {
         localStorage.removeItem('jwt');
         Cookies.expire('jwt');
       }
+      LoginStore.setError(null);
       LoginStore.setUser(null);
+      LoginStore.emitChange();
+      break;
+
+    case Constants.LOGIN_ERROR:
+      LoginStore.setError(action.error);
       LoginStore.emitChange();
       break;
 

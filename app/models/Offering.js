@@ -82,9 +82,9 @@ OfferingSchema.statics = {
 
   // Return all offerings.
   getOfferings: function(cb) {
-    var query      = {},
+    var query      = { "current": true },
         projection = {},
-        options    = { sort: {"lastUpdated": -1 }};
+        options    = { sort: {"meta.created": -1 }};
     
     this.find(query, projection, options, function(err, offerings) {
       if (err) cb(err);

@@ -20,10 +20,16 @@ module.exports = {
     });
   },
 
-  // Logout user
   logoutUser: function() {
     AppDispatcher.handleViewAction({
       actionType: Constants.LOGOUT_USER
+    });
+  },
+
+  handleLoginError: function(error) {
+    AppDispatcher.handleViewAction({
+      actionType: Constants.LOGIN_ERROR,
+      error: error
     });
   }
 };
@@ -35,7 +41,7 @@ var React   = require('react');
 module.exports = React.createClass({displayName: "exports",
 
   render: function() {
-    var msg = this.props.msg || '404. Not found.',
+    var msg       = this.props.msg || '404. Not found.',
         className = this.props.className || '';
 
     return React.createElement("h2", {className: className}, msg);
@@ -76,13 +82,14 @@ var React        = require('react'),
 module.exports = React.createClass({displayName: "exports",
 
   getInitialState: function() {
-    return this._getUser();
+    return this._update();
   },
 
-  _getUser: function() {
+  _update: function() {
     return {
-      user: LoginStore.getUser()
-    }
+      user: LoginStore.getUser(),
+      err:  LoginStore.getError()
+    };
   },
 
   componentDidMount: function() {
@@ -91,7 +98,7 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   _onChange: function() {
-    this.setState(this._getUser());
+    this.setState(this._update());
   },
 
   componentWillUnmount: function() {
@@ -103,7 +110,7 @@ module.exports = React.createClass({displayName: "exports",
         React.createElement("div", null, 
           React.createElement(Header, {user: this.state.user}), 
           React.createElement("section", {id: "mainContent"}, 
-            React.createElement(RouteHandler, React.__spread({},  this.props, {user: this.state.user}))
+            React.createElement(RouteHandler, React.__spread({},  this.props, {err: this.state.err, user: this.state.user}))
           )
         )
     );
@@ -312,14 +319,19 @@ module.exports = React.createClass({displayName: "exports",
 
   login: function(e) {
     e.preventDefault();
+    this.setState({password: ''});
     AuthService.login(this.state.username, this.state.password);
   },
 
   render: function() {
+    var err    = this.props.err,
+        errMsg = err ? React.createElement("p", null, err) : null;
+
     return (
       React.createElement("div", null, 
+        errMsg, 
         React.createElement("h1", null, "Login"), 
-        React.createElement("form", {className: "login", onSubmit: this.handleSubmit}, 
+        React.createElement("form", {className: "login"}, 
           React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "username"}, "Username"), 
             React.createElement("input", {
@@ -744,7 +756,8 @@ module.exports = {
   LOGIN_URL:   BASE_URL + '/sessions/new',
   LOGOUT_URL:  BASE_URL + '/logout',
   LOGIN_USER:  'LOGIN_USER',
-  LOGOUT_USER: 'LOGOUT-USER'
+  LOGOUT_USER: 'LOGOUT-USER',
+  LOGIN_ERROR: 'LOGIN_ERROR'
 };
 
 },{}],17:[function(require,module,exports){
@@ -847,8 +860,12 @@ var Constants    = require('../constants/Constants.js'),
 
 function handleAuth(options) {
   request.post(options, function(err, res, body) {
-    var parsedBody = JSON.parse(body);
-    LoginActions.loginUserClient(parsedBody.token);
+    if (res.statusCode >= 400) {
+      LoginActions.handleLoginError(body);
+    } else {
+      var parsedBody = JSON.parse(body);
+      LoginActions.loginUserClient(parsedBody.token);
+    }
   });
 }
 
@@ -915,7 +932,7 @@ var AppDispatcher   = require('../dispatcher/AppDispatcher'),
 
 var CHANGE_EVENT = 'change',
     _user        = null,
-    _token       = null;
+    _error       = null;
 
 var LoginStore = assign({}, EventEmitter.prototype, {
 
@@ -925,6 +942,14 @@ var LoginStore = assign({}, EventEmitter.prototype, {
 
   setUser: function(user) {
     _user = user;
+  },
+
+  getError: function() {
+    return _error;
+  },
+
+  setError: function(err) {
+    _error = err;
   },
 
   isLoggedIn: function() {
@@ -954,6 +979,7 @@ AppDispatcher.register(function(payload) {
         localStorage.setItem('jwt', action.token);
         Cookies.set('jwt', action.token);
       }
+      LoginStore.setError(null);
       LoginStore.setUser(jwt.decode(action.token));
       LoginStore.emitChange();
       break;
@@ -964,7 +990,13 @@ AppDispatcher.register(function(payload) {
         localStorage.removeItem('jwt');
         Cookies.expire('jwt');
       }
+      LoginStore.setError(null);
       LoginStore.setUser(null);
+      LoginStore.emitChange();
+      break;
+
+    case Constants.LOGIN_ERROR:
+      LoginStore.setError(action.error);
       LoginStore.emitChange();
       break;
 

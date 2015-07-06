@@ -19,14 +19,19 @@ module.exports = React.createClass({
 
   login: function(e) {
     e.preventDefault();
+    this.setState({password: ''});
     AuthService.login(this.state.username, this.state.password);
   },
 
   render: function() {
+    var err = this.props.err,
+        errorMsg = err ? <p>{err}</p> : null;
+
     return (
       <div>
+        {errorMsg}
         <h1>Login</h1>
-        <form className="login" onSubmit={this.handleSubmit} >
+        <form className="login">
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input

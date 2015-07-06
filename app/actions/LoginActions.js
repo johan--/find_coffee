@@ -19,10 +19,16 @@ module.exports = {
     });
   },
 
-  // Logout user
   logoutUser: function() {
     AppDispatcher.handleViewAction({
       actionType: Constants.LOGOUT_USER
+    });
+  },
+
+  handleLoginError: function(error) {
+    AppDispatcher.handleViewAction({
+      actionType: Constants.LOGIN_ERROR,
+      error: error
     });
   }
 };

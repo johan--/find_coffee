@@ -1,7 +1,11 @@
 var mongoose = require('mongoose');
 
 // Connect to Mongo.
-mongoose.connect('mongodb://localhost/getCoffee');
+var mongoURI = process.env.NODE_ENV === 'test' ?
+  'mongodb://localhost/testCoffee':
+  'mongodb://localhost/getCoffee';
+
+mongoose.connect(mongoURI);
 
 // Load models.
 require(__dirname + '/models/Offering.js');

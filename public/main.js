@@ -324,12 +324,12 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   render: function() {
-    var err    = this.props.err,
-        errMsg = err ? React.createElement("p", null, err) : null;
+    var err = this.props.err,
+        errorMsg = err ? React.createElement("p", null, err) : null;
 
     return (
       React.createElement("div", null, 
-        errMsg, 
+        errorMsg, 
         React.createElement("h1", null, "Login"), 
         React.createElement("form", {className: "login"}, 
           React.createElement("div", {className: "form-group"}, 

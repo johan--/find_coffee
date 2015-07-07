@@ -1,0 +1,50 @@
+{
+  "Roasteries": [
+    { "name": "Halfwit" },
+    { "name": "Gaslight" }
+  ],
+
+  "Offerings": {
+
+    "decaf": {
+      "name": "Decaf",
+      "origin": "Guatemala",
+      "url": "https://decaf.option.com",
+      "flavors": "orange zest, pineapple, peanut",
+      "process": "Natural",
+      "decaf": true
+    },
+
+    "organic": {
+      "name": "Organic",
+      "origin": "Kenya",
+      "url": "https://organic.option.com",
+      "flavors": "pecan, heavy cream, allspice",
+      "process": "Washed",
+      "organic": true
+    },
+
+    "direct": {
+      "name": "Direct",
+      "origin": "Papua New Guinea",
+      "url": "https://directTrade.option.com",
+      "flavors": "apple, gin, strawberry",
+      "process": "Natural",
+      "directTrade": true
+    },
+
+    "blend": {
+      "name": "Blend",
+      "origin": "Guatemala",
+      "url": "https://blend.option.com",
+      "blend": true
+    },
+
+    "honey": {
+      "name": "Honey",
+      "origin": "Kenya",
+      "url": "https://honey.process.com",
+      "flavors": "blackberry"
+    }
+  }
+}

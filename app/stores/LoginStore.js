@@ -54,6 +54,7 @@ AppDispatcher.register(function(payload) {
         localStorage.setItem('jwt', action.token);
         Cookies.set('jwt', action.token);
       }
+      //RouterContainer.get().transitionTo('/profile');
       LoginStore.setError(null);
       LoginStore.setUser(jwt.decode(action.token));
       LoginStore.emitChange();

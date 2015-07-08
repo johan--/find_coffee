@@ -57,7 +57,7 @@ OfferingSchema.statics = {
   // Return unique roasters.
   getRoasters: function(cb) {
     this.distinct('roastery.name', function(err, results) {
-      if (err) cb(err);
+      if (err) return cb(err);
       var roasters = results.sort();
 
       // Add 'Any' option.
@@ -70,7 +70,7 @@ OfferingSchema.statics = {
   // Return unique origins.
   getOrigins: function(cb) {
     this.distinct('origin', function(err, results) {
-      if (err) cb(err);
+      if (err) return cb(err);
       var origins = results.sort();
 
       // Add 'Any' option.
@@ -87,7 +87,7 @@ OfferingSchema.statics = {
         options    = { sort: {"meta.created": -1 }};
     
     this.find(query, projection, options, function(err, offerings) {
-      if (err) cb(err);
+      if (err) return cb(err);
       cb(null, offerings);
     });
   },

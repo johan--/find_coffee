@@ -5,6 +5,7 @@ var React        = require('react'),
     utils        = require('../lib/utils.js'),
     jwt          = require('jsonwebtoken'),
     Offering     = require('./db.js').Offering,
+    Roastery     = require('./db.js').Roastery,
     User         = require('./db.js').User,
     async        = require('async'),
     LoginActions = require('./actions/LoginActions.js'),
@@ -27,6 +28,37 @@ module.exports = function(app) {
 
       return res.json(JSON.stringify(available));
     });
+  });
+
+  // Load a user's roasteries and offerings.
+  app.post('/load', function(req, res, next) {
+
+    async.waterfall([
+
+      // Load user.
+      function(cb) {
+        User.find({ _id: req.body._id }, function(err, user) {
+          if (err) return cb(err);
+          cb(null, user);
+        });
+      },
+
+      // Get offerings/roasteries.
+      function(user, cb) {
+        var currentUser = new User(user);
+
+        async.parallel([
+          currentUser.getRoasteries.bind(currentUser),
+          currentUser.getOfferings.bind(currentUser)
+        ],
+        function(err, results) {
+          if (err) return cb(err);
+
+          var data = { roasteries: results[0], offerings: results[1] };
+          return res.json(JSON.stringify(data));
+        });
+      }
+    ]);
   });
 
   // Signup
@@ -101,7 +133,18 @@ module.exports = function(app) {
         };
 
         // Create router and store reference.
-        var router = Router.create({ location: req.url, routes: routes });
+        var router = Router.create({
+          location: req.url,
+          routes: routes,
+
+          onError: function(err) {
+            throw err;
+          },
+
+          onAbort: function(reason) {
+            res.redirect('https://localhost:8000/login');
+          }
+        });
         RouterContainer.set(router);
 
         // Check for jwt cookie.

@@ -7,6 +7,7 @@ var React         = require('react'),
     Offering      = require('./components/Offering.jsx'),
     Offerings     = require('./components/Offerings.jsx'),
     Offering404   = require('./components/Offering404.jsx'),
+    Profile       = require('./components/Profile.jsx'),
     Admin         = require('./components/Admin.jsx'),
     Login         = require('./components/Login.jsx'),
     Signup        = require('./components/Signup.jsx'),
@@ -26,6 +27,7 @@ module.exports = [
       <NotFoundRoute handler={Offering404} />
     </Route>
 
+    <Route name="profile" handler={Profile} />
     <Route name="login" handler={Login} />
     <Route name="signup" handler={Signup} />
     <Route name="admin" handler={Admin} />

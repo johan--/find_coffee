@@ -29,17 +29,17 @@ module.exports = React.createClass({
     // Handle form submit if rendering on client.
     } else {
       $.ajax({
-        url : "https://localhost:8000/offerings/find",
+        url: "https://localhost:8000/offerings/find",
         type: "POST",
         contentType: 'application/json',
-        data : JSON.stringify(values),
+        data: JSON.stringify(values),
 
         success: function(data, textStatus, jqXHR) {
           this.setState({ offerings: JSON.parse(data) })
         }.bind(this),
 
-        error: function (jqXHR, textStatus, error) {
-          console.error(error);
+        error: function (jqXHR, textStatus, err) {
+          console.error(err);
         }
       });
     }

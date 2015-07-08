@@ -1,8 +1,4 @@
 var mongoose       = require('mongoose'),
-    React          = require('react'),
-    ReactAddons    = require('react/addons'),
-    ReactTestUtils = React.addons.TestUtils,
-    Simulate       = ReactTestUtils.Simulate,
     should         = require('should'),
     app            = require('../server'),
     assign         = require('object-assign'),
@@ -263,7 +259,7 @@ describe('Form', function() {
         });
     });
 
-    it('should return match ', function(done) {
+    it('should return match', function(done) {
       var input = assign({}, defaultInputs, { search: 'gin' });
       request(app)
         .post('/offerings/find')

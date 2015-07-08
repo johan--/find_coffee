@@ -1,11 +1,12 @@
 /** @jsx React.DOM */
-var React           = require('react'),
-    RouteHandler    = require('react-router').RouteHandler,
-    RouterContainer = require('../services/RouterContainer.js'),
-    CoffeeForm      = require('./CoffeeForm.jsx'),
-    utils           = require('../../lib/utils.js');
+var React        = require('react'),
+    Router       = require('react-router'),
+    RouteHandler = Router.RouteHandler,
+    CoffeeForm   = require('./CoffeeForm.jsx'),
+    utils        = require('../../lib/utils.js');
 
 module.exports = React.createClass({
+  mixins: [Router.State, Router.Navigation],
 
   getInitialState: function() {
     return {
@@ -14,8 +15,12 @@ module.exports = React.createClass({
   },
 
   handleSubmit: function(values) {
-    // TODO: only transition if not already on offerings page
-    RouterContainer.get().transitionTo('/offerings');
+    var path = this.getPath, self = this;
+
+    // When form is used when viewing offering.
+    if (path !== '/offerings') {
+      self.transitionTo('/offerings');
+    }
 
     // Handle form submit if rendering on client.
     if (typeof window !== 'undefined') {

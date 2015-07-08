@@ -1,14 +1,19 @@
 /** @jsx React.DOM */
 var React       = require('react'),
+    Router      = require('react-router'),
     Button      = require('./Button.jsx'),
     Link        = require('react-router').Link,
     AuthService = require('../services/AuthService.js');
 
 module.exports = React.createClass({
+  mixins: [Router.State, Router.Navigation],
 
   logout: function(e) {
+    var path = this.getPath(), self = this;
     e.preventDefault();
-    AuthService.logout();
+    AuthService.logout(path, function() {
+      self.transitionTo('/login');
+    });
   },
 
   render: function() {

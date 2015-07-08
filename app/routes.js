@@ -1,16 +1,15 @@
 /** @jsx React.DOM */
-var React           = require('react'),
-    Router          = require('react-router'),
-    reactRoutes     = require('./reactRoutes.jsx'),
-    utils           = require('../lib/utils.js'),
-    jwt             = require('jsonwebtoken'),
-    mongoose        = require('mongoose'),
-    Offering        = mongoose.model('Offering'),
-    Roastery        = mongoose.model('Roastery'),
-    User            = mongoose.model('User'),
-    async           = require('async'),
-    LoginActions    = require('./actions/LoginActions.js'),
-    RouterContainer = require('./services/RouterContainer.js');
+var React        = require('react'),
+    Router       = require('react-router'),
+    reactRoutes  = require('./reactRoutes.jsx'),
+    utils        = require('../lib/utils.js'),
+    jwt          = require('jsonwebtoken'),
+    mongoose     = require('mongoose'),
+    Offering     = mongoose.model('Offering'),
+    Roastery     = mongoose.model('Roastery'),
+    User         = mongoose.model('User'),
+    async        = require('async'),
+    LoginActions = require('./actions/LoginActions.js');
 
 module.exports = function(app) {
 
@@ -134,19 +133,10 @@ module.exports = function(app) {
         };
 
         // Create router and store reference.
-        var router = Router.create({
-          location: req.url,
-          routes: reactRoutes,
-
-          onError: function(err) {
-            throw err;
-          },
-
-          onAbort: function(reason) {
-            res.redirect('https://localhost:8000/login');
-          }
+        var router = Router.create({ location: req.url, routes: reactRoutes,
+          onError: function(err) { throw err; },
+          onAbort: function(reason) { res.redirect('https://localhost:8000/login'); }
         });
-        RouterContainer.set(router);
 
         // Check for jwt cookie.
         var cookieToken = req.cookies.jwt;

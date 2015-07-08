@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
-var React  = require('react'),
-    Router = require('react-router'),
-    RouterContainer = require('./services/RouterContainer.js'),
+var React        = require('react'),
+    Router       = require('react-router'),
+    reactRoutes  = require('./reactRoutes.jsx'),
     LoginActions = require('./actions/LoginActions.js');
 
 // Get props from server rendered HTML.
@@ -9,12 +9,9 @@ var data = JSON.parse(document.getElementById('props').innerHTML).data;
 
 // Create router.
 var router = Router.create({
-  routes:   require('./reactRoutes.jsx'),
+  routes:   reactRoutes,
   location: Router.HistoryLocation
 });
-
-// Store router for use in transitions.
-RouterContainer.set(router);
 
 // Check for JWT token.
 var token = localStorage.getItem('jwt');

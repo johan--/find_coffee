@@ -1,8 +1,10 @@
 /** @jsx React.DOM */
 var React = require('react'),
+    Router = require('react-router'),
     AuthService = require('../services/AuthService.js');
 
 module.exports = React.createClass({
+  mixins: [Router.Navigation],
 
   getInitialState: function() {
     return {
@@ -18,9 +20,12 @@ module.exports = React.createClass({
   },
 
   login: function(e) {
+    var self = this;
     e.preventDefault();
     this.setState({password: ''});
-    AuthService.login(this.state.username, this.state.password);
+    AuthService.login(this.state.username, this.state.password, function() {
+      self.transitionTo('/profile');
+    });
   },
 
   render: function() {

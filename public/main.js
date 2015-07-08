@@ -242,15 +242,20 @@ module.exports = React.createClass({displayName: "exports",
 },{"react":668}],7:[function(require,module,exports){
 /** @jsx React.DOM */
 var React       = require('react'),
+    Router      = require('react-router'),
     Button      = require('./Button.jsx'),
     Link        = require('react-router').Link,
     AuthService = require('../services/AuthService.js');
 
 module.exports = React.createClass({displayName: "exports",
+  mixins: [Router.State, Router.Navigation],
 
   logout: function(e) {
+    var path = this.getPath(), self = this;
     e.preventDefault();
-    AuthService.logout();
+    AuthService.logout(path, function() {
+      self.transitionTo('/login');
+    });
   },
 
   render: function() {
@@ -300,9 +305,11 @@ module.exports = React.createClass({displayName: "exports",
 },{"react":668,"react-router":499}],9:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
+    Router = require('react-router'),
     AuthService = require('../services/AuthService.js');
 
 module.exports = React.createClass({displayName: "exports",
+  mixins: [Router.Navigation],
 
   getInitialState: function() {
     return {
@@ -318,9 +325,12 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   login: function(e) {
+    var self = this;
     e.preventDefault();
     this.setState({password: ''});
-    AuthService.login(this.state.username, this.state.password);
+    AuthService.login(this.state.username, this.state.password, function() {
+      self.transitionTo('/profile');
+    });
   },
 
   render: function() {
@@ -357,7 +367,7 @@ module.exports = React.createClass({displayName: "exports",
   }
 });
 
-},{"../services/AuthService.js":21,"react":668}],10:[function(require,module,exports){
+},{"../services/AuthService.js":21,"react":668,"react-router":499}],10:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     mongoose = require('mongoose');
@@ -625,13 +635,14 @@ module.exports = React.createClass({displayName: "exports",
 
 },{"react":668,"react-router":499}],14:[function(require,module,exports){
 /** @jsx React.DOM */
-var React           = require('react'),
-    RouteHandler    = require('react-router').RouteHandler,
-    RouterContainer = require('../services/RouterContainer.js'),
-    CoffeeForm      = require('./CoffeeForm.jsx'),
-    utils           = require('../../lib/utils.js');
+var React        = require('react'),
+    Router       = require('react-router'),
+    RouteHandler = Router.RouteHandler,
+    CoffeeForm   = require('./CoffeeForm.jsx'),
+    utils        = require('../../lib/utils.js');
 
 module.exports = React.createClass({displayName: "exports",
+  mixins: [Router.State, Router.Navigation],
 
   getInitialState: function() {
     return {
@@ -640,8 +651,12 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   handleSubmit: function(values) {
-    // TODO: only transition if not already on offerings page
-    RouterContainer.get().transitionTo('/offerings');
+    var path = this.getPath, self = this;
+
+    // When form is used when viewing offering.
+    if (path !== '/offerings') { 
+      self.transitionTo('/offerings');
+    }
 
     // Handle form submit if rendering on client.
     if (typeof window !== 'undefined') {
@@ -682,7 +697,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"../../lib/utils.js":24,"../services/RouterContainer.js":22,"./CoffeeForm.jsx":6,"react":668,"react-router":499}],15:[function(require,module,exports){
+},{"../../lib/utils.js":24,"./CoffeeForm.jsx":6,"react":668,"react-router":499}],15:[function(require,module,exports){
 /** @jsx React.DOM */
 var React      = require('react'),
     Router     = require('react-router'),
@@ -895,17 +910,18 @@ module.exports = AppDispatcher;
 
 },{"flux":25,"object-assign":295}],19:[function(require,module,exports){
 /** @jsx React.DOM */
-var React  = require('react'),
-    Router = require('react-router'),
+var React           = require('react'),
+    Router          = require('react-router'),
+    reactRoutes     = require('./reactRoutes.jsx'),
     RouterContainer = require('./services/RouterContainer.js'),
-    LoginActions = require('./actions/LoginActions.js');
+    LoginActions    = require('./actions/LoginActions.js');
 
 // Get props from server rendered HTML.
 var data = JSON.parse(document.getElementById('props').innerHTML).data;
 
 // Create router.
 var router = Router.create({
-  routes:   require('./reactRoutes.jsx'),
+  routes:   reactRoutes,
   location: Router.HistoryLocation
 });
 
@@ -969,13 +985,14 @@ var Constants    = require('../constants/Constants.js'),
     LoginActions = require('../actions/LoginActions'),
     request      = require('request');
 
-function handleAuth(options) {
+function handleAuth(options, cb) {
   request.post(options, function(err, res, body) {
     if (res.statusCode >= 400) {
       LoginActions.handleLoginError(body);
     } else {
       var parsedBody = JSON.parse(body);
       LoginActions.loginUserClient(parsedBody.token);
+      cb();
     }
   });
 }
@@ -983,36 +1000,39 @@ function handleAuth(options) {
 module.exports = {
 
   // Login
-  login: function(username, password) {
-
+  login: function(username, password, cb) {
     var options = {
       url:  Constants.LOGIN_URL,
       form: { username: username, password: password }
     };
 
-    handleAuth(options);
+    handleAuth(options, cb);
   },
 
   // Signup
-  signup: function(username, password, email) {
-
+  signup: function(username, password, email, cb) {
     var options = {
       url:  Constants.SIGNUP_URL,
       form: { username: username, password: password, email: email }
     };
 
-    handleAuth(options);
+    handleAuth(options, cb);
   },
 
   // Logout
-  logout: function() {
-
+  logout: function(path, cb) {
     // Logout on client.
     LoginActions.logoutUser();
+    if (typeof window !== 'undefined' && path === '/profile') {
+      cb(); // Causes redirect.
+    }
 
     // Logout on server.
     request.post({ url: Constants.LOGOUT_URL }, function(err, res, body) {
       if (err) console.error(err);
+      if (path === '/profile') {
+        res.redirect('https://localhost:8000/login');
+      }
     });
   }
 
@@ -1038,8 +1058,7 @@ var AppDispatcher   = require('../dispatcher/AppDispatcher'),
     EventEmitter    = require('events').EventEmitter,
     Constants       = require('../constants/Constants.js'),
     jwt             = require('jsonwebtoken'),
-    assign          = require('object-assign'),
-    RouterContainer = require('../services/RouterContainer.js');
+    assign          = require('object-assign');
 
 var CHANGE_EVENT = 'change',
     _user        = null,
@@ -1089,15 +1108,13 @@ AppDispatcher.register(function(payload) {
       if (typeof localStorage !== 'undefined') {
         localStorage.setItem('jwt', action.token);
         Cookies.set('jwt', action.token);
-      }
-      //RouterContainer.get().transitionTo('/profile');
+      } 
       LoginStore.setError(null);
       LoginStore.setUser(jwt.decode(action.token));
       LoginStore.emitChange();
       break;
 
     case Constants.LOGOUT_USER:
-      RouterContainer.get().transitionTo('/login');
       if (typeof localStorage !== 'undefined') {
         localStorage.removeItem('jwt');
         Cookies.expire('jwt');
@@ -1119,7 +1136,7 @@ AppDispatcher.register(function(payload) {
 
 module.exports = LoginStore;
 
-},{"../constants/Constants.js":17,"../dispatcher/AppDispatcher":18,"../services/RouterContainer.js":22,"events":187,"jsonwebtoken":219,"object-assign":295}],24:[function(require,module,exports){
+},{"../constants/Constants.js":17,"../dispatcher/AppDispatcher":18,"events":187,"jsonwebtoken":219,"object-assign":295}],24:[function(require,module,exports){
 function Filter(offerings) {
   if (typeof window === 'undefined') {
     // If rendering on server, offerings will be database

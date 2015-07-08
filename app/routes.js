@@ -1,14 +1,15 @@
 /** @jsx React.DOM */
-var React        = require('react'),
-    Router       = require('react-router'),
-    routes       = require('./reactRoutes.jsx'),
-    utils        = require('../lib/utils.js'),
-    jwt          = require('jsonwebtoken'),
-    Offering     = require('./db.js').Offering,
-    Roastery     = require('./db.js').Roastery,
-    User         = require('./db.js').User,
-    async        = require('async'),
-    LoginActions = require('./actions/LoginActions.js'),
+var React           = require('react'),
+    Router          = require('react-router'),
+    reactRoutes     = require('./reactRoutes.jsx'),
+    utils           = require('../lib/utils.js'),
+    jwt             = require('jsonwebtoken'),
+    mongoose        = require('mongoose'),
+    Offering        = mongoose.model('Offering'),
+    Roastery        = mongoose.model('Roastery'),
+    User            = mongoose.model('User'),
+    async           = require('async'),
+    LoginActions    = require('./actions/LoginActions.js'),
     RouterContainer = require('./services/RouterContainer.js');
 
 module.exports = function(app) {
@@ -135,7 +136,7 @@ module.exports = function(app) {
         // Create router and store reference.
         var router = Router.create({
           location: req.url,
-          routes: routes,
+          routes: reactRoutes,
 
           onError: function(err) {
             throw err;

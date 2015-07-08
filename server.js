@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser'),
     app          = express();
 
 require('node-jsx').install();
+require('./app/db.js');
 
 app.use(cookieParser());
 app.use(bodyParser.json());

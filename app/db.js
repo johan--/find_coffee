@@ -11,10 +11,3 @@ mongoose.connect(mongoURI);
 require(__dirname + '/models/Offering.js');
 require(__dirname + '/models/Roastery.js');
 require(__dirname + '/models/User.js');
-
-// Expose
-module.exports = {
-  Offering: mongoose.model('Offering'),
-  Roastery: mongoose.model('Roastery'),
-  User:     mongoose.model('User')
-};

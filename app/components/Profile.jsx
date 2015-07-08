@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
-var React    = require('react'),
-    Router   = require('react-router'),
+var React      = require('react'),
+    Router     = require('react-router'),
     LoginStore = require('../stores/LoginStore.js');
 
 module.exports = React.createClass({
@@ -73,6 +73,10 @@ module.exports = React.createClass({
     this._load();
   },
 
+  _getRoasters: function() {
+    return this.props.data.roasters.slice(1);
+  },
+
   render: function() {
     var roasters  = this.state.roasters,
         offerings = this.state.offerings;
@@ -88,6 +92,10 @@ module.exports = React.createClass({
         return <li>{offering}</li>;
       });
     }
+
+    var currentRoasters = this._getRoasters().map(function(roaster) {
+      return <li>{roaster}</li>;
+    });
 
     return (
         <div>

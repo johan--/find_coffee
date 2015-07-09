@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 
-// Connect to Mongo.
 var mongoURI = process.env.NODE_ENV === 'test' ?
   'mongodb://localhost/testCoffee':
   'mongodb://localhost/getCoffee';

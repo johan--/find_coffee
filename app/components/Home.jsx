@@ -4,12 +4,14 @@ var React        = require('react'),
 
 module.exports = React.createClass({
 
-  render: function() {
-    var msg = "Search the latest coffees from the country's best roasters.";
+  getMessage: function() {
+    return "Search the latest coffees from the country's best roasters.";
+  },
 
+  render: function() {
     return (
       <div>
-        <h1 className="greeting">{msg}</h1>
+        <h1 className="greeting">{this.getMessage()}</h1>
         <Link className="searchAll" to="offerings">Search all Offerings</Link>
       </div>
     );

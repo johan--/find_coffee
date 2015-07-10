@@ -5,18 +5,26 @@ var React = require('react'),
 
 module.exports = React.createClass({
 
-  render: function() {
-    var offering = this.props.offering,
-        _id      = offering._id,
-        name     = offering.name,
-        roaster  = offering.roastery.name;
+  getRoaster: function() {
+    return this.props.offering.roastery.name;
+  },
 
+  getName: function() {
+    return this.props.offering.name;
+  },
+
+  getId: function() {
+    return this.props.offering._id;
+  },
+
+  render: function() {
     return (
       <li className="offering">
-        <Link to="offering" params={{_id: _id}}>
-          <span>{name} | {roaster}</span>
+        <Link to="offering" params={{_id: this.getId()}}>
+          <span>{this.getName()} | {this.getRoaster()}</span>
         </Link>
       </li>
     );
   }
+
 });

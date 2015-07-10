@@ -27,9 +27,8 @@ module.exports = React.createClass({
   },
 
   // Load a user's roasters and offerings.
-  _load: function() {
-    var user = this.props.user,
-        self = this;
+  getUser: function() {
+    var user = this.props.user, self = this;
 
     // Handle server load.
     if (typeof window === 'undefined') {
@@ -70,37 +69,38 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    this._load();
+    this.getUser();
   },
 
-  _getRoasters: function() {
-    return this.props.data.roasters.slice(1);
-  },
-
-  render: function() {
-    var roasters  = this.state.roasters,
-        offerings = this.state.offerings;
+  renderRoasters: function() {
+    var roasters = this.state.roasters;
 
     if (roasters) {
-      roasters = roasters.map(function(roaster) {
+      roasters = roasters.slice(0).map(function(roaster) {
         return <li>{roaster}</li>;
       });
-    }
+    } 
+
+    return roasters;
+  },
+
+  renderOfferings: function() {
+    var offerings = this.state.offerings;
 
     if (offerings) {
-      offerings = offerings.map(function(offering) {
+      offerings = offerings.slice(0).map(function(offering) {
         return <li>{offering}</li>;
       });
     }
 
-    var currentRoasters = this._getRoasters().map(function(roaster) {
-      return <li>{roaster}</li>;
-    });
+    return offerings;
+  },
 
+  render: function() {
     return (
         <div>
-          <ul>{roasters}</ul>
-          <ul>{offerings}</ul>
+          <ul>{this.renderRoasters()}</ul>
+          <ul>{this.renderOfferings()}</ul>
         </div>
     );
   }

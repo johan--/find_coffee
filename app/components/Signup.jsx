@@ -13,12 +13,12 @@ module.exports = React.createClass({
   },
 
   handleChange: function(e) {
-    var state = {};
-    state[e.target.id] = e.target.value;
-    this.setState(state);
+    var updatedState = {};
+    updatedState[e.target.id] = e.target.value;
+    this.setState(updatedState);
   },
 
-  signup: function(e) {
+  handleClick: function(e) {
     e.preventDefault();
     AuthService.signup(this.state.username, this.state.password, this.state.email);
   },
@@ -27,7 +27,7 @@ module.exports = React.createClass({
     return (
       <div>
         <h1>Sign Up</h1>
-        <form className="signup" onSubmit={this.handleSubmit} >
+        <form className="signup"} >
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
@@ -55,7 +55,7 @@ module.exports = React.createClass({
               placeholder="Password"
               onChange={this.handleChange} />
           </div>
-          <button type="submit" onClick={this.signup}>Sign Up</button>
+          <button type="submit" onClick={this.handleClick}>Sign Up</button>
         </form>
       </div>
     );

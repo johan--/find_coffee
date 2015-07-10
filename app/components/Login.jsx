@@ -14,12 +14,13 @@ module.exports = React.createClass({
   },
 
   handleChange: function(e) {
-    var state = {};
-    state[e.target.id] = e.target.value;
-    this.setState(state);
+    var updatedState = {};
+    updatedState[e.target.id] = e.target.value;
+    this.setState(updatedState);
   },
 
-  login: function(e) {
+  // Login
+  handleClick: function(e) {
     var self = this;
     e.preventDefault();
     this.setState({password: ''});
@@ -28,13 +29,18 @@ module.exports = React.createClass({
     });
   },
 
-  render: function() {
-    var err = this.props.err,
-        errorMsg = err ? <p>{err}</p> : null;
+  hasError: function() {
+    return !!this.props.err;
+  },
 
+  renderError: function() {
+    return this.hasError() ? <p>{this.props.err}</p> : null;
+  },
+
+  render: function() {
     return (
       <div>
-        {errorMsg}
+        {this.renderError()}
         <h1>Login</h1>
         <form className="login">
           <div className="form-group">
@@ -55,7 +61,7 @@ module.exports = React.createClass({
               placeholder="Password"
               onChange={this.handleChange} />
           </div>
-          <button type="submit" onClick={this.login}>Login</button>
+          <button type="submit" onClick={this.handleClick}>Login</button>
         </form>
       </div>
     );

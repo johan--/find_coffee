@@ -6,7 +6,7 @@ module.exports = function(app) {
 
   // Query Mongo to get matched coffees.
   app.post('/offerings/find', function(req, res, next) {
-    
+
     Offering.find({}).exec(function(err, offerings) {
       if (err) throw err;
 

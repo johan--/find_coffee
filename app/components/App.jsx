@@ -8,27 +8,27 @@ var React        = require('react'),
 module.exports = React.createClass({
 
   getInitialState: function() {
-    return this._update();
-  },
-
-  _update: function() {
-    return {
-      user: LoginStore.getUser(),
-      err:  LoginStore.getError()
-    };
+    return this.update();
   },
 
   componentDidMount: function() {
-    this.changeListener = this._onChange,
+    this.changeListener = this.onChange,
     LoginStore.addChangeListener(this.changeListener);
-  },
-
-  _onChange: function() {
-    this.setState(this._update());
   },
 
   componentWillUnmount: function() {
     LoginStore.removeChangeListener(this.changeListener);
+  },
+
+  onChange: function() {
+    this.setState(this.update());
+  },
+
+  update: function() {
+    return {
+      user: LoginStore.getUser(),
+      err:  LoginStore.getError()
+    };
   },
 
   render: function() {

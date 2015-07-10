@@ -4,17 +4,17 @@ var React        = require('react'),
 
 module.exports = React.createClass({
 
+  getMessage: function() {
+    return this.isAdmin() ? 'Welcome admin!' : 'Not authorized.';
+  },
+
+  isAdmin: function() {
+    var user = this.props.user;
+    return user && user.admin;
+  },
+
   render: function() {
-    var user = this.props.user,
-        msg;
-
-    msg = user && user.admin ?  'Welcome admin!' : 'Not authorized';
-
-    return (
-      <div>
-        <h1>{msg}</h1>
-      </div>
-    );
+    return <h1>{this.getMessage()}</h1>;
   }
 
 });

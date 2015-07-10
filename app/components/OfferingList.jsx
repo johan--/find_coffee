@@ -6,20 +6,24 @@ var React = require('react'),
 
 var List = React.createClass({
 
-  render: function() {
-    var offerings    = this.props.offerings,
-        allOfferings = [],
-        self         = this;
+  renderList: function() {
+    var offerings = this.props.offerings,
+        offeringsList = [],
+        self = this;
 
     offerings.forEach(function(offering, index) {
-      allOfferings.push(
+      offeringsList.push(
         <OfferingListItem params={self.props.params} offering={offering} key={index} />
       );
     });
 
+    return offeringsList;
+  },
+
+  render: function() {
     return (
       <ul className="offeringsList">
-        {allOfferings}
+        {this.renderList()}
       </ul>
     );
   }
@@ -28,14 +32,10 @@ var List = React.createClass({
 var OfferingsList = React.createClass({
 
   getInitialState: function() {
-    return this._loadInitial();
+    return this.getInitial();
   },
 
-  componentWillReceiveProps: function(newProps) {
-    this.setState(this._loadInitial(newProps));
-  },
-
-  _loadInitial: function(newProps) {
+  getInitial: function(newProps) {
     var offerings = (newProps && newProps.offerings) || this.props.offerings,
         perPage   = this.props.perPage;
 
@@ -46,19 +46,7 @@ var OfferingsList = React.createClass({
     };
   },
 
-  handlePageClick: function(data) {
-    var offerings = this.props.offerings,
-        perPage   = this.props.perPage,
-        selected  = data.selected,
-        offset    = Math.ceil(selected * perPage);
-
-    this.setState({
-      offerings: offerings.slice(offset, (offset + perPage)),
-      selected: selected
-    });
-  },
-
-  _getButtons: function() {
+  getButtons: function() {
     var lastPage  = Math.ceil(this.props.offerings.length / this.props.perPage),
         selected  = this.state.selected,
         buttons   = { previous: true, next: true };
@@ -74,31 +62,55 @@ var OfferingsList = React.createClass({
     return buttons;
   },
 
-  _noResults: function() {
+  componentWillReceiveProps: function(newProps) {
+    this.setState(this.getInitial(newProps));
+  },
+
+  handlePageClick: function(data) {
+    var offerings = this.props.offerings,
+        perPage   = this.props.perPage,
+        selected  = data.selected,
+        offset    = Math.ceil(selected * perPage);
+
+    this.setState({
+      offerings: offerings.slice(offset, (offset + perPage)),
+      selected: selected
+    });
+  },
+
+  hasNoMatches: function() {
     return !this.state.offerings.length;
   },
 
+  renderNotFound: function() {
+    var msg = 'Oh no! Looks like nothing matched that search criteria.';
+    return <NotFound className="overview" msg={msg} />;
+  },
+
+  renderFound: function() {
+    return (
+      <div className="offerings">
+        <List offerings={this.state.offerings} />
+        <ReactPaginate previousLabel={"previous"}
+                       nextLabel={"next"}
+                       breakLabel={<li className="break"><a href="">...</a></li>}
+                       buttons={this.getButtons()}
+                       pageNum={this.state.pageNum}
+                       marginPagesDisplayed={2}
+                       pageRangeDisplayed={5}
+                       clickCallback={this.handlePageClick}
+                       containerClassName={"pagination"}
+                       subContainerClassName={"pages"}
+                       activeClass={"active"} />
+      </div>
+    );
+  },
+
   render: function () {
-    if (this._noResults()) {
-      var msg = 'Oh no! Looks like nothing matched that search criteria.';
-      return <NotFound className="overview" msg={msg} />;
+    if (this.hasNoMatches()) {
+      this.renderNotFound();
     } else {
-      return (
-        <div className="offerings">
-          <List offerings={this.state.offerings} />
-          <ReactPaginate previousLabel={"previous"}
-                         nextLabel={"next"}
-                         breakLabel={<li className="break"><a href="">...</a></li>}
-                         buttons={this._getButtons()}
-                         pageNum={this.state.pageNum}
-                         marginPagesDisplayed={2}
-                         pageRangeDisplayed={5}
-                         clickCallback={this.handlePageClick}
-                         containerClassName={"pagination"}
-                         subContainerClassName={"pages"}
-                         activeClass={"active"} />
-        </div>
-      );
+      this.renderFound();
     }
   }
 });

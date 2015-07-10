@@ -7,19 +7,8 @@ module.exports = React.createClass({
     return { roaster: 'Any', origin: 'Any', process: 'Any' };
   },
 
-  handleSelectChange: function(e) {
-    var state = {};
-    state[e.target.id] = e.target.value;
-    this.setState(state);
-  },
-
-  handleSubmit: function(e) {
-    e.preventDefault();
-    this.props.handleSubmit(this.getFormValues());
-  },
-
   getFormValues: function() {
-    var values = {
+    return {
       search:  this.refs.search.getDOMNode().value,
       origin:  this.refs.origin.getDOMNode().value,
       roaster: this.refs.roaster.getDOMNode().value,
@@ -29,28 +18,17 @@ module.exports = React.createClass({
       organic: this.refs.organic.getDOMNode().checked,
       direct:  this.refs.direct.getDOMNode().checked,
     };
-    return values;
   },
 
-  render: function() {
-    var data      = this.props.data,
-        origins   = data.origins,
-        roasters  = data.roasters,
-        processes = ['Any', 'Natural', 'Honey', 'Washed'];
+  handleSelectChange: function(e) {
+    var updatedState = {};
+    updatedState[e.target.id] = e.target.value;
+    this.setState(updatedState);
+  },
 
-    return (
-        <form className="offeringsForm" onSubmit={this.handleSubmit} >
-          {this.renderTextInput('search', 'Search flavors...')}
-          {this.renderSelect('origin', 'Origin', origins)}
-          {this.renderSelect('roaster', 'Roaster', roasters)}
-          {this.renderSelect('process', 'Process', processes)}
-          {this.renderCheckbox('blend', 'Blend')}
-          {this.renderCheckbox('decaf', 'Decaf')}
-          {this.renderCheckbox('organic', 'Organic')}
-          {this.renderCheckbox('direct', 'Direct Trade')}
-          {this.renderSubmit('Find coffee')}
-        </form>
-     );
+  handleSubmit: function(e) {
+    e.preventDefault();
+    this.props.handleSubmit(this.getFormValues());
   },
 
   renderTextInput: function(name, label) {
@@ -80,7 +58,10 @@ module.exports = React.createClass({
 
   renderSubmit: function(label) {
     return (
-      <input className="submit" type="submit" ref="submit" value={label}></input>
+      <input className="submit"
+             type="submit"
+             ref="submit"
+             value={label} />
       );
   },
 
@@ -105,5 +86,21 @@ module.exports = React.createClass({
 
   renderLabel: function(id, label) {
     return <label htmlFor={id}>{label}</label>;
+  },
+
+  render: function() {
+    return (
+        <form className="offeringsForm" onSubmit={this.handleSubmit} >
+          {this.renderTextInput('search', 'Search flavors...')}
+          {this.renderSelect('origin', 'Origin', this.props.data.origins)}
+          {this.renderSelect('roaster', 'Roaster', this.props.data.roasters)}
+          {this.renderSelect('process', 'Process', ['Any', 'Natural', 'Honey', 'Washed'])} // TODO: send down via props, dont' create here.
+          {this.renderCheckbox('blend', 'Blend')}
+          {this.renderCheckbox('decaf', 'Decaf')}
+          {this.renderCheckbox('organic', 'Organic')}
+          {this.renderCheckbox('direct', 'Direct Trade')}
+          {this.renderSubmit('Find coffee')}
+        </form>
+     );
   }
 });

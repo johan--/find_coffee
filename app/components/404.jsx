@@ -3,11 +3,16 @@ var React   = require('react');
 
 module.exports = React.createClass({
 
-  render: function() {
-    var msg       = this.props.msg || '404. Not found.',
-        className = this.props.className || '';
+  getMessage: function() {
+    return this.props.msg || '404. Not found.';
+  },
 
-    return <h2 className={className}>{msg}</h2>;
+  getClassName: function() {
+    return this.props.className || '';
+  },
+
+  render: function() {
+    return <h2 className={this.getClassName()}>{this.getMessage()}</h2>;
   }
 
 });

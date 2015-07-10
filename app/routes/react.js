@@ -25,7 +25,8 @@ module.exports = function(app) {
         var data = {
           roasters:  results[0],
           origins:   results[1],
-          offerings: results[2]
+          offerings: results[2],
+          processes: ['Any', 'Natural', 'Honey', 'Washed']
         };
 
         // Create router.

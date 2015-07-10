@@ -19,8 +19,8 @@ if (token) {
   LoginActions.loginUserClient(token);
 }
 
-router.run(function(Handler, state) {
+router.run(function(Root, state) {
   var params = state.params;
-  React.render(<Handler params={params} data={data}/>,
+  React.render(<Root params={params} data={data}/>,
       document.getElementById('mount-point'));
 });

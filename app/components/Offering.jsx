@@ -12,7 +12,7 @@ module.exports = React.createClass({
 
   getFlavors: function() {
     if (this.hasFlavors()) {
-      return this.state.flavors.join(', ');
+      return this.state.offering.flavors.join(', ');
     }
   },
 
@@ -58,7 +58,7 @@ module.exports = React.createClass({
 
   useCheckmark: function(value) {
     return value = value ? '\u2713' : null;
-  }
+  },
 
   hasBackground: function() {
     return !!this.state.offering.background;
@@ -93,9 +93,11 @@ module.exports = React.createClass({
   },
 
   renderValue: function(value) {
-    return <span> className="value">
-             {this.getValue(value)}
-           </span>;
+    return (
+      <span className="value">
+        {this.getValue(value)}
+      </span>
+    );
   },
 
   renderCategory: function(category) {
@@ -104,17 +106,19 @@ module.exports = React.createClass({
 
   // Build list of all categories and values that exist within offering.
   renderList: function(categories) {
-    var offering = this.state.offering, listItems = [];
+    var offering = this.state.offering,
+        listItems = [],
+        self = this;
 
     categories.forEach(function(cat) {
       var val = offering[cat];
       
       if (typeof val === 'boolean') {
-        val = this.useCheckmark(val);
+        val = self.useCheckmark(val);
       }
 
-      if (this.hasValue(val)) {
-        listItems.push(<li>{this.renderCategory(cat)} {this.renderValue(val)}</li>);
+      if (self.hasValue(val)) {
+        listItems.push(<li>{self.renderCategory(cat)} {self.renderValue(val)}</li>);
       }
     });
 

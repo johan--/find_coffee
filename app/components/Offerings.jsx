@@ -3,33 +3,41 @@ var React        = require('react'),
     Router       = require('react-router'),
     RouteHandler = Router.RouteHandler,
     CoffeeForm   = require('./CoffeeForm.jsx'),
-    utils        = require('../../lib/utils.js');
+    Filter       = require('../../lib/utils.js').Filter;
 
 module.exports = React.createClass({
   mixins: [Router.State, Router.Navigation],
 
   getInitialState: function() {
     return {
-      offerings: this.props.data.offerings
+      isInitialLoad: true,
+      offerings: null
     };
   },
 
-  handleSubmit: function(values) {
-    var path = this.getPath, self = this;
+  getOfferings: function() {
+    return this.state.isInitialLoad ? this.props.data.offerings : this.state.offerings;
+  },
 
-    // When form is used when viewing offering.
+  getFilteredOfferings: function(inputs) {
+    var filter = new Filter(this.props.data.offerings);
+    return filter.processForm(inputs);
+  },
+
+  handleSubmit: function(formInputs) {
+    var path = this.getPath(), self = this;
+
+    // Need to redirect to '/offerings' if currently viewing offering.
     if (path !== '/offerings') {
-      self.transitionTo('/offerings');
+      this.transitionTo('/offerings');
     }
 
     // Handle form submit if rendering on client.
     if (typeof window !== 'undefined') {
-
-      // Use offerings from props for full list.
-      var Filter    = new utils.Filter(this.props.data.offerings),
-          available = Filter.processForm(values);
-
-      this.setState({offerings: available});
+      this.setState({
+        offerings: self.getFilteredOfferings(formInputs),
+        isInitialLoad: false
+      });
 
     // Handle form submit if rendering on client.
     } else {
@@ -37,10 +45,13 @@ module.exports = React.createClass({
         url: "https://localhost:8000/offerings/find",
         type: "POST",
         contentType: 'application/json',
-        data: JSON.stringify(values),
+        data: JSON.stringify(formInputs),
 
         success: function(data, textStatus, jqXHR) {
-          this.setState({ offerings: JSON.parse(data) })
+          this.setState({
+            offerings: JSON.parse(data),
+            isInitialLoad: false
+          })
         }.bind(this),
 
         error: function (jqXHR, textStatus, err) {
@@ -54,7 +65,7 @@ module.exports = React.createClass({
     return (
       <div>
         <CoffeeForm {...this.props} handleSubmit={this.handleSubmit} />
-        <RouteHandler perPage={10} offerings={this.state.offerings} />
+        <RouteHandler perPage={10} offerings={this.getOfferings()} />
       </div>
     );
   }

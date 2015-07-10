@@ -27,7 +27,7 @@ module.exports = React.createClass({
     return (
       <div>
         <h1>Sign Up</h1>
-        <form className="signup"} >
+        <form className="signup" >
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input

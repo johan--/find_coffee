@@ -108,9 +108,9 @@ var OfferingsList = React.createClass({
 
   render: function () {
     if (this.hasNoMatches()) {
-      this.renderNotFound();
+      return this.renderNotFound();
     } else {
-      this.renderFound();
+      return this.renderFound();
     }
   }
 });

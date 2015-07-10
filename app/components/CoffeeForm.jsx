@@ -94,7 +94,7 @@ module.exports = React.createClass({
           {this.renderTextInput('search', 'Search flavors...')}
           {this.renderSelect('origin', 'Origin', this.props.data.origins)}
           {this.renderSelect('roaster', 'Roaster', this.props.data.roasters)}
-          {this.renderSelect('process', 'Process', ['Any', 'Natural', 'Honey', 'Washed'])} // TODO: send down via props, dont' create here.
+          {this.renderSelect('process', 'Process', this.props.data.processes)}
           {this.renderCheckbox('blend', 'Blend')}
           {this.renderCheckbox('decaf', 'Decaf')}
           {this.renderCheckbox('organic', 'Organic')}

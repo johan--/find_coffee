@@ -10,10 +10,19 @@ module.exports = function(grunt) {
         src: './app/main.js',
         dest: './public/main.js'
       }
+    },
+
+    uglify: {
+      my_target: {
+        files: {
+          './public/main.min.js': ['./public/main.js']
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', [ 'browserify' ]);
+  grunt.registerTask('default', [ 'browserify', 'uglify' ]);
 };

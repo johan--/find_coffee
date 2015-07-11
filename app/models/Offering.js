@@ -60,6 +60,8 @@ OfferingSchema.statics = {
       if (err) return cb(err);
       var roasters = results.sort();
 
+      if (roasters[0] === '') roasters.shift();
+
       // Add 'Any' option.
       roasters.unshift('Any');
 
@@ -72,6 +74,8 @@ OfferingSchema.statics = {
     this.distinct('origin', function(err, results) {
       if (err) return cb(err);
       var origins = results.sort();
+
+      if (origins[0] === '') origins.shift();
 
       // Add 'Any' option.
       origins.unshift('Any');

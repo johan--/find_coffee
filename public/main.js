@@ -648,6 +648,7 @@ var OfferingsList = React.createClass({displayName: "OfferingsList",
                        marginPagesDisplayed: 2, 
                        pageRangeDisplayed: 5, 
                        clickCallback: this.handlePageClick, 
+                       forceSelected: this.state.selected, 
                        containerClassName: "pagination", 
                        subContainerClassName: "pages", 
                        activeClass: "active"})

@@ -3,8 +3,8 @@ var mongoose = require('mongoose'),
     path     = require('path'),
     assign   = require('object-assign'),
     async    = require('async'),
-    Offering = require('../app/db.js').Offering,
-    Roastery = require('../app/db.js').Roastery;
+    Offering = mongoose.model('Offering'),
+    Roastery = mongoose.model('Roastery');
 
 function seedDatabase(finished) {
   async.waterfall([

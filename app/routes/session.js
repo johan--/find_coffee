@@ -1,12 +1,6 @@
-var jwt          = require('jsonwebtoken'),
-    mongoose     = require('mongoose'),
+var mongoose     = require('mongoose'),
     User         = mongoose.model('User'),
     LoginActions = require('../actions/LoginActions.js');
-
-// Return JSON web token.
-function createToken(user) {
-  return jwt.sign(user, 'marzocco', { expiresInMinutes: 60 * 12 });
-}
 
 module.exports = function(app) {
 
@@ -29,7 +23,7 @@ module.exports = function(app) {
       }
 
       res.status(201).send({
-        token: createToken(user)
+        token: user.createToken()
       });
     });
   });

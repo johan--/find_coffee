@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
     bcrypt   = require('bcrypt-nodejs'),
+    jwt      = require('jsonwebtoken'),
     Schema   = mongoose.Schema,
     Offering = mongoose.model('Offering'),
     Roastery = mongoose.model('Roastery');
@@ -16,6 +17,10 @@ var UserSchema = Schema({
 
 // Methods
 UserSchema.methods = {
+
+  createToken: function() {
+    return jwt.sign(this, 'marzocco', { expiresInMinutes: 60 * 12 });
+  },
 
   authenticate: function(password) {
     return bcrypt.compareSync(password, this.password);

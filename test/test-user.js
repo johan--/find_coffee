@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     should   = require('should'),
     app      = require('../server'),
     request  = require('supertest'),
-    User     = require('../app/db.js').User,
+    User     = mongoose.model('User'),
     userCount;
 
 describe('Users', function() {

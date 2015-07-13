@@ -1,5 +1,11 @@
 var mongoose = require('mongoose'),
-    Schema   = mongoose.Schema;
+    Schema   = mongoose.Schema,
+    gram     = require('instagram-node').instagram();
+
+gram.use({
+  client_id: process.env.INSTAGRAM_CLIENT_ID,
+  client_secret: process.env.INSTAGRAM_CLIENT_SECRET
+});
 
 var RoasterySchema = Schema({
   name:     { type: String, unique: true },
@@ -9,9 +15,20 @@ var RoasterySchema = Schema({
   address:  String,
   city:     String,
   state:    String,
-  zip:      Number
+  zip:      Number,
+  location: {
+    lat: Number,
+    lng: Number
+  },
+  instagram: {
+    user_id:     String,
+    location_id: String,
+    hashtag:     String
+  }
 });
 
+// Statics
+// =====================================================
 RoasterySchema.statics = {
 
   // Get unique cities.
@@ -30,6 +47,35 @@ RoasterySchema.statics = {
       if (err) cb(err);
       cb(null, cities);
     });
+  }
+
+};
+
+// Methods
+// =====================================================
+RoasterySchema.methods = {
+
+  // Get recent media from Instagram.
+  getInstagramMedia: function(type, cb) {
+
+    // Get recent photos that have been tagged at roaster's location.
+    if (type === 'location') {
+      gram.location(this.location_id, function(err, result, remaining, limit) {
+        if (err) return cb(err);
+        cb(null, result);
+      });
+
+    // Get recent photos from roaster's official account.
+    } else if (type === 'user') {
+      gram.user(this.user_id, function(err, result, remaining, limit) {
+        if (err) return cb(err);
+        cb(null, result);
+      });
+
+    // Otherwise error.
+    } else {
+      return new Error("Invalid type. Type should be 'location' or 'user'.");
+    }
   }
 
 };

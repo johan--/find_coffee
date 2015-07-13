@@ -17,6 +17,7 @@
     "express-session": "~1.0.0",
     "flux": "^2.0.3",
     "fresh": "^0.3.0",
+    "instagram-node": "^0.5.7",
     "jsonwebtoken": "^5.0.2",
     "jwt-decode": "^1.1.1",
     "moment": "^2.10.2",

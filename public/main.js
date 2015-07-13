@@ -438,8 +438,8 @@ module.exports = React.createClass({displayName: "exports",
 
   // False if empty array or null/undefined.
   hasValue: function(value) {
-    return (value && value.constructor === Array && value.length) ||
-           (value && value.constructor !== Array);
+    return value && ((value.constructor === Array && value.length) ||
+                     (value.constructor !== Array));
   },
 
   useCheckmark: function(value) {

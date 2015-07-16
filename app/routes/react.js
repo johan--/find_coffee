@@ -4,6 +4,7 @@ var React        = require('react'),
     reactRoutes  = require('../reactRoutes.jsx'),
     mongoose     = require('mongoose'),
     Offering     = mongoose.model('Offering'),
+    Roastery     = mongoose.model('Roastery'),
     async        = require('async'),
     LoginActions = require('../actions/LoginActions.js');
 
@@ -13,9 +14,10 @@ module.exports = function(app) {
   app.get('*', function(req, res) {
 
     async.series([
-        Offering.getRoasters.bind(Offering), // Get unique roasters.
-        Offering.getOrigins.bind(Offering),  // Get unique origins.
-        Offering.getOfferings.bind(Offering) // Get all offerings.
+        Offering.getUniqueRoasters.bind(Offering), // Get unique roasters.
+        Offering.getUniqueOrigins.bind(Offering),  // Get unique origins.
+        Offering.getOfferings.bind(Offering), // Get all current offering objects.
+        Roastery.getRoasters.bind(Roastery)   // Get all current roaster objects.
       ],
 
       // Called once all info is loaded.
@@ -23,9 +25,10 @@ module.exports = function(app) {
         if (err) throw err;
 
         var data = {
-          roasters:  results[0],
-          origins:   results[1],
-          offerings: results[2],
+          uniqueRoasterNames: results[0],
+          uniqueOriginNames:  results[1],
+          offerings:          results[2],
+          roasters:           results[3],
           processes: ['Any', 'Natural', 'Honey', 'Washed']
         };
 

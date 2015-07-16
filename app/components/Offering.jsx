@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var React = require('react'),
+var React    = require('react'),
     mongoose = require('mongoose');
 
 module.exports = React.createClass({
@@ -20,29 +20,33 @@ module.exports = React.createClass({
     return value.constructor === Array ? value.join(',') : value;
   },
 
-  componentDidMount: function() {
-    var _id  = this.props.params._id, self = this;
+  setOfferingOnServer: function(_id) {
+    var Offering = mongoose.model('Offering'), self = this;
 
-    // Handle server load.
-    if (typeof window === 'undefined') {
-      var Offering = mongoose.model('Offering');
+    Offering.find({ _id: _id }, function(err, offerings) {
+      if (err) throw err;
+      self.setState({ offering: offerings[0] });
+    });
+  },
 
-      Offering.find({ _id: _id }, function(err, offering) {
-        if (err) throw err;
-        self.setState({ offering: offering });
-      });
+  setOfferingOnClient: function(_id) {
+    var offerings = this.props.offerings;
 
-    // Handle client load.
-    } else {
-      var offerings = this.props.offerings;
-
-      // Find offering in offerings array.
-      for (var i = 0, len = offerings.length; i < len; i++) {
-        if (offerings[i]._id === _id) {
-          this.setState({ offering: offerings[i] });
-          break;
-        }
+    for (var i = 0, len = offerings.length; i < len; i++) {
+      if (offerings[i]._id === _id) {
+        this.setState({ offering: offerings[i] });
+        break;
       }
+    }
+  },
+
+  componentDidMount: function() {
+    var _id = this.props.params._id;
+
+    if (typeof window === 'undefined') {
+      this.setOfferingOnServer.call(this, _id);
+    } else {
+      this.setOfferingOnClient.call(this, _id);
     }
   },
 

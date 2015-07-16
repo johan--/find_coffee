@@ -31,6 +31,18 @@ var RoasterySchema = Schema({
 // =====================================================
 RoasterySchema.statics = {
 
+  // Get all roasters.
+  getRoasters: function(cb) {
+    var query = {},
+        projection = {},
+        options = { sort: { "name": 1 }};
+
+    this.find(query, projection, options, function(err, roasters) {
+      if (err) return cb(err);
+      cb(null, roasters);
+    });
+  },
+
   // Get unique cities.
   getCities: function(cb) {
     this.distinct('city', function(err, results) {
@@ -60,14 +72,14 @@ RoasterySchema.methods = {
 
     // Get recent photos that have been tagged at roaster's location.
     if (type === 'location') {
-      gram.location(this.location_id, function(err, result, remaining, limit) {
+      gram.location_media_recent(this.instagram.location_id, function(err, result, remaining, limit) {
         if (err) return cb(err);
         cb(null, result);
       });
 
     // Get recent photos from roaster's official account.
     } else if (type === 'user') {
-      gram.user(this.user_id, function(err, result, remaining, limit) {
+      gram.user_media_recent(this.instagram.user_id, function(err, result, remaining, limit) {
         if (err) return cb(err);
         cb(null, result);
       });

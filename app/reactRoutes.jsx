@@ -7,6 +7,10 @@ var React         = require('react'),
     Offering      = require('./components/Offering.jsx'),
     Offerings     = require('./components/Offerings.jsx'),
     Offering404   = require('./components/Offering404.jsx'),
+    Roasters      = require('./components/Roasters.jsx'),
+    RoasterList   = require('./components/RoasterList.jsx'),
+    Roaster       = require('./components/Roaster.jsx'),
+    Roaster404    = require('./components/Roaster404.jsx'),
     Profile       = require('./components/Profile.jsx'),
     Admin         = require('./components/Admin.jsx'),
     Login         = require('./components/Login.jsx'),
@@ -25,6 +29,12 @@ module.exports = [
       <DefaultRoute name="list" handler={OfferingList} />
       <Route name="offering" path=":_id" handler={Offering} />
       <NotFoundRoute handler={Offering404} />
+    </Route>
+
+    <Route name="roasters" handler={Roasters} >
+      <DefaultRoute name="roasterList" handler={RoasterList} />
+      <Route name="roaster" path=":_id" handler={Roaster} />
+      <NotFoundRoute handler={Roaster404} />
     </Route>
 
     <Route name="profile" handler={Profile} />

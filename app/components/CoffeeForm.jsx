@@ -92,8 +92,8 @@ module.exports = React.createClass({
     return (
         <form className="offeringsForm" onSubmit={this.handleSubmit} >
           {this.renderTextInput('search', 'Search flavors...')}
-          {this.renderSelect('origin', 'Origin', this.props.data.origins)}
-          {this.renderSelect('roaster', 'Roaster', this.props.data.roasters)}
+          {this.renderSelect('origin', 'Origin', this.props.data.uniqueOriginNames)}
+          {this.renderSelect('roaster', 'Roaster', this.props.data.uniqueRoasterNames)}
           {this.renderSelect('process', 'Process', this.props.data.processes)}
           {this.renderCheckbox('blend', 'Blend')}
           {this.renderCheckbox('decaf', 'Decaf')}

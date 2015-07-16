@@ -1,11 +1,7 @@
-var mongoose = require('mongoose'),
-    Schema   = mongoose.Schema,
-    gram     = require('instagram-node').instagram();
-
-gram.use({
-  client_id: process.env.INSTAGRAM_CLIENT_ID,
-  client_secret: process.env.INSTAGRAM_CLIENT_SECRET
-});
+var mongoose  = require('mongoose'),
+    Schema    = mongoose.Schema,
+    Instagram = require('../services/Instagram.js'),
+    Twitter   = require('../services/Twitter.js');
 
 var RoasterySchema = Schema({
   name:     { type: String, unique: true },
@@ -24,6 +20,10 @@ var RoasterySchema = Schema({
     user_id:     String,
     location_id: String,
     hashtag:     String
+  },
+  twitter: {
+    user_id:     String,
+    screen_name: String
   }
 });
 
@@ -69,17 +69,22 @@ RoasterySchema.methods = {
 
   // Get recent media from Instagram.
   getInstagramMedia: function(type, cb) {
+    var id;
 
     // Get recent photos that have been tagged at roaster's location.
     if (type === 'location') {
-      gram.location_media_recent(this.instagram.location_id, function(err, result, remaining, limit) {
+      id = this.instagram.location_id;
+
+      Instagram.location_media_recent(id, function(err, result, remaining, limit) {
         if (err) return cb(err);
         cb(null, result);
       });
 
     // Get recent photos from roaster's official account.
     } else if (type === 'user') {
-      gram.user_media_recent(this.instagram.user_id, function(err, result, remaining, limit) {
+      id = this.instagram.user_id;
+
+      Instagram.user_media_recent(id, function(err, result, remaining, limit) {
         if (err) return cb(err);
         cb(null, result);
       });

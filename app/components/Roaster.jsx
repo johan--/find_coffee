@@ -34,7 +34,12 @@ module.exports = React.createClass({
 
     Roastery.find({ _id: _id }, function(err, roasters) {
       if (err) throw err;
-      self.setState({ roaster: roasters[0] });
+
+      if (!roasters) {
+        self.setState({ roaster: {notFound: true} });
+      } else {
+        self.setState({ roaster: roasters[0] });
+      }
     });
   },
 
@@ -43,10 +48,10 @@ module.exports = React.createClass({
 
     for (var i = 0, len = roasters.length; i < len; i++) {
       if (roasters[i]._id === _id) {
-        this.setState({ roaster: roasters[i] });
-        break;
+        return this.setState({ roaster: roasters[i] });
       }
     }
+    this.setState({ roaster: {notFound: true} });
   },
 
   setTweets: function() {
@@ -82,20 +87,48 @@ module.exports = React.createClass({
     }
   },
 
+  isLoading: function() {
+    return Object.keys(this.state.roaster).length === 0;
+  },
+
+  isFound: function() {
+    return !this.state.roaster.notFound;
+  },
+
   hasLoaded: function() {
-    return Object.keys(this.state.roaster).length !== 0;
+    return this.isFound() && !this.isLoading();
+  },
+
+  renderFound: function() {
+    return (
+      <div>
+        <h1>{this.state.roaster.name}</h1>
+        <InstagramFeed pics={this.state.pics} />
+      </div>
+    );
+  },
+
+  renderNotFound: function() {
+    return <h1>No roaster found in database.</h1>;
+  },
+
+  renderLoading: function() {
+    return <h1>Loading...</h1>;
   },
 
   render: function() {
-    if (this.hasLoaded()) {
-      return (
-        <div>
-          <h1>{this.state.roaster.name}</h1>
-          <InstagramFeed pics={this.state.pics} />
-        </div>
-      );
+
+    // Handle loading.
+    if (this.isLoading()) {
+      return this.renderLoading();
+
+    // Handle found or not found.
     } else {
-      return <h1>Loading...</h1>;
+      if (this.hasLoaded()) {
+        return this.renderFound();
+      } else {
+        return this.renderNotFound();
+      }
     }
   }
 

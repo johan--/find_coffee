@@ -17,9 +17,9 @@ module.exports = function(app) {
         });
       },
 
-      // Get instagram media.
+      // Get photos.
       function(roaster, cb) {
-        roaster.getInstagramMedia('location', function(err, pics) {
+        roaster.getInstagramByLocation(function(err, pics) {
           if (err) return cb(err);
           return res.json(JSON.stringify(pics));
         });

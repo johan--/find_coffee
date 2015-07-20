@@ -26,7 +26,7 @@ module.exports = React.createClass({
       var current = self.state.current,
           len     = self.props.pics.length;
 
-      if (current === len) {
+      if (current === len - 1) {
         self.setState({ current: 0 });
       } else {
         self.setState({ current: ++current });

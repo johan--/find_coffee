@@ -67,32 +67,20 @@ RoasterySchema.statics = {
 // =====================================================
 RoasterySchema.methods = {
 
-  // Get recent media from Instagram.
-  getInstagramMedia: function(type, cb) {
-    var id;
+  // Get recent photos that have been tagged at roaster's location.
+  getInstagramByLocation: function(cb) {
+    Instagram.location_media_recent(this.instagram.location_id, function(err, result) {
+      if (err) return cb(err);
+      cb(null, result);
+    });
+  },
 
-    // Get recent photos that have been tagged at roaster's location.
-    if (type === 'location') {
-      id = this.instagram.location_id;
-
-      Instagram.location_media_recent(id, function(err, result, remaining, limit) {
-        if (err) return cb(err);
-        cb(null, result);
-      });
-
-    // Get recent photos from roaster's official account.
-    } else if (type === 'user') {
-      id = this.instagram.user_id;
-
-      Instagram.user_media_recent(id, function(err, result, remaining, limit) {
-        if (err) return cb(err);
-        cb(null, result);
-      });
-
-    // Otherwise error.
-    } else {
-      return new Error("Invalid type. Type should be 'location' or 'user'.");
-    }
+  // Get recent photos from roaster's official account.
+  getInstagramByUser: function(cb) {
+    Instagram.user_media_recent(this.instagram.location_id, function(err, result) {
+      if (err) return cb(err);
+      cb(null, result);
+    });
   }
 
 };

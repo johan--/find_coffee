@@ -10,8 +10,8 @@ var OfferingSchema = Schema({
   name:    String,
   start:   Date,
   end:     Date,
-  price:   Number,
-  url:     { type: String, unique: true },
+  price:   Schema.Types.Mixed,
+  url:     String,
 
   origin:    { type: [], get: get, set: set },
   region:    { type: [], get: get, set: set },

@@ -86,22 +86,28 @@ module.exports = React.createClass({
 
   renderBackground: function() {
     if (this.hasBackground()) {
-      return <p><span className="background">Background:</span>{this.state.offering.background}</p>;
+      return (
+        <p>
+          <span className="background category">Background:</span>
+          <span className="value">{this.state.offering.background}</span>
+        </p>
+      );
     }
   },
 
   renderFlavors: function() {
     if (this.hasFlavors()) {
-      return <p><span className="flavors">Flavors:</span>{this.getFlavors()}</p>;
+      return (
+        <p>
+          <span className="flavors category">Flavors:</span>
+          <span className="value">{this.getFlavors()}</span>
+        </p>
+      );
     }
   },
 
   renderValue: function(value) {
-    return (
-      <span className="value">
-        {this.getValue(value)}
-      </span>
-    );
+    return <span className="value">{this.getValue(value)}</span>;
   },
 
   renderCategory: function(category) {
@@ -129,15 +135,32 @@ module.exports = React.createClass({
     return <ul>{listItems}</ul>;
   },
 
+  renderTitle: function() {
+    var offering = this.state.offering;
+
+    return (
+      <h1><a href={offering.url}>{offering.name} - {offering.roastery.name}</a></h1>
+    );
+  },
+
+  renderPrice: function() {
+    var price = this.state.offering.price;
+
+    if (price) {
+      return <p className="price">$ {price}</p>;
+    }
+  },
+
   render: function() {
     if (this.isEmpty()) {
       return <div className="overview"><h1>Loading...</h1></div>;
     } else {
       return (
         <div className="overview">
-          <h1><a href={this.state.offering.url}>{this.state.offering.name}</a></h1>
-          {this.renderBackground()}
+          {this.renderTitle()}
+          {this.renderPrice()}
           {this.renderFlavors()}
+          {this.renderBackground()}
           {this.renderInfo()}
           {this.renderBooleans()}
         </div>

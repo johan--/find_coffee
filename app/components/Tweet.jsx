@@ -6,13 +6,14 @@ module.exports = React.createClass({
 
   getFormattedTime: function() {
     var created = new Date(this.props.created);
-    return moment(created).format('llll');
+    return moment(created).format('LL');
   },
 
   render: function() {
     return (
-      <li>
-        {this.getFormattedTime()}: {this.props.text}
+      <li className="tweet">
+        <span className="tweetTime">{this.getFormattedTime()}</span><br/>
+        <span className="tweetText">{this.props.text}</span>
       </li>
     );
   }

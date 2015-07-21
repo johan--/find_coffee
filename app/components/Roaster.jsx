@@ -134,11 +134,19 @@ module.exports = React.createClass({
 
   renderFound: function() {
     return (
-      <div>
-        <h1>{this.state.roaster.name}</h1>
-        <InstagramFeed pics={this.state.pics} />
-        <TwitterFeed tweets={this.state.tweets} />
-        {this.renderOfferingsList()}
+      <div className="roasterPage">
+        <div className="roasterProfile">
+          <h1>{this.state.roaster.name}</h1>
+          {this.renderAddress()}
+          <h3>Current Offerings</h3>
+          {this.renderOfferingsList()}
+        </div>
+        <div className="feeds">
+          <h2 className="instagramHeader">Latest Instagram photos</h2>
+          <InstagramFeed pics={this.state.pics} />
+          <h2 className="twitterHeader">Latest Tweets</h2>
+          <TwitterFeed tweets={this.state.tweets} />
+        </div>
       </div>
     );
   },
@@ -153,10 +161,23 @@ module.exports = React.createClass({
 
   renderOfferingsList: function() {
     if (this.hasLoadedOfferings()) {
-      return <OfferingList perPage={10} offerings={this.state.offerings} />;
+      return <OfferingList hideRoaster={true}
+                           perPage={10}
+                           offerings={this.state.offerings} />;
     } else {
       return <div></div>;
     }
+  },
+
+  renderAddress: function() {
+    var roaster = this.state.roaster;
+
+    return (
+      <ul className="roasterAddress">
+        <li>{roaster.address}</li>
+        <li>{roaster.city}, {roaster.state} {roaster.zip}</li>
+      </ul>
+    );
   },
 
   render: function() {

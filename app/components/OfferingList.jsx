@@ -13,7 +13,10 @@ var List = React.createClass({
 
     offerings.forEach(function(offering, index) {
       offeringsList.push(
-        <OfferingListItem params={self.props.params} offering={offering} key={index} />
+        <OfferingListItem params={self.props.params}
+                          offering={offering}
+                          hideRoaster={self.props.hideRoaster}
+                          key={index} />
       );
     });
 
@@ -84,13 +87,13 @@ var OfferingsList = React.createClass({
 
   renderNotFound: function() {
     var msg = 'Oh no! Looks like nothing matched that search criteria.';
-    return <NotFound className="overview" msg={msg} />;
+    return <NotFound className="offerings" msg={msg} />;
   },
 
   renderFound: function() {
     return (
       <div className="offerings">
-        <List offerings={this.state.offerings} />
+        <List hideRoaster={this.props.hideRoaster} offerings={this.state.offerings} />
         <ReactPaginate previousLabel={"previous"}
                        nextLabel={"next"}
                        breakLabel={<li className="break"><a href="">...</a></li>}

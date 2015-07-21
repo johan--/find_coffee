@@ -1,11 +1,22 @@
 /** @jsx React.DOM */
 var React = require('react');
 
+function runOnce(fn) {
+  var hasRun = false;
+
+  return function() {
+    if (hasRun) return;
+    hasRun = true;
+    fn();
+  };
+}
+
 module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      current: 0
+      current: 0,
+      startInterval: runOnce(this.startCycle)
     };
   },
 
@@ -14,33 +25,34 @@ module.exports = React.createClass({
         pics    = this.props.pics,
         pic     = pics[current];
 
-    this.getNextPic();
-
-    return <a href={pic.link}><img src={pic.images.low_resolution.url} /></a>;
+    return (
+      <div className="instagramFeed">
+        <a href={pic.link}><img src={pic.images.low_resolution.url} /></a>
+      </div>
+    );
   },
 
-  // Cycle through photos endlessly.
+  startCycle: function() {
+    setInterval(this.getNextPic, 5000);
+  },
+
   getNextPic: function() {
-    var self = this;
+    var current = this.state.current,
+        len     = this.props.pics.length;
 
-    setTimeout(function() {
-      var current = self.state.current,
-          len     = self.props.pics.length;
-
-      if (current === len - 1) {
-        self.setState({ current: 0 });
-      } else {
-        self.setState({ current: ++current });
-      }
-
-    }, 3000);
+    if (current === len - 1) {
+      this.setState({ current: 0 });
+    } else {
+      this.setState({ current: ++current });
+    }
   },
 
   render: function() {
-    if (!this.props.pics) {
-      return <div></div>;
-    }
+    this.state.startInterval();
 
+    if (!this.props.pics) {
+      return <div className="instagramFeed"></div>;
+    }
     return this.getPic();
   }
 

@@ -17,11 +17,19 @@ module.exports = React.createClass({
     return this.props.offering._id;
   },
 
+  renderText: function() {
+    if (this.props.hideRoaster) {
+      return <span>{this.getName()}</span>;
+    } else {
+      return <span>{this.getName()} | {this.getRoaster()}</span>;
+    }
+  },
+
   render: function() {
     return (
       <li className="offering">
         <Link to="offering" params={{_id: this.getId()}}>
-          <span>{this.getName()} | {this.getRoaster()}</span>
+          {this.renderText()}
         </Link>
       </li>
     );

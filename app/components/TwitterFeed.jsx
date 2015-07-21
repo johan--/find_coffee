@@ -19,14 +19,14 @@ module.exports = React.createClass({
       }
     }
 
-    return <ul>{tweets}</ul>;
+    return <div className="twitterFeed"><ul>{tweets}</ul></div>;
   },
 
   render: function() {
     if (this.hasTweets()) {
       return this.renderList();
     } else {
-      return <div></div>;
+      return <div className="twitterFeed"></div>;
     }
   }
 

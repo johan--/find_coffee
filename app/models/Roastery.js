@@ -62,9 +62,9 @@ RoasterySchema.statics = {
   },
 
   load: function(_id, cb) {
-    this.find({ _id: _id }, function(err, roasters) {
+    this.findOne({ _id: _id }, function(err, roaster) {
       if (err) return cb(err);
-      cb(null, roasters[0]);
+      cb(null, roaster);
     });
   }
 

@@ -23,9 +23,9 @@ module.exports = React.createClass({
   setOfferingOnServer: function(_id) {
     var Offering = mongoose.model('Offering'), self = this;
 
-    Offering.find({ _id: _id }, function(err, offerings) {
+    Offering.findOne({ _id: _id }, function(err, offering) {
       if (err) throw err;
-      self.setState({ offering: offerings[0] });
+      self.setState({ offering: offering });
     });
   },
 

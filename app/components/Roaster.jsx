@@ -5,6 +5,7 @@ var React         = require('react'),
     mongoose      = require('mongoose'),
     InstagramFeed = require('./InstagramFeed.jsx'),
     TwitterFeed   = require('./TwitterFeed.jsx'),
+    OfferingList  = require('./OfferingList.jsx'),
     RouteHandler  = Router.RouteHandler;
 
 module.exports = React.createClass({
@@ -12,9 +13,10 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      roaster: {},
-      pics:    null,
-      tweets:  null
+      roaster:   {},
+      offerings: [],
+      pics:      null,
+      tweets:    null
     };
   },
 
@@ -31,16 +33,29 @@ module.exports = React.createClass({
     return links;
   },
 
+  setOfferings: function() {
+    var offerings = [],
+        self = this;
+
+    this.props.data.offerings.forEach(function(offering) {
+      if (offering.roastery._id === self.state.roaster._id) {
+        offerings.push(offering);
+      }
+    });
+
+    this.setState({ offerings: offerings });
+  },
+
   setRoasterOnServer: function(_id) {
     var Roastery = mongoose.model('Roastery'), self = this;
 
-    Roastery.find({ _id: _id }, function(err, roasters) {
+    Roastery.findOne({ _id: _id }, function(err, roaster) {
       if (err) throw err;
 
       if (!roasters) {
         self.setState({ roaster: {notFound: true} });
       } else {
-        self.setState({ roaster: roasters[0] });
+        self.setState({ roaster: roaster });
       }
     });
   },
@@ -94,6 +109,7 @@ module.exports = React.createClass({
 
     setTimeout(function() {
       if (self.hasLoaded()) {
+        self.setOfferings();
         self.setPics();
         self.setTweets();
       }
@@ -112,12 +128,17 @@ module.exports = React.createClass({
     return this.isFound() && !this.isLoading();
   },
 
+  hasLoadedOfferings: function() {
+    return this.state.offerings.length;
+  },
+
   renderFound: function() {
     return (
       <div>
         <h1>{this.state.roaster.name}</h1>
         <InstagramFeed pics={this.state.pics} />
         <TwitterFeed tweets={this.state.tweets} />
+        {this.renderOfferingsList()}
       </div>
     );
   },
@@ -128,6 +149,14 @@ module.exports = React.createClass({
 
   renderLoading: function() {
     return <h1>Loading...</h1>;
+  },
+
+  renderOfferingsList: function() {
+    if (this.hasLoadedOfferings()) {
+      return <OfferingList perPage={10} offerings={this.state.offerings} />;
+    } else {
+      return <div></div>;
+    }
   },
 
   render: function() {

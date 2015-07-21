@@ -1,8 +1,10 @@
 /** @jsx React.DOM */
 var React         = require('react'),
     Router        = require('react-router'),
+    request       = require('request'),
     mongoose      = require('mongoose'),
     InstagramFeed = require('./InstagramFeed.jsx'),
+    TwitterFeed   = require('./TwitterFeed.jsx'),
     RouteHandler  = Router.RouteHandler;
 
 module.exports = React.createClass({
@@ -55,22 +57,27 @@ module.exports = React.createClass({
   },
 
   setTweets: function() {
-    // TODO
+    var url  = 'https://localhost:8000/roasters/twitter/',
+        _id  = this.props.params._id,
+        self = this;
+
+    request(url + _id, function(err, res, body) {
+      if (err) throw err;
+      if (res.statusCode < 400) {
+        self.setState({ tweets: JSON.parse(res.body) });
+      }
+    });
   },
 
   setPics: function() {
-    $.ajax({
-      url: "https://localhost:8000/roasters/instagram",
-      type: "POST",
-      contentType: 'application/json',
-      data: JSON.stringify({ _id: this.props.params._id }),
+    var url  = 'https://localhost:8000/roasters/instagram/',
+        _id  = this.props.params._id,
+        self = this;
 
-      success: function(data, textStatus, jqXHR) {
-        this.setState({ pics: JSON.parse(data) });
-      }.bind(this),
-
-      error: function(jqXHR, textStatus, err) {
-        console.error(err);
+    request(url + _id, function(err, res, body) {
+      if (err) throw err;
+      if (res.statusCode < 400) {
+        self.setState({ pics: JSON.parse(res.body) });
       }
     });
   },
@@ -80,11 +87,12 @@ module.exports = React.createClass({
 
     if (typeof window === 'undefined') {
       this.setRoasterOnServer.call(this, _id);
-      this.setPics();
     } else {
       this.setRoasterOnClient.call(this, _id);
-      this.setPics();
     }
+
+    this.setPics();
+    this.setTweets();
   },
 
   isLoading: function() {
@@ -104,6 +112,7 @@ module.exports = React.createClass({
       <div>
         <h1>{this.state.roaster.name}</h1>
         <InstagramFeed pics={this.state.pics} />
+        <TwitterFeed tweets={this.state.tweets} />
       </div>
     );
   },

@@ -4,11 +4,24 @@ var React        = require('react'),
     RouteHandler = Router.RouteHandler;
 
 module.exports = React.createClass({
-  mixins: [Router.State, Router.Navigation],
+
+  renderList: function() {
+    var list = [],
+        baseUrl = 'https://localhost:8000/roasters/';
+
+    this.props.data.roasters.forEach(function(roaster) {
+      list.push(<li><a href={baseUrl + roaster._id}>{roaster.name}</a></li>);
+    });
+
+    return <ul className="roasterList">{list}</ul>;
+  },
 
   render: function() {
     return (
-        <h1>Roasteries List</h1>
+      <div className="roasteries">
+        <h1>Roasters</h1>
+        {this.renderList()}
+      </div>
     );
   }
 

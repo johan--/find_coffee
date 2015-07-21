@@ -83,7 +83,8 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    var _id = this.props.params._id;
+    var _id = this.props.params._id,
+        self = this;
 
     if (typeof window === 'undefined') {
       this.setRoasterOnServer.call(this, _id);
@@ -91,8 +92,12 @@ module.exports = React.createClass({
       this.setRoasterOnClient.call(this, _id);
     }
 
-    this.setPics();
-    this.setTweets();
+    setTimeout(function() {
+      if (self.hasLoaded()) {
+        self.setPics();
+        self.setTweets();
+      }
+    }, 0);
   },
 
   isLoading: function() {

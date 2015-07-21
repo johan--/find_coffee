@@ -96,6 +96,21 @@ OfferingSchema.statics = {
     });
   },
 
+  // Get date Mongo was last updated.
+  getLastUpdate: function(cb) {
+    this.findOne({}).
+         sort({ "meta.lastUpdated": -1 }).
+         limit(1).
+         select({
+           _id: 0,
+           "meta.lastUpdated": 1
+         }).
+         exec(function(err, date) {
+           if (err) return cb(err);
+           cb(null, date);
+         });
+  }
+
 };
 
 module.exports = mongoose.model('Offering', OfferingSchema);

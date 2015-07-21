@@ -11,11 +11,12 @@ module.exports = React.createClass({
 
   getPic: function() {
     var current = this.state.current,
-        pics    = this.props.pics;
+        pics    = this.props.pics,
+        pic     = pics[current];
 
     this.getNextPic();
 
-    return <img src={pics[current].images.low_resolution.url} />;
+    return <a href={pic.link}><img src={pic.images.low_resolution.url} /></a>;
   },
 
   // Cycle through photos endlessly.

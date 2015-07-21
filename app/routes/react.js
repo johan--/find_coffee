@@ -17,7 +17,8 @@ module.exports = function(app) {
         Offering.getUniqueRoasters.bind(Offering), // Get unique roasters.
         Offering.getUniqueOrigins.bind(Offering),  // Get unique origins.
         Offering.getOfferings.bind(Offering), // Get all current offering objects.
-        Roastery.getRoasters.bind(Roastery)   // Get all current roaster objects.
+        Roastery.getRoasters.bind(Roastery),  // Get all current roaster objects.
+        Offering.getLastUpdate.bind(Offering) // Get date Mongo was last updated.
       ],
 
       // Called once all info is loaded.
@@ -29,6 +30,7 @@ module.exports = function(app) {
           uniqueOriginNames:  results[1],
           offerings:          results[2],
           roasters:           results[3],
+          lastUpdated:        results[4],
           processes: ['Any', 'Natural', 'Honey', 'Washed']
         };
 

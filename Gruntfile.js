@@ -8,14 +8,14 @@ module.exports = function(grunt) {
       },
       client: {
         src: './app/main.js',
-        dest: './public/main.js'
+        dest: './public/scripts/main.js'
       }
     },
 
     uglify: {
       my_target: {
         files: {
-          './public/main.min.js': ['./public/main.js']
+          './public/scripts/main.min.js': ['./public/scripts/main.js']
         }
       }
     }

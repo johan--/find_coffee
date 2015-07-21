@@ -1,6 +1,5 @@
 .DS_Store
 node_modules
 ssl
-public/main.js
-public/main.min.js
+public/scripts
 todo.txt

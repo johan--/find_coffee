@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React    = require('react'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    Link = require('react-router').Link;
 
 module.exports = React.createClass({
 
@@ -135,11 +136,21 @@ module.exports = React.createClass({
     return <ul>{listItems}</ul>;
   },
 
+  getRoasteryLink: function() {
+    var roastery = this.state.offering.roastery;
+
+    return (
+      <Link to="roaster" params={{ _id: roastery._id }}>
+        {roastery.name}
+      </Link>
+    );
+  },
+
   renderTitle: function() {
     var offering = this.state.offering;
 
     return (
-      <h1><a href={offering.url}>{offering.name} - {offering.roastery.name}</a></h1>
+      <h1><a href={offering.url}>{offering.name}</a> - {this.getRoasteryLink()}</h1>
     );
   },
 
@@ -153,7 +164,7 @@ module.exports = React.createClass({
 
   render: function() {
     if (this.isEmpty()) {
-      return <div className="overview"><h1>Loading...</h1></div>;
+      return <div className="offerings"><h1>Loading...</h1></div>;
     } else {
       return (
         <div className="overview">

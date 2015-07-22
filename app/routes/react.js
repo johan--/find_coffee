@@ -61,6 +61,7 @@ module.exports = function(app) {
 
           return res.render('index', {
             jsonProps: JSON.stringify({data: data}),
+            GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
             reactOutput: html
           });
         });

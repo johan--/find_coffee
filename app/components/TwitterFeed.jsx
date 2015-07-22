@@ -10,6 +10,7 @@ module.exports = React.createClass({
 
   renderList: function() {
     var tweets = [];
+    console.log(this.props.tweets);
 
     // Only use the last ten tweets.
     for (var i = 0; i < 10; i++) {

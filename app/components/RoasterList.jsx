@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React        = require('react'),
     Router       = require('react-router'),
+    GoogleMap    = require('./GoogleMap.jsx'),
     RouteHandler = Router.RouteHandler;
 
 module.exports = React.createClass({
@@ -21,6 +22,7 @@ module.exports = React.createClass({
       <div className="roasteries">
         <h1>Roasters</h1>
         {this.renderList()}
+        <GoogleMap coords={{ lat: 53.5333, lng: -113.4073126 }} />
       </div>
     );
   }

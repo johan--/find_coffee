@@ -18,7 +18,7 @@ module.exports = React.createClass({
   },
 
   getValue: function(value) {
-    return value.constructor === Array ? value.join(',') : value;
+    return value.constructor === Array ? value.join(', ') : value;
   },
 
   setOfferingOnServer: function(_id) {

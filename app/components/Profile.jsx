@@ -30,42 +30,25 @@ module.exports = React.createClass({
   getUser: function() {
     var user = this.props.user, self = this;
 
-    // Handle server load.
-    if (typeof window === 'undefined') {
-      var currentUser = new User(user);
+    $.ajax({
+      url: "https://localhost:8000/load",
+      type: "POST",
+      contentType: 'application/json',
+      data: JSON.stringify({ _id: self.props.user._id }),
 
-      currentUser.getOfferings(function(err, offerings) {
+      success: function(data, textStatus, jqXHR) {
+        var parsed = JSON.parse(data);
+
+        self.setState({
+          roasters: parsed.roasteries,
+          offerings: parsed.offerings
+        });
+      }.bind(self),
+
+      error: function(jqXHR, textStatus, err) {
         if (err) throw err;
-        self.setState({ offerings: offerings });
-      });
-
-      currentUser.getRoasteries(function(err, roasters) {
-        if (err) throw err;
-        self.setState({ roasters: roasters });
-      });
-
-    // Handle client load.
-    } else {
-      $.ajax({
-        url: "https://localhost:8000/load",
-        type: "POST",
-        contentType: 'application/json',
-        data: JSON.stringify({ _id: self.props.user._id }),
-
-        success: function(data, textStatus, jqXHR) {
-          var parsed = JSON.parse(data);
-
-          self.setState({ 
-            roasters: parsed.roasteries,
-            offerings: parsed.offerings
-          });
-        }.bind(self),
-
-        error: function(jqXHR, textStatus, err) {
-          if (err) throw err;
-        }
-      });
-    }
+      }
+    });
   },
 
   componentDidMount: function() {

@@ -21,16 +21,7 @@ module.exports = React.createClass({
     return value.constructor === Array ? value.join(', ') : value;
   },
 
-  setOfferingOnServer: function(_id) {
-    var Offering = mongoose.model('Offering'), self = this;
-
-    Offering.findOne({ _id: _id }, function(err, offering) {
-      if (err) throw err;
-      self.setState({ offering: offering });
-    });
-  },
-
-  setOfferingOnClient: function(_id) {
+  setOffering: function(_id) {
     var offerings = this.props.offerings;
 
     for (var i = 0, len = offerings.length; i < len; i++) {
@@ -42,13 +33,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    var _id = this.props.params._id;
-
-    if (typeof window === 'undefined') {
-      this.setOfferingOnServer.call(this, _id);
-    } else {
-      this.setOfferingOnClient.call(this, _id);
-    }
+    this.setOffering(this.props.params._id);
   },
 
   isEmpty: function() {

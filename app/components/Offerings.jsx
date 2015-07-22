@@ -32,33 +32,10 @@ module.exports = React.createClass({
       this.transitionTo('/offerings');
     }
 
-    // Handle form submit if rendering on client.
-    if (typeof window !== 'undefined') {
-      this.setState({
-        offerings: self.getFilteredOfferings(formInputs),
-        isInitialLoad: false
-      });
-
-    // Handle form submit if rendering on client.
-    } else {
-      $.ajax({
-        url: "https://localhost:8000/offerings/find",
-        type: "POST",
-        contentType: 'application/json',
-        data: JSON.stringify(formInputs),
-
-        success: function(data, textStatus, jqXHR) {
-          this.setState({
-            offerings: JSON.parse(data),
-            isInitialLoad: false
-          })
-        }.bind(this),
-
-        error: function (jqXHR, textStatus, err) {
-          console.error(err);
-        }
-      });
-    }
+    this.setState({
+      offerings: self.getFilteredOfferings(formInputs),
+      isInitialLoad: false
+    });
   },
 
   render: function() {

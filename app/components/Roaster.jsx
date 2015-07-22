@@ -46,21 +46,7 @@ module.exports = React.createClass({
     this.setState({ offerings: offerings });
   },
 
-  setRoasterOnServer: function(_id) {
-    var Roastery = mongoose.model('Roastery'), self = this;
-
-    Roastery.findOne({ _id: _id }, function(err, roaster) {
-      if (err) throw err;
-
-      if (!roasters) {
-        self.setState({ roaster: {notFound: true} });
-      } else {
-        self.setState({ roaster: roaster });
-      }
-    });
-  },
-
-  setRoasterOnClient: function(_id) {
+  setRoaster: function(_id) {
     var roasters = this.props.data.roasters;
 
     for (var i = 0, len = roasters.length; i < len; i++) {
@@ -98,14 +84,9 @@ module.exports = React.createClass({
   },
 
   componentDidMount: function() {
-    var _id = this.props.params._id,
-        self = this;
+    var _id = this.props.params._id, self = this;
 
-    if (typeof window === 'undefined') {
-      this.setRoasterOnServer.call(this, _id);
-    } else {
-      this.setRoasterOnClient.call(this, _id);
-    }
+    this.setRoaster(_id);
 
     setTimeout(function() {
       if (self.hasLoaded()) {

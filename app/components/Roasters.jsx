@@ -4,12 +4,9 @@ var React        = require('react'),
     RouteHandler = Router.RouteHandler;
 
 module.exports = React.createClass({
-  mixins: [Router.State, Router.Navigation],
 
   render: function() {
-    return (
-      <RouteHandler perPage={10} {...this.props} />
-    );
+    return <RouteHandler perPage={10} {...this.props} />;
   }
 
 });

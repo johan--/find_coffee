@@ -5,30 +5,20 @@ var React = require('react'),
 
 module.exports = React.createClass({
 
-  getRoaster: function() {
-    return this.props.offering.roastery.name;
-  },
-
-  getName: function() {
-    return this.props.offering.name;
-  },
-
-  getId: function() {
-    return this.props.offering._id;
-  },
-
   renderText: function() {
+    var offering = this.props.offering;
+
     if (this.props.hideRoaster) {
-      return <span>{this.getName()}</span>;
+      return <span>{offering.name}</span>;
     } else {
-      return <span>{this.getName()} | {this.getRoaster()}</span>;
+      return <span>{offering.name} | {offering.roastery.name}</span>;
     }
   },
 
   render: function() {
     return (
       <li className="offering">
-        <Link to="offering" params={{_id: this.getId()}}>
+        <Link to="offering" params={{_id: this.props.offering._id}}>
           {this.renderText()}
         </Link>
       </li>

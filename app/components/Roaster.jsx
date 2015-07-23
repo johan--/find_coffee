@@ -83,7 +83,7 @@ module.exports = React.createClass({
     });
   },
 
-  componentDidMount: function() {
+  componentWillMount: function() {
     var _id = this.props.params._id, self = this;
 
     this.setRoaster(_id);

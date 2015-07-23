@@ -1,22 +1,11 @@
 /** @jsx React.DOM */
 var React = require('react');
 
-function runOnce(fn) {
-  var hasRun = false;
-
-  return function() {
-    if (hasRun) return;
-    hasRun = true;
-    fn();
-  };
-}
-
 module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      current: 0,
-      startInterval: runOnce(this.startCycle)
+      current: 0
     };
   },
 
@@ -32,10 +21,6 @@ module.exports = React.createClass({
     );
   },
 
-  startCycle: function() {
-    setInterval(this.getNextPic, 5000);
-  },
-
   getNextPic: function() {
     var current = this.state.current,
         len     = this.props.pics.length;
@@ -47,13 +32,23 @@ module.exports = React.createClass({
     }
   },
 
-  render: function() {
-    this.state.startInterval();
+  componentDidMount: function() {
+    this.interval = setInterval(this.getNextPic, 5000);
+  },
 
-    if (!this.props.pics) {
-      return <div className="instagramFeed"></div>;
+  componentWillUnmount: function() {
+    clearInterval(this.interval);
+  },
+
+  hasLoaded: function() {
+    return !!this.props.pics;
+  },
+
+  render: function() {
+    if (this.hasLoaded()) {
+      return this.getPic();
     }
-    return this.getPic();
+    return <div className="instagramFeed"></div>;
   }
 
 });

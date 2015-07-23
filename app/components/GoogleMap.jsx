@@ -3,17 +3,34 @@ var React = require('react');
 
 module.exports = React.createClass({
 
-  getDefaultProps: function() {
+  getInitialState: function() {
     return {
-      coords: {
-        lat: 53.5333,
-        lng: -113.4073126
-      }
+      map: null,
+      marker: null,
+      infoWindow: null
     };
   },
 
   componentDidMount: function() {
     this.createMap();
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    var map = this.state.map,
+        marker = this.state.marker,
+        infoWindow = this.state.infoWindow,
+        coords = nextProps.coords;
+
+    var newPosition = new google.maps.LatLng(coords.lat, coords.lng);
+
+    map.setCenter(newPosition);
+    marker.setPosition(newPosition);
+
+    this.setState({
+      map: map,
+      marker: marker,
+      infoWindow: infoWindow
+    });
   },
 
   createMap: function() {
@@ -25,9 +42,14 @@ module.exports = React.createClass({
         };
 
     var map = new google.maps.Map(this.getDOMNode(), mapOptions),
-        marker = this.renderMarker(map);
+        marker = this.renderMarker(map),
+        infoWindow = this.renderInfoWindow(map, marker);
 
-    this.renderInfoWindow(map, marker);
+    this.setState({
+      map: map,
+      marker: marker,
+      infoWindow: infoWindow
+    });
   },
 
   renderMarker: function(map) {
@@ -40,7 +62,7 @@ module.exports = React.createClass({
   },
 
   renderInfoWindow: function(map, marker) {
-    new google.maps.InfoWindow({
+    return new google.maps.InfoWindow({
           map: map,
           anchor: marker,
           content: 'content'

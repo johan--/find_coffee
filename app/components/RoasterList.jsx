@@ -2,27 +2,51 @@
 var React        = require('react'),
     Router       = require('react-router'),
     GoogleMap    = require('./GoogleMap.jsx'),
+    List         = require('./List.jsx'),
     RouteHandler = Router.RouteHandler;
 
 module.exports = React.createClass({
 
-  renderList: function() {
-    var list = [],
-        baseUrl = 'https://localhost:8000/roasters/';
+  getInitialState: function() {
+    var coords = this.getRoasterCoords();
+
+    return {
+      current: coords.random,
+      coords: coords.all
+    };
+  },
+
+  getRoasterCoords: function() {
+    var coords = {};
 
     this.props.data.roasters.forEach(function(roaster) {
-      list.push(<li><a href={baseUrl + roaster._id}>{roaster.name}</a></li>);
+      coords[roaster._id] = roaster.location;
     });
 
-    return <ul className="roasterList">{list}</ul>;
+    return {
+      all: coords,
+      random: this.getRandomCoords(coords)
+    };
+  },
+
+  getRandomCoords: function(coords) {
+    var _ids = Object.keys(coords),
+        randomIndex = Math.floor(Math.random() * _ids.length);
+
+    return _ids[randomIndex];
+  },
+
+  handleMouseOver: function(_id) {
+    this.setState({ current: _id });
   },
 
   render: function() {
     return (
       <div className="roasteries">
         <h1>Roasters</h1>
-        {this.renderList()}
-        <GoogleMap coords={{ lat: 53.5333, lng: -113.4073126 }} />
+        <List handleMouseOver={this.handleMouseOver}
+              roasters={this.props.data.roasters} />
+        <GoogleMap coords={ this.state.coords[this.state.current] } />
       </div>
     );
   }

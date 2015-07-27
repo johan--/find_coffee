@@ -15,22 +15,8 @@ module.exports = React.createClass({
     return {
       roaster:   {},
       offerings: [],
-      pics:      null,
       tweets:    null
     };
-  },
-
-  getPics: function() {
-    var pics = this.state.pics,
-        links = [];
-
-    if (pics) {
-      pics.forEach(function(pic) {
-        links.push({ link: pic.link, user: pic.user.username });
-      });
-    }
-
-    return links;
   },
 
   setOfferings: function() {
@@ -70,19 +56,6 @@ module.exports = React.createClass({
     });
   },
 
-  setPics: function() {
-    var url  = 'https://localhost:8000/roasters/instagram/',
-        _id  = this.props.params._id,
-        self = this;
-
-    request(url + _id, function(err, res, body) {
-      if (err) throw err;
-      if (res.statusCode < 400) {
-        self.setState({ pics: JSON.parse(res.body) });
-      }
-    });
-  },
-
   componentWillMount: function() {
     var _id = this.props.params._id, self = this;
 
@@ -91,7 +64,6 @@ module.exports = React.createClass({
     setTimeout(function() {
       if (self.hasLoaded()) {
         self.setOfferings();
-        self.setPics();
         self.setTweets();
       }
     }, 0);
@@ -113,33 +85,6 @@ module.exports = React.createClass({
     return this.state.offerings.length;
   },
 
-  renderFound: function() {
-    return (
-      <div className="roasterPage">
-        <div className="roasterProfile">
-          <h1>{this.state.roaster.name}</h1>
-          {this.renderAddress()}
-          <h3>Current Offerings</h3>
-          {this.renderOfferingsList()}
-        </div>
-        <div className="feeds">
-          <h2 className="instagramHeader">Latest Instagram photos</h2>
-          <InstagramFeed pics={this.state.pics} />
-          <h2 className="twitterHeader">Latest Tweets</h2>
-          <TwitterFeed tweets={this.state.tweets} />
-        </div>
-      </div>
-    );
-  },
-
-  renderNotFound: function() {
-    return <h1>No roaster found in database.</h1>;
-  },
-
-  renderLoading: function() {
-    return <h1>Loading...</h1>;
-  },
-
   renderOfferingsList: function() {
     if (this.hasLoadedOfferings()) {
       return <OfferingList hideRoaster={true}
@@ -159,6 +104,33 @@ module.exports = React.createClass({
         <li>{roaster.city}, {roaster.state} {roaster.zip}</li>
       </ul>
     );
+  },
+
+  renderFound: function() {
+    return (
+      <div className="roasterPage">
+        <div className="roasterProfile">
+          <h1>{this.state.roaster.name}</h1>
+          {this.renderAddress()}
+          <h3>Current Offerings</h3>
+          {this.renderOfferingsList()}
+        </div>
+        <div className="feeds">
+          <h2 className="instagramHeader">Latest Instagram photos</h2>
+          <InstagramFeed _id={this.props.params._id} />
+          <h2 className="twitterHeader">Latest Tweets</h2>
+          <TwitterFeed tweets={this.state.tweets} />
+        </div>
+      </div>
+    );
+  },
+
+  renderNotFound: function() {
+    return <h1>No roaster found in database.</h1>;
+  },
+
+  renderLoading: function() {
+    return <h1>Loading...</h1>;
   },
 
   render: function() {

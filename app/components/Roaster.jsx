@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 var React         = require('react'),
     Router        = require('react-router'),
-    mongoose      = require('mongoose'),
+    request       = require('request'),
     InstagramFeed = require('./InstagramFeed.jsx'),
     TwitterFeed   = require('./TwitterFeed.jsx'),
     OfferingList  = require('./OfferingList.jsx'),
@@ -38,13 +38,14 @@ module.exports = React.createClass({
         return this.setState({ roaster: roasters[i] });
       }
     }
+
     this.setState({ roaster: {notFound: true} });
   },
 
   componentWillMount: function() {
-    var _id = this.props.params._id, self = this;
+    var self = this;
 
-    this.setRoaster(_id);
+    this.setRoaster(this.props.params._id);
 
     setTimeout(function() {
       if (self.hasLoaded()) {
@@ -69,6 +70,29 @@ module.exports = React.createClass({
     return this.state.offerings.length;
   },
 
+  handleClick: function() {
+    var user = this.props.user;
+
+    // If user is logged in, add roaster to list user follows.
+    if (user) {
+      var baseUrl = 'https://localhost:8000/users/follow/?',
+          user_id = 'user=' + user._id,
+          roaster_id = 'roaster=' + this.state.roaster._id;
+
+      var url = baseUrl + user_id + '&' + roaster_id;
+
+      request(url, function(err, res, body) {
+        if (err) throw err;
+        if (res.statusCode === 200) {
+          // TODO: inform user of successful update
+        }
+      });
+
+    } else {
+      // TODO: inform user they must be logged in.
+    }
+  },
+
   renderOfferingsList: function() {
     if (this.hasLoadedOfferings()) {
       return <OfferingList hideRoaster={true}
@@ -90,6 +114,14 @@ module.exports = React.createClass({
     );
   },
 
+  renderFollowButton: function() {
+    return <button name="followButton"
+                   type="button"
+                   onClick={this.handleClick}>
+                   Follow this roaster
+            </button>;
+  },
+
   renderFound: function() {
     var _id = this.props.params._id;
 
@@ -97,6 +129,7 @@ module.exports = React.createClass({
       <div className="roasterPage">
         <div className="roasterProfile">
           <h1>{this.state.roaster.name}</h1>
+          {this.renderFollowButton()}
           {this.renderAddress()}
           <h3>Current Offerings</h3>
           {this.renderOfferingsList()}

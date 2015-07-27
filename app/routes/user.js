@@ -4,14 +4,26 @@ var mongoose = require('mongoose'),
 
 module.exports = function(app) {
 
+  // Follow new roaster.
+  app.get('/users/follow', function(req, res) {
+    var user_id = req.query.user,
+        roaster_id = req.query.roaster;
+
+    User.followRoaster(user_id, roaster_id, function(err, num) {
+      if (err) throw err;
+      return res.status(200).end();
+    });
+
+  });
+
   // Load.
-  app.post('/load', function(req, res, next) {
+  app.get('/users/:_id', function(req, res) {
 
     async.waterfall([
 
       // Load user.
       function(cb) {
-        User.find({ _id: req.body._id }, function(err, user) {
+        User.find({ _id: req.params._id }, function(err, user) {
           if (err) return cb(err);
           cb(null, user);
         });

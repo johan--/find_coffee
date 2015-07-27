@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React      = require('react'),
     Router     = require('react-router'),
+    request    = require('request'),
     LoginStore = require('../stores/LoginStore.js');
 
 module.exports = React.createClass({
@@ -26,32 +27,26 @@ module.exports = React.createClass({
     };
   },
 
-  // Load a user's roasters and offerings.
   getUser: function() {
-    var user = this.props.user, self = this;
+    var url = 'https://localhost:8000/users/',
+        _id = this.props.user._id,
+        self = this;
 
-    $.ajax({
-      url: "https://localhost:8000/load",
-      type: "POST",
-      contentType: 'application/json',
-      data: JSON.stringify({ _id: self.props.user._id }),
+    request(url + _id, function(err, res, body) {
+      if (err) throw err;
 
-      success: function(data, textStatus, jqXHR) {
-        var parsed = JSON.parse(data);
+      if (res.statusCode < 400) {
+        var data = JSON.parse(body);
 
         self.setState({
-          roasters: parsed.roasteries,
-          offerings: parsed.offerings
+          roasters: data.roasteries,
+          offerings: data.offerings
         });
-      }.bind(self),
-
-      error: function(jqXHR, textStatus, err) {
-        if (err) throw err;
       }
     });
   },
 
-  componentDidMount: function() {
+  componentWillMount: function() {
     this.getUser();
   },
 

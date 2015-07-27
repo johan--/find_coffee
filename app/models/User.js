@@ -15,6 +15,21 @@ var UserSchema = Schema({
   offerings:    [{ _id: {type: Schema.ObjectId, ref: 'Offering' } }]
 });
 
+// Statics
+UserSchema.statics = {
+
+  followRoaster: function(user_id, roaster_id, cb) {
+    var query = { _id: user_id },
+        update = { $addToSet: { roasteries: roaster_id }};
+
+    this.update(query, update, function(err, num) {
+      if (err) return cb(err);
+      cb(null, num);
+    });
+  }
+
+};
+
 // Methods
 UserSchema.methods = {
 
@@ -52,16 +67,6 @@ UserSchema.methods = {
     Offering.find(query, function(err, offerings) {
       if (err) return cb(err);
       cb(null, offerings);
-    });
-  },
-
-  // Add roaster to list of roasteries.
-  addRoaster: function(roaster) {
-    var query  = { _id: this._id },
-        update = { $push: { roasteries: roaster }};
-
-    this.update(query, update, function(err, num) {
-      if (err) throw err;
     });
   },
 

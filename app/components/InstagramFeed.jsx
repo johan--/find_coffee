@@ -39,15 +39,6 @@ module.exports = React.createClass({
     return this.state.pics[this.state.current];
   },
 
-  renderLoading: function() {
-    return <p>Loading...</p>;
-  },
-
-  renderPic: function() {
-    var pic = this.getCurrentPic();
-    return <a href={pic.link}><img src={pic.images.low_resolution.url} /></a>;
-  },
-
   componentWillMount: function() {
     this.getPics();
   },
@@ -64,11 +55,21 @@ module.exports = React.createClass({
     return !!this.state.pics;
   },
 
+  renderLoading: function() {
+    return <p>Loading...</p>;
+  },
+
+  renderPic: function() {
+    var pic = this.getCurrentPic();
+    return <a href={pic.link}><img src={pic.images.low_resolution.url} /></a>;
+  },
+
   render: function() {
     var content = this.hasLoaded() ? this.renderPic() : this.renderLoading();
 
     return (
       <div className="instagramFeed">
+        <h2 className="instagramHeader">Latest Instagram photos</h2>
         {content}
       </div>
     );

@@ -1,7 +1,6 @@
 /** @jsx React.DOM */
 var React         = require('react'),
     Router        = require('react-router'),
-    request       = require('request'),
     mongoose      = require('mongoose'),
     InstagramFeed = require('./InstagramFeed.jsx'),
     TwitterFeed   = require('./TwitterFeed.jsx'),
@@ -14,8 +13,7 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       roaster:   {},
-      offerings: [],
-      tweets:    null
+      offerings: []
     };
   },
 
@@ -43,19 +41,6 @@ module.exports = React.createClass({
     this.setState({ roaster: {notFound: true} });
   },
 
-  setTweets: function() {
-    var url  = 'https://localhost:8000/roasters/twitter/',
-        _id  = this.props.params._id,
-        self = this;
-
-    request(url + _id, function(err, res, body) {
-      if (err) throw err;
-      if (res.statusCode < 400) {
-        self.setState({ tweets: JSON.parse(res.body) });
-      }
-    });
-  },
-
   componentWillMount: function() {
     var _id = this.props.params._id, self = this;
 
@@ -64,7 +49,6 @@ module.exports = React.createClass({
     setTimeout(function() {
       if (self.hasLoaded()) {
         self.setOfferings();
-        self.setTweets();
       }
     }, 0);
   },
@@ -107,6 +91,8 @@ module.exports = React.createClass({
   },
 
   renderFound: function() {
+    var _id = this.props.params._id;
+
     return (
       <div className="roasterPage">
         <div className="roasterProfile">
@@ -116,10 +102,8 @@ module.exports = React.createClass({
           {this.renderOfferingsList()}
         </div>
         <div className="feeds">
-          <h2 className="instagramHeader">Latest Instagram photos</h2>
-          <InstagramFeed _id={this.props.params._id} />
-          <h2 className="twitterHeader">Latest Tweets</h2>
-          <TwitterFeed tweets={this.state.tweets} />
+          <InstagramFeed _id={_id} />
+          <TwitterFeed _id={_id} />
         </div>
       </div>
     );

@@ -1,8 +1,8 @@
-var AppDispatcher   = require('../dispatcher/AppDispatcher'),
-    EventEmitter    = require('events').EventEmitter,
-    Constants       = require('../constants/Constants.js'),
-    jwt             = require('jsonwebtoken'),
-    assign          = require('object-assign');
+var AppDispatcher = require('../dispatcher/AppDispatcher'),
+    EventEmitter = require('events').EventEmitter,
+    Constants = require('../constants/Constants.js'),
+    jwt = require('jsonwebtoken'),
+    assign = require('object-assign');
 
 var CHANGE_EVENT = 'change',
     _user        = null,

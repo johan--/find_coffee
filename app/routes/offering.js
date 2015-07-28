@@ -1,4 +1,4 @@
-var Filter   = require('../../lib/utils.js').Filter,
+var Filter = require('../../lib/utils.js').Filter,
     mongoose = require('mongoose'),
     Offering = mongoose.model('Offering');
 

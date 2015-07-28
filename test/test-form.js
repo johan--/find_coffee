@@ -1,9 +1,9 @@
-var mongoose       = require('mongoose'),
-    should         = require('should'),
-    app            = require('../server'),
-    assign         = require('object-assign'),
-    request        = require('supertest'),
-    helpers        = require('./helpers.js'),
+var mongoose = require('mongoose'),
+    should = require('should'),
+    app = require('../server'),
+    assign = require('object-assign'),
+    request = require('supertest'),
+    helpers = require('./helpers.js'),
     offeringCount;
 
 describe('Form', function() {

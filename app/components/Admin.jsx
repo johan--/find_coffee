@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
-var React        = require('react'),
-    CoffeeForm   = require('./CoffeeForm.jsx');
+var React = require('react'),
+    CoffeeForm = require('./CoffeeForm.jsx');
 
 module.exports = React.createClass({
 

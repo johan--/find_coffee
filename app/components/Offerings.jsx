@@ -1,9 +1,9 @@
 /** @jsx React.DOM */
-var React        = require('react'),
-    Router       = require('react-router'),
+var React = require('react'),
+    Router = require('react-router'),
     RouteHandler = Router.RouteHandler,
-    CoffeeForm   = require('./CoffeeForm.jsx'),
-    Filter       = require('../../lib/utils.js').Filter;
+    CoffeeForm = require('./CoffeeForm.jsx'),
+    Filter = require('../../lib/utils.js').Filter;
 
 module.exports = React.createClass({
   mixins: [Router.State, Router.Navigation],

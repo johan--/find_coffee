@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-var React    = require('react'),
+var React = require('react'),
     mongoose = require('mongoose'),
     Link = require('react-router').Link;
 
@@ -40,8 +40,7 @@ module.exports = React.createClass({
     return Object.keys(this.state.offering).length === 0;
   },
 
-  // False if empty array or null/undefined.
-  hasValue: function(value) {
+  hasValue: function(value) { // False if empty array or null/undefined.
     return value && ((value.constructor === Array && value.length) ||
                      (value.constructor !== Array));
   },
@@ -100,7 +99,6 @@ module.exports = React.createClass({
     return <span className="category">{category}:</span>;
   },
 
-  // Build list of all categories and values that exist within offering.
   renderList: function(categories) {
     var offering = this.state.offering,
         listItems = [],

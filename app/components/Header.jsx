@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
-var React       = require('react'),
-    Router      = require('react-router'),
-    Link        = require('react-router').Link,
+var React = require('react'),
+    Router = require('react-router'),
+    Link = require('react-router').Link,
     AuthService = require('../services/AuthService.js');
 
 module.exports = React.createClass({

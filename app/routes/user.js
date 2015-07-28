@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
-    User     = mongoose.model('User'),
-    async    = require('async');
+    User = mongoose.model('User'),
+    async = require('async');
 
 module.exports = function(app) {
 

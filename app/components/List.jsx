@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
-var React        = require('react'),
-    ListItem     = require('./RoasterListItem.jsx');
+var React = require('react'),
+    ListItem = require('./RoasterListItem.jsx');
 
 module.exports = React.createClass({
 

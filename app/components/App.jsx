@@ -1,9 +1,9 @@
 /** @jsx React.DOM */
-var React        = require('react'),
+var React = require('react'),
     RouteHandler = require('react-router').RouteHandler,
-    Header       = require('./Header.jsx'),
-    AuthService  = require('../services/AuthService.js'),
-    LoginStore   = require('../stores/LoginStore.js');
+    Header = require('./Header.jsx'),
+    AuthService = require('../services/AuthService.js'),
+    LoginStore = require('../stores/LoginStore.js');
 
 module.exports = React.createClass({
 

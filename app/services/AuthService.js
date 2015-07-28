@@ -1,6 +1,6 @@
-var Constants    = require('../constants/Constants.js'),
+var Constants = require('../constants/Constants.js'),
     LoginActions = require('../actions/LoginActions'),
-    request      = require('request');
+    request = require('request');
 
 function handleAuth(options, cb) {
   request.post(options, function(err, res, body) {

@@ -1,13 +1,13 @@
 /** @jsx React.DOM */
-var React         = require('react'),
-    Router        = require('react-router'),
-    request       = require('request'),
-    LoginActions  = require('../actions/LoginActions.js'),
-    LoginStore    = require('../stores/LoginStore.js'),
+var React = require('react'),
+    Router = require('react-router'),
+    request = require('request'),
+    LoginActions = require('../actions/LoginActions.js'),
+    LoginStore = require('../stores/LoginStore.js'),
     InstagramFeed = require('./InstagramFeed.jsx'),
-    TwitterFeed   = require('./TwitterFeed.jsx'),
-    OfferingList  = require('./OfferingList.jsx'),
-    RouteHandler  = Router.RouteHandler;
+    TwitterFeed = require('./TwitterFeed.jsx'),
+    OfferingList = require('./OfferingList.jsx'),
+    RouteHandler = Router.RouteHandler;
 
 module.exports = React.createClass({
   mixins: [Router.State, Router.Navigation],

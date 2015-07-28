@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
-var React        = require('react'),
-    Router       = require('react-router'),
-    reactRoutes  = require('./reactRoutes.jsx'),
+var React = require('react'),
+    Router = require('react-router'),
+    reactRoutes = require('./reactRoutes.jsx'),
     LoginActions = require('./actions/LoginActions.js');
 
 // Get props from server rendered HTML.

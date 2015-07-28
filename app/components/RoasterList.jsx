@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
-var React        = require('react'),
-    Router       = require('react-router'),
-    GoogleMap    = require('./GoogleMap.jsx'),
-    List         = require('./List.jsx'),
+var React = require('react'),
+    Router = require('react-router'),
+    GoogleMap = require('./GoogleMap.jsx'),
+    List = require('./List.jsx'),
     RouteHandler = Router.RouteHandler;
 
 module.exports = React.createClass({

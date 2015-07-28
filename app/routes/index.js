@@ -1,6 +1,6 @@
-var react    = require('./react'),
-    session  = require('./session'),
-    user     = require('./user'),
+var react = require('./react'),
+    session = require('./session'),
+    user = require('./user'),
     roastery = require('./roastery'),
     offering = require('./offering');
 

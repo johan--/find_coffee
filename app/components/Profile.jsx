@@ -1,8 +1,8 @@
 /** @jsx React.DOM */
-var React      = require('react'),
-    Router     = require('react-router'),
-    Link       = Router.Link,
-    request    = require('request'),
+var React = require('react'),
+    Router = require('react-router'),
+    Link = Router.Link,
+    request = require('request'),
     OfferingList = require('./OfferingList.jsx'),
     LoginStore = require('../stores/LoginStore.js');
 

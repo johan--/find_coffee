@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
-var React     = require('react'),
-    NotFound  = require('./404.jsx');
+var React = require('react'),
+    NotFound = require('./404.jsx');
 
 module.exports = React.createClass({
 

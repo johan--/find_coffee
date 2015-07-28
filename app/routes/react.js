@@ -1,11 +1,11 @@
 /** @jsx React.DOM */
-var React        = require('react'),
-    Router       = require('react-router'),
-    reactRoutes  = require('../reactRoutes.jsx'),
-    mongoose     = require('mongoose'),
-    Offering     = mongoose.model('Offering'),
-    Roastery     = mongoose.model('Roastery'),
-    async        = require('async'),
+var React = require('react'),
+    Router = require('react-router'),
+    reactRoutes = require('../reactRoutes.jsx'),
+    mongoose = require('mongoose'),
+    Offering = mongoose.model('Offering'),
+    Roastery = mongoose.model('Roastery'),
+    async = require('async'),
     LoginActions = require('../actions/LoginActions.js');
 
 module.exports = function(app) {

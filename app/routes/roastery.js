@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
     Roastery = mongoose.model('Roastery'),
-    async    = require('async');
+    async = require('async');
 
 module.exports = function(app) {
 

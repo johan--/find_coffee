@@ -1,8 +1,8 @@
 var mongoose = require('mongoose'),
-    fs       = require('fs'),
-    path     = require('path'),
-    assign   = require('object-assign'),
-    async    = require('async'),
+    fs = require('fs'),
+    path = require('path'),
+    assign = require('object-assign'),
+    async = require('async'),
     Offering = mongoose.model('Offering'),
     Roastery = mongoose.model('Roastery');
 

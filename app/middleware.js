@@ -1,7 +1,7 @@
 var cookieParser = require('cookie-parser'),
-    bodyParser   = require('body-parser'),
-    express      = require('express'),
-    path         = require('path');
+    bodyParser = require('body-parser'),
+    express = require('express'),
+    path = require('path');
 
 module.exports = function(app) {
 

@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
-var React        = require('react'),
-    Link         = require('react-router').Link;
+var React = require('react'),
+    Link = require('react-router').Link;
 
 module.exports = React.createClass({
 

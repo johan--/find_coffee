@@ -1,5 +1,5 @@
-var mongoose     = require('mongoose'),
-    User         = mongoose.model('User'),
+var mongoose = require('mongoose'),
+    User = mongoose.model('User'),
     LoginActions = require('../actions/LoginActions.js');
 
 module.exports = function(app) {

@@ -6,13 +6,15 @@ var mongoose = require('mongoose'),
     Roastery = mongoose.model('Roastery');
 
 var UserSchema = Schema({
+
   username:     { type: String, unique: true },
   email:        { type: String, default: '' },
   password:     { type: String, default: '' },
   created:      { type: Date, default: Date.now },
   admin:        { type: Boolean, default: false },
-  roasteries:   [{ _id: {type: Schema.ObjectId, ref: 'Roastery' } }],
-  offerings:    [{ _id: {type: Schema.ObjectId, ref: 'Offering' } }]
+  roasteries:   [{ type: String }],
+  offerings:    [{ type: String }]
+
 });
 
 // Statics
@@ -20,7 +22,8 @@ UserSchema.statics = {
 
   followRoaster: function(user_id, roaster_id, cb) {
     var query = { _id: user_id },
-        update = { $addToSet: { roasteries: roaster_id }};
+        update = { $addToSet: { roasteries: roaster_id }},
+        self = this;
 
     this.update(query, update, function(err, num) {
       if (err) return cb(err);

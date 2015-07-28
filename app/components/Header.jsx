@@ -22,7 +22,7 @@ module.exports = React.createClass({
 
   getGreeting: function() {
     if (this.isUser()) {
-      return 'Hello, ' + this.props.user.username;
+      return <span>Hello, <Link to="profile">{this.props.user.username}</Link></span>;
     } else {
       return 'Welcome!';
     }

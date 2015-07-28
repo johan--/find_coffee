@@ -4,14 +4,18 @@ var mongoose = require('mongoose'),
 
 module.exports = function(app) {
 
-  // Follow new roaster.
+  // Follow roaster and return updated user.
   app.get('/users/follow', function(req, res) {
     var user_id = req.query.user,
         roaster_id = req.query.roaster;
 
     User.followRoaster(user_id, roaster_id, function(err, num) {
       if (err) throw err;
-      return res.status(200).end();
+
+      User.findOne({ _id: user_id }, function(err, user) {
+        if (err) throw err;
+        return res.status(200).json({ token: user.createToken() });
+      });
     });
 
   });
@@ -23,7 +27,7 @@ module.exports = function(app) {
 
       // Load user.
       function(cb) {
-        User.find({ _id: req.params._id }, function(err, user) {
+        User.findOne({ _id: req.params._id }, function(err, user) {
           if (err) return cb(err);
           cb(null, user);
         });
@@ -31,17 +35,15 @@ module.exports = function(app) {
 
       // Get offerings/roasteries.
       function(user, cb) {
-        var currentUser = new User(user);
-
         async.parallel([
-          currentUser.getRoasteries.bind(currentUser),
-          currentUser.getOfferings.bind(currentUser)
+          user.getRoasteries.bind(user),
+          user.getOfferings.bind(user)
         ],
         function(err, results) {
           if (err) return cb(err);
 
           var data = { roasteries: results[0], offerings: results[1] };
-          return res.json(JSON.stringify(data));
+          return res.json(data);
         });
       }
 

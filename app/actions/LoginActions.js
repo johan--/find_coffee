@@ -19,12 +19,22 @@ module.exports = {
     });
   },
 
+  // Update user.
+  updateUser: function(token) {
+    AppDispatcher.handleViewAction({
+      actionType: Constants.UPDATE_USER,
+      token: token
+    });
+  },
+
+  // Logout
   logoutUser: function() {
     AppDispatcher.handleViewAction({
       actionType: Constants.LOGOUT_USER
     });
   },
 
+  // Error
   handleLoginError: function(error) {
     AppDispatcher.handleViewAction({
       actionType: Constants.LOGIN_ERROR,

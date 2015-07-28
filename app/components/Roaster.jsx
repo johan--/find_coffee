@@ -2,6 +2,8 @@
 var React         = require('react'),
     Router        = require('react-router'),
     request       = require('request'),
+    LoginActions  = require('../actions/LoginActions.js'),
+    LoginStore    = require('../stores/LoginStore.js'),
     InstagramFeed = require('./InstagramFeed.jsx'),
     TwitterFeed   = require('./TwitterFeed.jsx'),
     OfferingList  = require('./OfferingList.jsx'),
@@ -15,6 +17,10 @@ module.exports = React.createClass({
       roaster:   {},
       offerings: []
     };
+  },
+
+  getCurrentUser: function() {
+    return LoginStore.getUser();
   },
 
   setOfferings: function() {
@@ -71,26 +77,22 @@ module.exports = React.createClass({
   },
 
   handleClick: function() {
-    var user = this.props.user;
+    var user = this.getCurrentUser(),
+        baseUrl = 'https://localhost:8000/users/follow/?',
+        user_id = 'user=' + user._id,
+        roaster_id = 'roaster=' + this.state.roaster._id;
 
-    // If user is logged in, add roaster to list user follows.
-    if (user) {
-      var baseUrl = 'https://localhost:8000/users/follow/?',
-          user_id = 'user=' + user._id,
-          roaster_id = 'roaster=' + this.state.roaster._id;
+    var url = baseUrl + user_id + '&' + roaster_id;
 
-      var url = baseUrl + user_id + '&' + roaster_id;
+    request(url, function(err, res, body) {
+      if (err) throw err;
+      if (res.statusCode === 200) {
+        var token = JSON.parse(body).token;
+        LoginActions.updateUser(token);
+        // TODO: inform user of successful update;
+      }
+    });
 
-      request(url, function(err, res, body) {
-        if (err) throw err;
-        if (res.statusCode === 200) {
-          // TODO: inform user of successful update
-        }
-      });
-
-    } else {
-      // TODO: inform user they must be logged in.
-    }
   },
 
   renderOfferingsList: function() {
@@ -114,12 +116,27 @@ module.exports = React.createClass({
     );
   },
 
+  isFollowingRoaster: function() {
+    var roaster_id = this.props.params._id,
+        roasters = this.getCurrentUser().roasteries;
+
+    for (var i = 0, len = roasters.length; i < len; i++) {
+      if (roaster_id === roasters[i]) {
+        return true;
+      }
+    }
+
+    return false;
+  },
+
   renderFollowButton: function() {
-    return <button name="followButton"
-                   type="button"
-                   onClick={this.handleClick}>
-                   Follow this roaster
-            </button>;
+    if (this.getCurrentUser() && !this.isFollowingRoaster()) {
+      return <button name="followButton"
+                     type="button"
+                     onClick={this.handleClick}>
+                     Follow this roaster
+              </button>;
+    }
   },
 
   renderFound: function() {

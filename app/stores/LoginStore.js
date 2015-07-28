@@ -68,6 +68,16 @@ AppDispatcher.register(function(payload) {
       LoginStore.emitChange();
       break;
 
+    case Constants.UPDATE_USER:
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('jwt', action.token);
+        Cookies.set('jwt', action.token);
+      }
+      LoginStore.setError(null);
+      LoginStore.setUser(jwt.decode(action.token));
+      LoginStore.emitChange();
+      break;
+
     case Constants.LOGIN_ERROR:
       LoginStore.setError(action.error);
       LoginStore.emitChange();

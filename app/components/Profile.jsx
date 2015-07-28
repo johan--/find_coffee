@@ -1,7 +1,9 @@
 /** @jsx React.DOM */
 var React      = require('react'),
     Router     = require('react-router'),
+    Link       = Router.Link,
     request    = require('request'),
+    OfferingList = require('./OfferingList.jsx'),
     LoginStore = require('../stores/LoginStore.js');
 
 module.exports = React.createClass({
@@ -46,7 +48,7 @@ module.exports = React.createClass({
     });
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
     this.getUser();
   },
 
@@ -55,30 +57,46 @@ module.exports = React.createClass({
 
     if (roasters) {
       roasters = roasters.slice(0).map(function(roaster) {
-        return <li>{roaster}</li>;
+        return (
+          <li>
+            <Link to="roaster" params={{ _id: roaster._id }}>
+              {roaster.name}
+            </Link>
+          </li>
+        );
       });
     } 
 
-    return roasters;
+    return (
+      <div className="followedRoasters">
+        <h2>Your Roasters</h2>
+        <ul>
+          {roasters}
+        </ul>
+      </div>
+    );
   },
 
   renderOfferings: function() {
     var offerings = this.state.offerings;
 
     if (offerings) {
-      offerings = offerings.slice(0).map(function(offering) {
-        return <li>{offering}</li>;
-      });
+      return (
+        <div className="followedOfferings">
+          <h2>Your Offerings</h2>
+          <OfferingList hideRoaster={false}
+                        perPage={10}
+                        offerings={offerings} />
+        </div>
+      );
     }
-
-    return offerings;
   },
 
   render: function() {
     return (
         <div>
-          <ul>{this.renderRoasters()}</ul>
-          <ul>{this.renderOfferings()}</ul>
+          {this.renderRoasters()}
+          {this.renderOfferings()}
         </div>
     );
   }

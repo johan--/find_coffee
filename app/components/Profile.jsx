@@ -2,7 +2,9 @@
 var React = require('react'),
     Router = require('react-router'),
     Link = Router.Link,
+    jwt = require('jsonwebtoken'),
     request = require('request'),
+    mongoose = require('mongoose'),
     OfferingList = require('./OfferingList.jsx'),
     LoginStore = require('../stores/LoginStore.js');
 
@@ -23,13 +25,21 @@ module.exports = React.createClass({
   },
 
   getInitialState: function() {
-    return {
-      roasters: null,
-      offerings: null
-    };
+    if (this.isRenderingOnClient() && this.hasValidToken()) {
+      return this.getUserFromToken();
+    }
+    return { user: null, offerings: null, roasters: null };
   },
 
-  getUser: function() {
+  getUserFromToken: function() {
+    return JSON.parse(localStorage.getItem('USER_DATA'));
+  },
+
+  setUserOnToken: function(userData) {
+    localStorage.setItem('USER_DATA', JSON.stringify(userData));
+  },
+
+  getUserFromServer: function() {
     var url = 'https://localhost:8000/users/',
         _id = this.props.user._id,
         self = this;
@@ -38,18 +48,24 @@ module.exports = React.createClass({
       if (err) throw err;
 
       if (res.statusCode < 400) {
-        var data = JSON.parse(body);
-
-        self.setState({
-          roasters: data.roasteries,
-          offerings: data.offerings
-        });
+        var userData = JSON.parse(body);
+        self.setState(userData);
+        self.setUserOnToken(userData);
       }
     });
   },
 
   componentDidMount: function() {
-    this.getUser();
+    this.getUserFromServer();
+  },
+
+  hasValidToken: function() {
+    var token = this.getUserFromToken();
+    return !!(token && token.user && token.roasters && token.offerings);
+  },
+
+  isRenderingOnClient: function() {
+    return typeof localStorage !== 'undefined';
   },
 
   renderRoasters: function() {

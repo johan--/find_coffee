@@ -22,32 +22,10 @@ module.exports = function(app) {
 
   // Load.
   app.get('/users/:_id', function(req, res) {
-
-    async.waterfall([
-
-      // Load user.
-      function(cb) {
-        User.findOne({ _id: req.params._id }, function(err, user) {
-          if (err) return cb(err);
-          cb(null, user);
-        });
-      },
-
-      // Get offerings/roasteries.
-      function(user, cb) {
-        async.parallel([
-          user.getRoasteries.bind(user),
-          user.getOfferings.bind(user)
-        ],
-        function(err, results) {
-          if (err) return cb(err);
-
-          var data = { roasteries: results[0], offerings: results[1] };
-          return res.json(data);
-        });
-      }
-
-    ]);
+    User.load(req.params._id, function(err, userData) {
+      if (err) return res.status(404).end();
+      return res.json(userData);
+    });
   });
 
   // Signup

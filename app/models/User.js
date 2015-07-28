@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     bcrypt   = require('bcrypt-nodejs'),
     jwt      = require('jsonwebtoken'),
+    async    = require('async'),
     Schema   = mongoose.Schema,
     Offering = mongoose.model('Offering'),
     Roastery = mongoose.model('Roastery');
@@ -19,6 +20,42 @@ var UserSchema = Schema({
 
 // Statics
 UserSchema.statics = {
+
+  // Load a user by _id and return their offerings and roasters.
+  load: function(_id, callback) {
+    var self = this;
+
+    async.waterfall([
+
+      // Load user.
+      function(cb) {
+        self.findOne({ _id: _id }, function(err, user) {
+          if (err) return cb(err);
+          cb(null, user);
+        });
+      },
+
+      // Get offerings & roasteries.
+      function(user, cb) {
+        async.parallel([
+          user.getRoasteries.bind(user),
+          user.getOfferings.bind(user)
+        ],
+        function(err, results) {
+          if (err) return callback(err);
+
+          var data = {
+            user: user,
+            roasters: results[0],
+            offerings: results[1]
+          };
+
+          return callback(null, data);
+        });
+      }
+
+    ]);
+  },
 
   followRoaster: function(user_id, roaster_id, cb) {
     var query = { _id: user_id },

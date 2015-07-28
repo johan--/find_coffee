@@ -19,10 +19,6 @@ module.exports = React.createClass({
     };
   },
 
-  getCurrentUser: function() {
-    return LoginStore.getUser();
-  },
-
   setOfferings: function() {
     var offerings = [],
         self = this;
@@ -64,6 +60,10 @@ module.exports = React.createClass({
     return Object.keys(this.state.roaster).length === 0;
   },
 
+  isLoggedIn: function() {
+    return !!this.props.user;
+  },
+
   isFound: function() {
     return !this.state.roaster.notFound;
   },
@@ -77,7 +77,7 @@ module.exports = React.createClass({
   },
 
   handleClick: function() {
-    var user = this.getCurrentUser(),
+    var user = this.props.user,
         baseUrl = 'https://localhost:8000/users/follow/?',
         user_id = 'user=' + user._id,
         roaster_id = 'roaster=' + this.state.roaster._id;
@@ -118,7 +118,7 @@ module.exports = React.createClass({
 
   isFollowingRoaster: function() {
     var roaster_id = this.props.params._id,
-        roasters = this.getCurrentUser().roasteries;
+        roasters = this.props.user.roasteries;
 
     for (var i = 0, len = roasters.length; i < len; i++) {
       if (roaster_id === roasters[i]) {
@@ -130,7 +130,7 @@ module.exports = React.createClass({
   },
 
   renderFollowButton: function() {
-    if (this.getCurrentUser() && !this.isFollowingRoaster()) {
+    if (this.isLoggedIn() && !this.isFollowingRoaster()) {
       return <button name="followButton"
                      type="button"
                      onClick={this.handleClick}>

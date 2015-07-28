@@ -5,9 +5,11 @@ var React = require('react'),
 module.exports = React.createClass({
 
   getInitialState: function() {
+    var pics = 'PICS_' + this.props._id;
+
     return {
       current: 0,
-      pics: null
+      pics: JSON.parse(localStorage.getItem(pics)) || null
     };
   },
 
@@ -30,7 +32,9 @@ module.exports = React.createClass({
     request(url + _id, function(err, res, body) {
       if (err) throw err;
       if (res.statusCode < 400) {
-        self.setState({ pics: JSON.parse(res.body) });
+        var pics = JSON.parse(res.body);
+        self.setState({ pics: pics });
+        localStorage.setItem('PICS_' + _id, JSON.stringify(pics));
       }
     });
   },
@@ -40,7 +44,9 @@ module.exports = React.createClass({
   },
 
   componentWillMount: function() {
-    this.getPics();
+    if (!this.state.pics) {
+      this.getPics();
+    }
   },
 
   componentDidMount: function() {

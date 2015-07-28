@@ -6,8 +6,9 @@ var React = require('react'),
 module.exports = React.createClass({
 
   getInitialState: function() {
+    var tweets = 'TWEETS_' + this.props._id;
     return {
-      tweets: null
+      tweets: JSON.parse(localStorage.getItem(tweets)) || null
     };
   },
 
@@ -19,7 +20,9 @@ module.exports = React.createClass({
     request(url + _id, function(err, res, body) {
       if (err) throw err;
       if (res.statusCode < 400) {
-        self.setState({ tweets: JSON.parse(res.body) });
+        var tweets = JSON.parse(res.body);
+        self.setState({ tweets: tweets });
+        localStorage.setItem('TWEETS_' + _id, JSON.stringify(tweets));
       }
     });
   },
@@ -38,7 +41,9 @@ module.exports = React.createClass({
   },
 
   componentWillMount: function() {
-    this.getTweets();
+    if (!this.state.tweets) {
+      this.getTweets();
+    }
   },
 
   hasLoaded: function() {

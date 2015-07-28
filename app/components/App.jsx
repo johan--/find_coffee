@@ -8,7 +8,14 @@ var React        = require('react'),
 module.exports = React.createClass({
 
   getInitialState: function() {
-    return this.update();
+    return this.getStore();
+  },
+
+  getStore: function() {
+    return {
+      user: LoginStore.getUser(),
+      err:  LoginStore.getError()
+    };
   },
 
   componentDidMount: function() {
@@ -21,14 +28,7 @@ module.exports = React.createClass({
   },
 
   onChange: function() {
-    this.setState(this.update());
-  },
-
-  update: function() {
-    return {
-      user: LoginStore.getUser(),
-      err:  LoginStore.getError()
-    };
+    this.setState(this.getStore());
   },
 
   render: function() {
@@ -36,7 +36,9 @@ module.exports = React.createClass({
         <div>
           <Header user={this.state.user} />
           <section id="mainContent">
-            <RouteHandler {...this.props} err={this.state.err} user={this.state.user} />
+            <RouteHandler {...this.props}
+                          err={this.state.err}
+                          user={this.state.user} />
           </section>
         </div>
     );

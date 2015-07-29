@@ -28,7 +28,11 @@ module.exports = React.createClass({
     if (this.isRenderingOnClient() && this.hasValidToken()) {
       return this.getUserFromToken();
     }
-    return { user: null, offerings: null, roasters: null };
+    return {
+      user: null,
+      roasters: null,
+      offerings: { roaster: null, followed: null }
+    };
   },
 
   getUserFromToken: function() {
@@ -61,7 +65,8 @@ module.exports = React.createClass({
 
   hasValidToken: function() {
     var token = this.getUserFromToken();
-    return !!(token && token.user && token.roasters && token.offerings);
+    return !!(token && token.user && token.roasters &&
+              token.offerings.roaster && token.offerings.followed);
   },
 
   isRenderingOnClient: function() {
@@ -93,13 +98,24 @@ module.exports = React.createClass({
     );
   },
 
-  renderOfferings: function() {
-    var offerings = this.state.offerings;
+  renderOfferings: function(type) {
+    var offerings = this.state.offerings,
+        msg;
+
+    if (type === 'ROASTER') {
+      offerings = offerings.roaster;
+      msg = "Offerings from your roasters.";
+    } else if (type === 'FOLLOWED') {
+      offerings = offerings.followed;
+      msg = "Your offerings";
+    } else {
+      return null;
+    }
 
     if (offerings) {
       return (
-        <div className="followedOfferings">
-          <h2>Your Offerings</h2>
+        <div className="">
+          <h2>{msg}</h2>
           <OfferingList hideRoaster={false}
                         perPage={10}
                         offerings={offerings} />
@@ -108,11 +124,22 @@ module.exports = React.createClass({
     }
   },
 
+  renderLinks: function() {
+    return (
+      <div className="links">
+        <Link to="roasters">Browse Roasters</Link>
+        <Link to="offerings">Browse Offerings</Link>
+      </div>
+    );
+  },
+
   render: function() {
     return (
         <div>
+          {this.renderLinks()}
           {this.renderRoasters()}
-          {this.renderOfferings()}
+          {this.renderOfferings('FOLLOWED')}
+          {this.renderOfferings('ROASTER')}
         </div>
     );
   }

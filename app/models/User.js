@@ -39,7 +39,8 @@ UserSchema.statics = {
       function(user, cb) {
         async.parallel([
           user.getRoasteries.bind(user),
-          user.getOfferings.bind(user)
+          user.getRoasterOfferings.bind(user),
+          user.getFollowedOfferings.bind(user)
         ],
         function(err, results) {
           if (err) return callback(err);
@@ -47,7 +48,10 @@ UserSchema.statics = {
           var data = {
             user: user,
             roasters: results[0],
-            offerings: results[1]
+            offerings: {
+              roaster: results[1],
+              followed: results[2]
+            }
           };
 
           return callback(null, data);
@@ -95,8 +99,18 @@ UserSchema.methods = {
     });
   },
 
-  // Get all offerings a user is following.
-  getOfferings: function(cb) {
+  // Get only offerings that user has explicitly followed.
+  getFollowedOfferings: function(cb) {
+    var query = { _id: { $in: this.offerings }};
+
+    Offering.find(query, function(err, offerings) {
+      if (err) return cb(err);
+      cb(null, offerings);
+    });
+  },
+
+  // Get all current offerings from followed roasters.
+  getRoasterOfferings: function(cb) {
     var query = {
       $or: [
         { "roastery._id": { $in: this.roasteries }},

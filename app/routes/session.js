@@ -31,7 +31,7 @@ module.exports = function(app) {
   // Logout
   app.post('/logout', function(req, res) {
     LoginActions.logoutUser();
-    res.status(204);
+    res.status(204).end();
   });
 
 };

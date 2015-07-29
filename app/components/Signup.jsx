@@ -1,8 +1,10 @@
 /** @jsx React.DOM */
 var React = require('react'),
+    Router = require('react-router'),
     AuthService = require('../services/AuthService.js');
 
 module.exports = React.createClass({
+  mixins: [Router.Navigation],
 
   getInitialState: function() {
     return {
@@ -19,8 +21,18 @@ module.exports = React.createClass({
   },
 
   handleClick: function(e) {
+    var state = this.state,
+        self = this;
+
     e.preventDefault();
-    AuthService.signup(this.state.username, this.state.password, this.state.email);
+    AuthService.signup(state.username, state.password, state.email, function() {
+      self.transitionTo('/profile');
+    });
+    this.setFormToBlank();
+  },
+
+  setFormToBlank: function() {
+    this.setState({ username: '', password: '', email: '' });
   },
 
   render: function() {

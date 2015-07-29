@@ -23,10 +23,14 @@ module.exports = React.createClass({
   handleClick: function(e) {
     var self = this;
     e.preventDefault();
-    this.setState({password: ''});
     AuthService.login(this.state.username, this.state.password, function() {
       self.transitionTo('/profile');
     });
+    this.setFormToBlank();
+  },
+
+  setFormToBlank: function() {
+    this.setState({ username: '', password: '' });
   },
 
   hasError: function() {

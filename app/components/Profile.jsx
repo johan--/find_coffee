@@ -6,6 +6,7 @@ var React = require('react'),
     request = require('request'),
     mongoose = require('mongoose'),
     OfferingList = require('./OfferingList.jsx'),
+    LoginActions = require('../actions/LoginActions.js'),
     LoginStore = require('../stores/LoginStore.js');
 
 module.exports = React.createClass({
@@ -24,6 +25,7 @@ module.exports = React.createClass({
     }
   },
 
+  // Pull data from localStorage if possible.
   getInitialState: function() {
     if (this.isRenderingOnClient() && this.hasValidToken()) {
       return this.getUserFromToken();
@@ -63,6 +65,10 @@ module.exports = React.createClass({
     this.getUserFromServer();
   },
 
+  componentWillReceiveProps: function() {
+    this.getUserFromServer();
+  },
+
   hasValidToken: function() {
     var token = this.getUserFromToken();
     return !!(token && token.user && token.roasters &&
@@ -73,8 +79,25 @@ module.exports = React.createClass({
     return typeof localStorage !== 'undefined';
   },
 
+  handleClick: function(roaster_id) {
+    var baseURL = 'https://localhost:8000/users/unfollow/?',
+        user_id = 'user=' + this.state.user._id,
+        roaster_id = 'roaster=' + roaster_id;
+
+    var url = baseURL + user_id + '&' + roaster_id;
+
+    request(url, function(err, res, body) {
+      if (err) throw err;
+      if (res.statusCode === 200) {
+        var token = JSON.parse(body).token;
+        LoginActions.updateUser(token);
+      }
+    });
+  },
+
   renderRoasters: function() {
-    var roasters = this.state.roasters;
+    var roasters = this.state.roasters,
+        self = this;
 
     if (roasters) {
       roasters = roasters.slice(0).map(function(roaster) {
@@ -83,6 +106,10 @@ module.exports = React.createClass({
             <Link to="roaster" params={{ _id: roaster._id }}>
               {roaster.name}
             </Link>
+            <button onClick={self.handleClick.bind(self, roaster._id)}
+                    className="unfollowBtn" >
+              Unfollow
+            </button>
           </li>
         );
       });

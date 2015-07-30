@@ -63,8 +63,17 @@ UserSchema.statics = {
 
   followRoaster: function(user_id, roaster_id, cb) {
     var query = { _id: user_id },
-        update = { $addToSet: { roasteries: roaster_id }},
-        self = this;
+        update = { $addToSet: { roasteries: roaster_id }};
+
+    this.update(query, update, function(err, num) {
+      if (err) return cb(err);
+      cb(null, num);
+    });
+  },
+
+  unfollowRoaster: function(user_id, roaster_id, cb) {
+    var query = { _id: user_id },
+        update = { $pull: { roasteries: roaster_id }};
 
     this.update(query, update, function(err, num) {
       if (err) return cb(err);

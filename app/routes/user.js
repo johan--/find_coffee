@@ -17,7 +17,21 @@ module.exports = function(app) {
         return res.status(200).json({ token: user.createToken() });
       });
     });
+  });
 
+  // Unfollow roaster and return updated user.
+  app.get('/users/unfollow', function(req, res) {
+    var user_id = req.query.user,
+        roaster_id = req.query.roaster;
+
+    User.unfollowRoaster(user_id, roaster_id, function(err, num) {
+      if (err) throw err;
+
+      User.findOne({ _id: user_id }, function(err, user) {
+        if (err) throw err;
+        return res.status(200).json({ token: user.createToken() });
+      });
+    });
   });
 
   // Load.

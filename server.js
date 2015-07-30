@@ -11,8 +11,8 @@ require('node-jsx').install();
 require('./app/db.js');
 
 var credentials = {
-  key:  fs.readFileSync('./ssl/server_key.pem', 'utf8'),
-  cert: fs.readFileSync('./ssl/server_cert.pem', 'utf8')
+  key:  fs.readFileSync('./ssl/SERVER_256.key', 'utf8'),
+  cert: fs.readFileSync('./ssl/SERVER_256.crt', 'utf8')
 };
 
 var server = https.createServer(credentials, app);

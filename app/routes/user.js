@@ -11,11 +11,7 @@ module.exports = function(app) {
 
     User.followRoaster(user_id, roaster_id, function(err, num) {
       if (err) throw err;
-
-      User.findOne({ _id: user_id }, function(err, user) {
-        if (err) throw err;
-        return res.status(200).json({ token: user.createToken() });
-      });
+      return User.sendToken(user_id, res);
     });
   });
 
@@ -26,11 +22,29 @@ module.exports = function(app) {
 
     User.unfollowRoaster(user_id, roaster_id, function(err, num) {
       if (err) throw err;
+      return User.sendToken(user_id, res);
+    });
+  });
 
-      User.findOne({ _id: user_id }, function(err, user) {
-        if (err) throw err;
-        return res.status(200).json({ token: user.createToken() });
-      });
+  // Watch offering and return updated user.
+  app.get('/users/watch', function(req, res) {
+    var user_id = req.query.user,
+        offering_id = req.query.offering;
+
+    User.watchOffering(user_id, offering_id, function(err, num) {
+      if (err) throw err;
+      return User.sendToken(user_id, res);
+    });
+  });
+
+  // Unfollow roaster and return updated user.
+  app.get('/users/unwatch', function(req, res) {
+    var user_id = req.query.user,
+        offering_id = req.query.offering;
+
+    User.unwatchOffering(user_id, offering_id, function(err, num) {
+      if (err) throw err;
+      return User.sendToken(user_id, res);
     });
   });
 

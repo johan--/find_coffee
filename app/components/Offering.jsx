@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
 var React = require('react'),
     mongoose = require('mongoose'),
+    LoginActions = require('../actions/LoginActions.js'),
+    request = require('request'),
     Link = require('react-router').Link;
 
 module.exports = React.createClass({
@@ -119,6 +121,53 @@ module.exports = React.createClass({
     return <ul>{listItems}</ul>;
   },
 
+  isLoggedIn: function() {
+    return !!this.props.user;
+  },
+
+  isFollowingOffering: function() {
+    var offering_id = this.props.params._id,
+        offerings = this.props.user.offerings;
+
+    for (var i = 0, len = offerings.length; i < len; i++) {
+      if (offering_id === offerings[i]) {
+        return true;
+      }
+    }
+
+    return false;
+  },
+
+  handleClick: function() {
+    var user = this.props.user,
+        baseUrl = 'https://localhost:8000/users/watch/?',
+        user_id = 'user=' + this.props.user._id,
+        offering_id = 'offering=' + this.props.params._id;
+
+    var url = baseUrl + user_id + '&' + offering_id;
+
+    request(url, function(err, res, body) {
+      if (err) throw err;
+      if (res.statusCode === 200) {
+        var token = JSON.parse(body).token;
+        LoginActions.updateUser(token);
+        // TODO: inform user ot successful update
+      }
+    });
+  },
+
+  renderFollowButton: function() {
+    if (this.isLoggedIn() && !this.isFollowingOffering()) {
+      return (
+        <button name="followButton"
+                type="button"
+                onClick={this.handleClick}>
+                Remember this offering
+        </button>
+      );
+    }
+  },
+
   getRoasteryLink: function() {
     var roastery = this.state.offering.roastery;
 
@@ -152,6 +201,7 @@ module.exports = React.createClass({
       return (
         <div className="overview">
           {this.renderTitle()}
+          {this.renderFollowButton()}
           {this.renderPrice()}
           {this.renderFlavors()}
           {this.renderBackground()}

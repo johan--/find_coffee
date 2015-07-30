@@ -47,9 +47,6 @@ module.exports = {
     // Logout on server.
     request.post({ url: Constants.LOGOUT_URL }, function(err, res, body) {
       if (err) console.error(err);
-      if (path === '/profile') {
-        res.redirect('https://localhost:8000/login');
-      }
     });
   }
 

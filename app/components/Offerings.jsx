@@ -42,7 +42,9 @@ module.exports = React.createClass({
     return (
       <div>
         <CoffeeForm {...this.props} handleSubmit={this.handleSubmit} />
-        <RouteHandler perPage={10} offerings={this.getOfferings()} />
+        <RouteHandler {...this.props}
+                      perPage={10}
+                      offerings={this.getOfferings()} />
       </div>
     );
   }

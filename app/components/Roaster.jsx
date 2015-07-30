@@ -76,10 +76,22 @@ module.exports = React.createClass({
     return this.state.offerings.length;
   },
 
+  isFollowingRoaster: function() {
+    var roaster_id = this.props.params._id,
+        roasters = this.props.user.roasteries;
+
+    for (var i = 0, len = roasters.length; i < len; i++) {
+      if (roaster_id === roasters[i]) {
+        return true;
+      }
+    }
+
+    return false;
+  },
+
   handleClick: function() {
-    var user = this.props.user,
-        baseUrl = 'https://localhost:8000/users/follow/?',
-        user_id = 'user=' + user._id,
+    var baseUrl = 'https://localhost:8000/users/follow/?',
+        user_id = 'user=' + this.props.user._id,
         roaster_id = 'roaster=' + this.state.roaster._id;
 
     var url = baseUrl + user_id + '&' + roaster_id;
@@ -116,26 +128,15 @@ module.exports = React.createClass({
     );
   },
 
-  isFollowingRoaster: function() {
-    var roaster_id = this.props.params._id,
-        roasters = this.props.user.roasteries;
-
-    for (var i = 0, len = roasters.length; i < len; i++) {
-      if (roaster_id === roasters[i]) {
-        return true;
-      }
-    }
-
-    return false;
-  },
-
   renderFollowButton: function() {
     if (this.isLoggedIn() && !this.isFollowingRoaster()) {
-      return <button name="followButton"
-                     type="button"
-                     onClick={this.handleClick}>
-                     Follow this roaster
-              </button>;
+      return (
+        <button name="followButton"
+                type="button"
+                onClick={this.handleClick}>
+                Follow this roaster
+        </button>
+      );
     }
   },
 

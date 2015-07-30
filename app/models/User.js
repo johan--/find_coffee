@@ -61,6 +61,7 @@ UserSchema.statics = {
     ]);
   },
 
+  // Add roaster to user's list.
   followRoaster: function(user_id, roaster_id, cb) {
     var query = { _id: user_id },
         update = { $addToSet: { roasteries: roaster_id }};
@@ -71,6 +72,7 @@ UserSchema.statics = {
     });
   },
 
+  // Remove roaster from user's list.
   unfollowRoaster: function(user_id, roaster_id, cb) {
     var query = { _id: user_id },
         update = { $pull: { roasteries: roaster_id }};
@@ -78,6 +80,35 @@ UserSchema.statics = {
     this.update(query, update, function(err, num) {
       if (err) return cb(err);
       cb(null, num);
+    });
+  },
+
+  // Add offering to user's list.
+  watchOffering: function(user_id, offering_id, cb) {
+    var query = { _id: user_id },
+        update = { $addToSet: { offerings: offering_id }};
+
+    this.update(query, update, function(err, num) {
+      if (err) return cb(err);
+      cb(null, num);
+    });
+  },
+
+  // Remove offering from user's list.
+  unwatchOffering: function(user_id, offering_id, cb) {
+    var query = { _id: user_id },
+        update = { $pull: { offerings: offering_id }};
+
+    this.update(query, update, function(err, num) {
+      if (err) return cb(err);
+      cb(null, num);
+    });
+  },
+
+  sendToken: function(_id, res) {
+    this.findOne({ _id: _id }, function(err, user) {
+      if (err) throw err;
+      return res.status(200).json({ token: user.createToken() });
     });
   }
 

@@ -23,6 +23,16 @@ module.exports = React.createClass({
     return value.constructor === Array ? value.join(', ') : value;
   },
 
+  getRoasteryLink: function() {
+    var roastery = this.state.offering.roastery;
+
+    return (
+      <Link to="roaster" params={{ _id: roastery._id }}>
+        {roastery.name}
+      </Link>
+    );
+  },
+
   setOffering: function(_id) {
     var offerings = this.props.offerings;
 
@@ -36,6 +46,23 @@ module.exports = React.createClass({
 
   componentDidMount: function() {
     this.setOffering(this.props.params._id);
+  },
+
+  handleClick: function() {
+    var user = this.props.user,
+        baseUrl = 'https://localhost:8000/users/watch/?',
+        user_id = 'user=' + this.props.user._id,
+        offering_id = 'offering=' + this.props.params._id;
+
+    var url = baseUrl + user_id + '&' + offering_id;
+
+    request(url, function(err, res, body) {
+      if (err) throw err;
+      if (res.statusCode === 200) {
+        var token = JSON.parse(body).token;
+        LoginActions.updateUser(token);
+      }
+    });
   },
 
   isEmpty: function() {
@@ -58,6 +85,23 @@ module.exports = React.createClass({
   hasFlavors: function() {
     var flavors = this.state.offering.flavors;
     return flavors && flavors.length;
+  },
+
+  isLoggedIn: function() {
+    return !!this.props.user;
+  },
+
+  isFollowingOffering: function() {
+    var offering_id = this.props.params._id,
+        offerings = this.props.user.offerings;
+
+    for (var i = 0, len = offerings.length; i < len; i++) {
+      if (offering_id === offerings[i]) {
+        return true;
+      }
+    }
+
+    return false;
   },
 
   renderInfo: function() {
@@ -121,40 +165,6 @@ module.exports = React.createClass({
     return <ul>{listItems}</ul>;
   },
 
-  isLoggedIn: function() {
-    return !!this.props.user;
-  },
-
-  isFollowingOffering: function() {
-    var offering_id = this.props.params._id,
-        offerings = this.props.user.offerings;
-
-    for (var i = 0, len = offerings.length; i < len; i++) {
-      if (offering_id === offerings[i]) {
-        return true;
-      }
-    }
-
-    return false;
-  },
-
-  handleClick: function() {
-    var user = this.props.user,
-        baseUrl = 'https://localhost:8000/users/watch/?',
-        user_id = 'user=' + this.props.user._id,
-        offering_id = 'offering=' + this.props.params._id;
-
-    var url = baseUrl + user_id + '&' + offering_id;
-
-    request(url, function(err, res, body) {
-      if (err) throw err;
-      if (res.statusCode === 200) {
-        var token = JSON.parse(body).token;
-        LoginActions.updateUser(token);
-      }
-    });
-  },
-
   renderFollowButton: function() {
     if (this.isLoggedIn() && !this.isFollowingOffering()) {
       return (
@@ -166,16 +176,6 @@ module.exports = React.createClass({
         </button>
       );
     }
-  },
-
-  getRoasteryLink: function() {
-    var roastery = this.state.offering.roastery;
-
-    return (
-      <Link to="roaster" params={{ _id: roastery._id }}>
-        {roastery.name}
-      </Link>
-    );
   },
 
   renderTitle: function() {

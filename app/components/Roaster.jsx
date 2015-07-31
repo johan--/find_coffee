@@ -145,14 +145,14 @@ module.exports = React.createClass({
 
     return (
       <div className="row roasterPage">
-        <div className="col-xs-12 col-md-4 roasterProfile">
+        <div className="col-xs-12 col-md-4 background roasterProfile">
           <h1 className="text-center">{this.state.roaster.name}</h1>
           {this.renderFollowButton()}
           {this.renderAddress()}
           <h3>Current Offerings</h3>
           {this.renderOfferingsList()}
         </div>
-        <div className="col-xs-12 col-md-8 feeds">
+        <div className="col-xs-12 col-md-8 background feeds">
           <InstagramFeed _id={_id} />
           <TwitterFeed _id={_id} />
         </div>

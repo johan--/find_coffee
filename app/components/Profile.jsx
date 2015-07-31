@@ -99,56 +99,71 @@ module.exports = React.createClass({
     var roasters = this.state.roasters,
         self = this;
 
-    if (roasters) {
-      roasters = roasters.slice(0).map(function(roaster) {
-        return (
-          <li>
-            <Link to="roaster" params={{ _id: roaster._id }}>
-              {roaster.name}
-            </Link>
-            <button onClick={self.handleClick.bind(self, roaster._id)}
-                    className="unfollowBtn" >
-              Unfollow
-            </button>
-          </li>
-        );
-      });
-    } 
+    if (this.isRenderingOnClient() && this.hasValidToken()) {
 
-    return (
-      <div className="followedRoasters">
-        <h2>Your Roasters</h2>
-        <ul>
-          {roasters}
-        </ul>
-      </div>
-    );
+      if (roasters.length) {
+        roasters = roasters.slice(0).map(function(roaster) {
+          return (
+            <li>
+              <Link to="roaster" params={{ _id: roaster._id }}>
+                {roaster.name}
+              </Link>
+              <button onClick={self.handleClick.bind(self, roaster._id)}
+                      className="unfollowBtn" >
+                X
+              </button>
+            </li>
+          );
+        });
+      } else {
+        roasters = <li><p>Not currently following any roasters.</p></li>;
+      }
+
+      return (
+        <div className="background profile-roasters col-xs-12 col-md-6">
+          <h3>Your Roasters</h3>
+          <ul>
+            {roasters}
+          </ul>
+        </div>
+      );
+
+    }
   },
 
-  renderOfferings: function(type) {
-    var offerings = this.state.offerings,
-        msg;
-
-    if (type === 'ROASTER') {
-      offerings = offerings.roaster;
-      msg = "Offerings from your roasters.";
-    } else if (type === 'FOLLOWED') {
-      offerings = offerings.followed;
-      msg = "Your offerings";
-    } else {
-      return null;
-    }
+  // Offerings user has explicitly followed.
+  renderFollowedOfferings: function() {
+    var offerings = this.state.offerings.followed,
+        msg = "Your offerings";
 
     if (offerings) {
       return (
-        <div className="">
-          <h2>{msg}</h2>
+        <div>
+          <h3>{msg}</h3>
           <OfferingList hideRoaster={false}
                         perPage={10}
                         offerings={offerings} />
         </div>
       );
     }
+  },
+
+  // All offerings from followed roasters.
+  renderRoasterOfferings: function() {
+    var offerings = this.state.offerings.roaster,
+        msg = "Some current offerings from your roasters.";
+
+    if (offerings) {
+      return (
+        <div className="background offerings-roaster col-xs-12 col-md-6">
+          <h3>{msg}</h3>
+          <OfferingList hideRoaster={false}
+                        perPage={10}
+                        offerings={offerings} />
+        </div>
+      );
+    }
+
   },
 
   renderLinks: function() {
@@ -162,12 +177,21 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-        <div>
-          {this.renderLinks()}
-          {this.renderRoasters()}
-          {this.renderOfferings('FOLLOWED')}
-          {this.renderOfferings('ROASTER')}
+      <div className="row profile">
+        {this.renderLinks()}
+
+        <div className="background offerings-followed col-xs-6 col-sm-3">
+          {this.renderFollowedOfferings()}
         </div>
+
+        <div className="profile-roaster-info col-xs-6 col-sm-8">
+          <div className="row">
+            {this.renderRoasters()}
+            {this.renderRoasterOfferings()}
+          </div>
+        </div>
+
+      </div>
     );
   }
 

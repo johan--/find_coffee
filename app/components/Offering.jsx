@@ -75,7 +75,7 @@ module.exports = React.createClass({
     if (this.hasBackground()) {
       return (
         <p>
-          <span className="background category">Background:</span>
+          <span className="background-info category">Background:</span>
           <span className="value">{this.state.offering.background}</span>
         </p>
       );
@@ -200,10 +200,10 @@ module.exports = React.createClass({
 
   render: function() {
     if (this.isEmpty()) {
-      return <div className="offerings"><h1>Loading...</h1></div>;
+      return <div className="col-xs-12 col-sm-7 offerings"><h1>Loading...</h1></div>;
     } else {
       return (
-        <div className="overview">
+        <div className="col-xs-12 col-sm-7 background overview">
           {this.renderTitle()}
           {this.renderFollowButton()}
           {this.renderFlavors()}

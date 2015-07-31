@@ -41,16 +41,12 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div>
-        <div className="row">
-          <RouteHandler {...this.props}
-                        perPage={10}
-                        offerings={this.getOfferings()} />
-        </div>
-        <div className="row">
-          <CoffeeForm {...this.props}
-                      handleSubmit={this.handleSubmit} />
-        </div>
+      <div className="row">
+        <RouteHandler {...this.props}
+                      perPage={10}
+                      offerings={this.getOfferings()} />
+        <CoffeeForm {...this.props}
+                    handleSubmit={this.handleSubmit} />
       </div>
     );
   }

@@ -26,7 +26,7 @@ module.exports = React.createClass({
     this.setState(updatedState);
   },
 
-  handleSubmit: function(e) {
+  handleChangeOrSubmit: function(e) {
     e.preventDefault();
     this.props.handleSubmit(this.getFormValues());
   },
@@ -100,7 +100,9 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-        <form className="col-xs-12 offeringsForm" onSubmit={this.handleSubmit} >
+        <form onChange={this.handleChangeOrSubmit}
+              className="col-xs-12 col-sm-5 offeringsForm"
+              onSubmit={this.handleChangeOrSubmit} >
           {this.renderTextInput('search', 'Search flavors...')}
           {this.renderSelect('origin', 'Origin', this.props.data.uniqueOriginNames)}
           {this.renderSelect('roaster', 'Roaster', this.props.data.uniqueRoasterNames)}

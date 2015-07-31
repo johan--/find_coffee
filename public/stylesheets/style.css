@@ -128,7 +128,7 @@ label {
  ******************************************************/
 
 .offeringsForm {
-  width: 400px;
+  width: 350px;
   float: right;
 }
 
@@ -156,10 +156,20 @@ label {
  ******************************************************/
 .offerings,
 .overview {
-  margin-left: 20px;
   float: left;
+  width: 60%;
+  padding: 15px;
   font-size: 1.4em;
+  width: 60%;
+}
+
+.offerings {
+  border: 1px solid rgba(0, 0, 0, 0);
   height: 400px;
+}
+
+.list li:nth-child(odd) a {
+  color: #FFCCAA;
 }
 
 /* List Pagination
@@ -191,14 +201,17 @@ label {
 
 /* Offering
  ******************************************************/
+/* overview */
 
-.overview {
+.background {
   background-color: rgba(0, 0, 0, 0.7);
-  width: 60%;
   border-radius: 5px;
   border: 1px solid black;
-  padding: 15px;
-  overflow: scroll,
+  margin: 10px;
+}
+
+.overview {
+  overflow: scroll;
 }
 
 .overview h1 {
@@ -230,7 +243,7 @@ label {
   text-align: left;
 }
 
-.background,
+.background-info,
 .flavors,
 .category {
   margin-right: 10px;
@@ -244,29 +257,26 @@ label {
  *******************************/
 
 .feeds, .roasterProfile {
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  margin: 10px 10px;
+  margin: 10px;
 }
 
 .feeds {
   float: right;
-  width: 60%;
   min-width: 400px;
+  width: 60%;
 }
 
 .roasterProfile {
-  width: 30%;
-  min-width: 200px;
   float: left;
+  min-width: 200px;
+  width: 30%;
 }
 
 .roasterProfile .offerings {
+  float: none;
+  height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 100%;
-  float: none;
 }
 
 
@@ -287,6 +297,48 @@ label {
   text-decoration: underline;
 }
 
+/******************************************************
+ User profile page
+ ******************************************************/
+
+.profile .offerings {
+  height: 100%;
+  width: 100%;
+}
+
+
+.offerings-followed {
+}
+
+.offerings-roaster {
+}
+
+.profile-roasters {
+  width: 200px;
+}
+
+.profile-roaster-info {
+}
+
+.profile-roasters a {
+  font-size: 1.2em;
+}
+
+.links a {
+  font-size: 1.5em;
+  margin: 0 10px;
+}
+
+.profile-roasters button {
+  font-family: sans-serif;
+  font-size: 0.7em;
+  background: white;
+  color: black;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 2px;
+  margin-left: 8px;
+}
 
 /******************************************************
  Instagram, Google, Twitter
@@ -332,12 +384,44 @@ label {
  Media Queries
  ******************************************************/
 
+@media screen and (max-width: 1000px) {
+  .overview,
+  .offeringsForm,
+  .offerings {
+    margin: 0 auto;
+    float: none;
+  }
+
+  .overview,
+  .offerings {
+    width: 90%;
+  }
+
+}
+
+@media screen and (max-width: 750px) {
+  .profile-roaster-info,
+  .offerings-followed,
+  .offerings-roaster {
+    margin: 10px auto;
+    width: 90%;
+    float: none;
+    text-align: center;
+  }
+
+  .profile-roasters {
+    margin: 10px auto;
+    float: none;
+  }
+}
+
 @media screen and (max-width: 640px) {
   body {
     overflow-y: scroll;
   }
 
-  .feeds, .roasterProfile {
+  .feeds,
+  .roasterProfile {
     margin: 10px, auto;
     width: 90%;
     float: none;
@@ -352,6 +436,7 @@ label {
   .roasterProfile .offerings {
     margin: 0 auto;
   }
+
 }
 
 @media screen and (max-width: 600px) {

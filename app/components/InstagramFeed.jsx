@@ -67,15 +67,15 @@ module.exports = React.createClass({
 
   renderPic: function() {
     var pic = this.getCurrentPic();
-    return <a href={pic.link}><img src={pic.images.low_resolution.url} /></a>;
+    return <a className="text-center" href={pic.link}><img src={pic.images.low_resolution.url} /></a>;
   },
 
   render: function() {
     var content = this.hasLoaded() ? this.renderPic() : this.renderLoading();
 
     return (
-      <div className="instagramFeed">
-        <h2 className="instagramHeader">Latest Instagram photos</h2>
+      <div className="text-center instagramFeed">
+        <h2>Latest Instagram photos</h2>
         {content}
       </div>
     );

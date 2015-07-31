@@ -10,9 +10,9 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div>
-        <h1 className="greeting">{this.getMessage()}</h1>
-        <Link className="searchAll" to="offerings">Search all Offerings</Link>
+      <div className="text-center greeting">
+        <h1>{this.getMessage()}</h1>
+        <Link to="offerings">Search all Offerings</Link>
       </div>
     );
   }

@@ -35,7 +35,7 @@ module.exports = React.createClass({
     return (
       <input
         ref={name}
-        id="textbox"
+        className="textbox"
         type="text"
         name={name}
         placeholder={label}>
@@ -45,14 +45,13 @@ module.exports = React.createClass({
 
   renderCheckbox: function(name, value) {
     return (
-      <input id={name}
-        className="checkbox"
-        type="checkbox"
-        name={name}
-        ref={name}
-        value={value}>
-        {value}
-      </input>
+      <div className="form-group">
+        {this.renderLabel(name, value)}
+        <input id={name}
+          type="checkbox"
+          name={name}
+          ref={name} />
+      </div>
     );
   },
 
@@ -88,17 +87,25 @@ module.exports = React.createClass({
     return <label htmlFor={id}>{label}</label>;
   },
 
+  renderCheckboxes: function() {
+    return (
+      <div className="checkboxes">
+        {this.renderCheckbox('blend', 'Blend')}
+        {this.renderCheckbox('decaf', 'Decaf')}
+        {this.renderCheckbox('organic', 'Organic')}
+        {this.renderCheckbox('direct', 'Direct Trade')}
+      </div>
+    );
+  },
+
   render: function() {
     return (
-        <form className="offeringsForm" onSubmit={this.handleSubmit} >
+        <form className="col-xs-12 offeringsForm" onSubmit={this.handleSubmit} >
           {this.renderTextInput('search', 'Search flavors...')}
           {this.renderSelect('origin', 'Origin', this.props.data.uniqueOriginNames)}
           {this.renderSelect('roaster', 'Roaster', this.props.data.uniqueRoasterNames)}
           {this.renderSelect('process', 'Process', this.props.data.processes)}
-          {this.renderCheckbox('blend', 'Blend')}
-          {this.renderCheckbox('decaf', 'Decaf')}
-          {this.renderCheckbox('organic', 'Organic')}
-          {this.renderCheckbox('direct', 'Direct Trade')}
+          {this.renderCheckboxes()}
           {this.renderSubmit('Find coffee')}
         </form>
      );

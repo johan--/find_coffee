@@ -6,7 +6,11 @@ var React = require('react'),
 module.exports = React.createClass({
 
   render: function() {
-    return <RouteHandler perPage={10} {...this.props} />;
+    return (
+      <div className="row">
+        <RouteHandler perPage={10} {...this.props} />
+      </div>
+    );
   }
 
 });

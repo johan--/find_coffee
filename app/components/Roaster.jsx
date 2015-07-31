@@ -101,7 +101,6 @@ module.exports = React.createClass({
       if (res.statusCode === 200) {
         var token = JSON.parse(body).token;
         LoginActions.updateUser(token);
-        // TODO: inform user of successful update;
       }
     });
 
@@ -121,7 +120,7 @@ module.exports = React.createClass({
     var roaster = this.state.roaster;
 
     return (
-      <ul className="roasterAddress">
+      <ul className="address text-center">
         <li>{roaster.address}</li>
         <li>{roaster.city}, {roaster.state} {roaster.zip}</li>
       </ul>
@@ -132,9 +131,10 @@ module.exports = React.createClass({
     if (this.isLoggedIn() && !this.isFollowingRoaster()) {
       return (
         <button name="followButton"
+                className="btn text-center"
                 type="button"
                 onClick={this.handleClick}>
-                Follow this roaster
+                Follow {this.state.roaster.name}
         </button>
       );
     }
@@ -144,15 +144,15 @@ module.exports = React.createClass({
     var _id = this.props.params._id;
 
     return (
-      <div className="roasterPage">
-        <div className="roasterProfile">
-          <h1>{this.state.roaster.name}</h1>
+      <div className="row roasterPage">
+        <div className="col-xs-12 col-md-4 roasterProfile">
+          <h1 className="text-center">{this.state.roaster.name}</h1>
           {this.renderFollowButton()}
           {this.renderAddress()}
           <h3>Current Offerings</h3>
           {this.renderOfferingsList()}
         </div>
-        <div className="feeds">
+        <div className="col-xs-12 col-md-8 feeds">
           <InstagramFeed _id={_id} />
           <TwitterFeed _id={_id} />
         </div>

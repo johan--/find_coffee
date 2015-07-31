@@ -1,14 +1,15 @@
-var middleware = require('./app/middleware'),
-    express    = require('express'),
-    https      = require('https'),
-    path       = require('path'),
-    fs         = require('fs'),
-    app        = express();
-
 require('node-jsx').install();
 
 // Connect to Mongo and load models.
 require('./app/db.js');
+
+var middleware = require('./app/middleware'),
+    express    = require('express'),
+    routes     = require('./app/routes'),
+    https      = require('https'),
+    path       = require('path'),
+    fs         = require('fs'),
+    app        = express();
 
 var credentials = {
   key:  fs.readFileSync('./ssl/SERVER_256.key', 'utf8'),
@@ -21,7 +22,7 @@ var server = https.createServer(credentials, app);
 middleware(app);
 
 // Load routes.
-require('./app/routes')(app);
+routes(app);
 
 // Start server.
 server.listen(8000);

@@ -1,17 +1,21 @@
+/******************************************************
+ General
+ ******************************************************/
+
 body {
   background-image: url("/images/background_2.png");
   background-repeat: no-repeat;
+  background-attachment: fixed;
   color: white;
-  margin: 0;
-  font-color: black;
+  font-family: "Amatic SC", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
 }
 
-a {
+a,
+a:visited {
   color: white;
 }
 
 a:hover {
-  color: darkcyan;
   color: #FFEECC;
 }
 
@@ -20,28 +24,27 @@ ul {
   padding: 0;
 }
 
-/* Header
- *******************************/
+/******************************************************
+ Header
+ ******************************************************/
+
 header {
   font-size: 1.3em;
-  font-family: 'Reenie Beanie', sans-serif;
-  position: fixed;
+  font-family: "Reenie Beanie", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
   height: 45px;
-  width: 100%;
+  padding: 5px;
 }
 
 header button {
   font-size: 1.3em;
-  font-family: 'Reenie Beanie', sans-serif;
-  color: white;
   background-color: transparent;
   border: 0;
   padding: 0;
 }
 
 header ul {
-  position: absolute;
-  right: 20px;
+  float: right;
+  margin-right: 20px;
 }
 
 header li {
@@ -49,106 +52,177 @@ header li {
   margin-right: 10px;
 }
 
-/* Main
- *******************************/
-#mainContent {
-  font-family: 'Amatic SC', sans-serif;
-  position: fixed;
-  top: 45px;
-  width: 100%;
-  height: 100%;
+/******************************************************
+ Homepage
+ ******************************************************/
+
+.text-center {
   text-align: center;
 }
 
 .greeting {
-  position: relative;
-  top: 85px;
-  font-size:  3.35em; 
+  margin-top: 85px;
 }
 
-.offerings li {
-  font-size: 1.4em;
+.greeting h1 {
+  font-size: 3.35em;
 }
 
-.searchAll {
-  position: relative;
-  top: 100px;
+.greeting a {
+  display: block;
+  margin-top: 50px;
   font-size: 3em;
 }
 
-/* Forms
- *******************************/
+/******************************************************
+ Forms
+ ******************************************************/
+
 form {
   font-size: 1.45em;
 }
 
-.signup,
-.login {
-  position: relative;
-  top: 100px;
+select,
+input,
+option,
+.btn {
+  color: black;
+  font-family: sans-serif;
+  font-size: 12px;
 }
 
-.offeringsForm {
-  padding: 10px;
-  border-radius: 4px;
-  position: absolute;
-  top: 400px;
-  right: 40px;
+.btn:hover {
+  background-color: #DDD;
+}
+
+option {
+  padding: 2px;
+}
+
+label {
+  margin-right: 10px;
+}
+
+.checkboxes > * {
+  display: inline;
 }
 
 .form-group {
   margin: 5px;
 }
 
-form label {
-  margin-right: 10px;
+.submit {
+  display: block;
+  margin: 0 auto;
 }
 
-form #textbox {
+.textbox {
   border: 1px solid #ccc;
   border-radius: 2px;
   padding: 3px;
-  width: 200px;
-  height: 15px;
+  width: 100%;
+  height: 25px;
 }
 
-form .submit {
-  margin-top: 10px;
+/* Coffee Form
+ ******************************************************/
+
+.offeringsForm {
+  width: 400px;
+  float: right;
+}
+
+/* Signup/Login Forms
+ ******************************************************/
+
+.signup form,
+.login form {
+  margin: 100px auto;
+  width: 300px;
+}
+
+.signup .form-group *,
+.login .form-group * {
   display: block;
-  margin-right: auto;
-  margin-left: auto;
+  margin: 10px auto;
+  width: 90%;
 }
 
-/* Offering List / Offering
- *******************************/
+/******************************************************
+ Offerings 
+ ******************************************************/
+
+/* List
+ ******************************************************/
 .offerings,
 .overview {
-  width: 60%;
+  margin-left: 20px;
+  float: left;
+  font-size: 1.4em;
+  height: 400px;
 }
 
+/* List Pagination
+ ******************************************************/
+
+.pagination > li > a {
+  background-color: transparent;
+  color: white;
+  float: none;
+  border: none;
+  padding: 0;
+}
+
+.pagination > li > a:hover {
+  color: #FFEECC;
+  background-color: transparent;
+}
+
+
+.pagination ul,
+.pages li {
+  display: inline;
+  margin: 0 10px;
+}
+
+.active > a {
+  font-size: 1.35em;
+}
+
+/* Offering
+ ******************************************************/
+
 .overview {
-  margin-left: 20px;
   background-color: rgba(0, 0, 0, 0.7);
+  width: 60%;
   border-radius: 5px;
   border: 1px solid black;
   padding: 15px;
   overflow: scroll,
 }
 
+.overview h1 {
+  font-size: 1.2em;
+}
+
+.overview .btn {
+  margin: 10px 0px;
+}
+
+.category {
+  color: #FFEECC;
+}
+
 .value {
-  font-family: Helvetica, sans-serif;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
   font-weight: 100;
   font-size: 0.8em;
   line-height: 1.5em;
 }
 
 .price {
-  font-size: 1.1em;
-}
-
-.category {
-  font-size: 1.3em;
-  color: #FFEECC;
+  display: inline-block;
+  margin-left: 10px;
 }
 
 .overview ul {
@@ -162,64 +236,77 @@ form .submit {
   margin-right: 10px;
 }
 
-/* Pagination
- *******************************/
-.pagination > *,
-.pages li {
-  display: inline;
-  margin: 0 10px;
-}
-
-.active > a {
-  font-size: 1.25em;
-}
+/******************************************************
+ Roaster
+ ******************************************************/
 
 /* Roaster Page
  *******************************/
-.roasterPage {
-  padding: 10px; 50px;
-  position: relative;
-}
 
 .feeds, .roasterProfile {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.7);
-  margin: 0, 50px;
-  float: left;
-  margin-left: 100px;
   padding: 10px;
-}
-
-.roasterPage .offering {
-  font-size: 0.95em;
+  margin: 10px 10px;
 }
 
 .feeds {
-  width: 45%;
+  float: right;
+  width: 60%;
+  min-width: 400px;
 }
 
 .roasterProfile {
   width: 30%;
+  min-width: 200px;
+  float: left;
 }
 
 .roasterProfile .offerings {
-  margin: 0 auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 100%;
+  float: none;
 }
 
-/* Instagram
- *******************************/
-.instagramFeed {
+
+.roasterProfile .btn {
+  display: block;
+  margin: 0 auto;
+  padding: 3px;
+  margin-bottom: 5px;
+}
+
+.roasterProfile .address {
+  font-size: 1em;
+}
+
+.roasterProfile h3 {
+  display: inline-block;
+  margin-left: 20px;
+  text-decoration: underline;
+}
+
+
+/******************************************************
+ Instagram, Google, Twitter
+ ******************************************************/
+
+.twitterFeed h2,
+.instagramFeed h2 {
+  text-decoration: underline;
 }
 
 /* Twitter
- *******************************/
+ ******************************************************/
 .tweet {
   margin-bottom: 10px;
 }
 
-.twitterFeed {
-  height: 120px;
+.tweets {
+  height: 100px;
   overflow-y: scroll;
+  margin-left: 20px;
 }
 
 .tweetText {
@@ -232,8 +319,47 @@ form .submit {
 }
 
 /* Google Map
- *******************************/
+ ******************************************************/
+
 .map_canvas {
-  height: 200px;
-  width: 200px;
+  float: left;
+  height: 400px;
+  width: 600px;
+  margin: 0 auto;
+}
+
+/******************************************************
+ Media Queries
+ ******************************************************/
+
+@media screen and (max-width: 640px) {
+  body {
+    overflow-y: scroll;
+  }
+
+  .feeds, .roasterProfile {
+    margin: 10px, auto;
+    width: 90%;
+    float: none;
+    text-align: center;
+  }
+
+  .roasterProfile h3 {
+    display: inline;
+    margin: 0;
+  }
+
+  .roasterProfile .offerings {
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .offeringsForm,
+  .overview {
+    float: none;
+    margin: 0 auto;
+    width: 90%;
+  }
+
 }

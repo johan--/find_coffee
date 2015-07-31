@@ -151,7 +151,6 @@ module.exports = React.createClass({
       if (res.statusCode === 200) {
         var token = JSON.parse(body).token;
         LoginActions.updateUser(token);
-        // TODO: inform user ot successful update
       }
     });
   },
@@ -160,6 +159,7 @@ module.exports = React.createClass({
     if (this.isLoggedIn() && !this.isFollowingOffering()) {
       return (
         <button name="followButton"
+                className="btn"
                 type="button"
                 onClick={this.handleClick}>
                 Remember this offering
@@ -182,7 +182,11 @@ module.exports = React.createClass({
     var offering = this.state.offering;
 
     return (
-      <h1><a href={offering.url}>{offering.name}</a> - {this.getRoasteryLink()}</h1>
+      <h1>
+        <a href={offering.url}>{offering.name}</a>
+        - {this.getRoasteryLink()}
+        {this.renderPrice()}
+      </h1>
     );
   },
 
@@ -190,7 +194,7 @@ module.exports = React.createClass({
     var price = this.state.offering.price;
 
     if (price) {
-      return <p className="price">$ {price}</p>;
+      return <span className="price">{"$" + price}</span>;
     }
   },
 
@@ -202,7 +206,6 @@ module.exports = React.createClass({
         <div className="overview">
           {this.renderTitle()}
           {this.renderFollowButton()}
-          {this.renderPrice()}
           {this.renderFlavors()}
           {this.renderBackground()}
           {this.renderInfo()}

@@ -27,7 +27,8 @@ module.exports = React.createClass({
   handleSubmit: function(formInputs) {
     var path = this.getPath(), self = this;
 
-    // Need to redirect to '/offerings' if currently viewing offering.
+    // If currently on /offering/:id, will need to redirect to
+    // /offerings in order to view list.
     if (path !== '/offerings') {
       this.transitionTo('/offerings');
     }
@@ -41,10 +42,15 @@ module.exports = React.createClass({
   render: function() {
     return (
       <div>
-        <CoffeeForm {...this.props} handleSubmit={this.handleSubmit} />
-        <RouteHandler {...this.props}
-                      perPage={10}
-                      offerings={this.getOfferings()} />
+        <div className="row">
+          <RouteHandler {...this.props}
+                        perPage={10}
+                        offerings={this.getOfferings()} />
+        </div>
+        <div className="row">
+          <CoffeeForm {...this.props}
+                      handleSubmit={this.handleSubmit} />
+        </div>
       </div>
     );
   }

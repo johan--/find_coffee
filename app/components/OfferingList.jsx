@@ -24,11 +24,7 @@ var List = React.createClass({
   },
 
   render: function() {
-    return (
-      <ul className="offeringsList">
-        {this.renderList()}
-      </ul>
-    );
+    return <ul>{this.renderList()}</ul>;
   }
 });
 
@@ -92,7 +88,7 @@ var OfferingsList = React.createClass({
 
   renderFound: function() {
     return (
-      <div className="offerings">
+      <div className="col-xs-12 offerings">
         <List hideRoaster={this.props.hideRoaster} offerings={this.state.offerings} />
         <ReactPaginate previousLabel={"previous"}
                        nextLabel={"next"}

@@ -35,7 +35,7 @@ module.exports = React.createClass({
     return (
         <div>
           <Header user={this.state.user} />
-          <section id="mainContent">
+          <section className="container">
             <RouteHandler {...this.props}
                           err={this.state.err}
                           user={this.state.user} />

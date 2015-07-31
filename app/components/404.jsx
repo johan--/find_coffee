@@ -11,7 +11,7 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    return <h2 className={this.props.className}>{this.props.msg}</h2>;
+    return <h1 className={this.props.className}>{this.props.msg}</h1>;
   }
 
 });

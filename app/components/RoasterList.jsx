@@ -42,11 +42,15 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div className="roasteries">
-        <h1>Roasters</h1>
-        <List handleMouseOver={this.handleMouseOver}
-              roasters={this.props.data.roasters} />
-        <GoogleMap coords={ this.state.coords[this.state.current] } />
+      <div className="roasteries col-xs-12 col-md-10 col-md-offset-2">
+        <div className="list col-xs-12 col-md-3">
+          <h1>Roasters</h1>
+          <List handleMouseOver={this.handleMouseOver}
+                roasters={this.props.data.roasters} />
+        </div>
+        <div classname="col-xs-12 col-md-9">
+          <GoogleMap coords={ this.state.coords[this.state.current] } />
+        </div>
       </div>
     );
   }

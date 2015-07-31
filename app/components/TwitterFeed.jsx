@@ -52,14 +52,14 @@ module.exports = React.createClass({
 
   renderTweets: function() {
     return (
-      <ul>
+      <ul className="tweets">
         {this.getLatestTweets()}
       </ul>
     );
   },
 
   renderLoading: function() {
-    return <p>Loading...</p>;
+    return <p className="tweets">Loading...</p>;
   },
 
   render: function() {
@@ -67,7 +67,7 @@ module.exports = React.createClass({
 
     return (
       <div className="twitterFeed">
-        <h2 className="twitterHeader">Latest Tweets</h2>
+        <h2 className="text-center">Latest Tweets</h2>
         {content}
       </div>
     );

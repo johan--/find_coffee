@@ -4,7 +4,15 @@ var React = require('react');
 module.exports = React.createClass({
 
   getInitialState: function() {
-    return { roaster: 'Any', origin: 'Any', process: 'Any' };
+    return {
+      roaster: 'Any',
+      origin: 'Any',
+      process: 'Any',
+      blend: false,
+      decaf: false,
+      organic: false,
+      direct: false
+    }
   },
 
   getFormValues: function() {
@@ -20,21 +28,32 @@ module.exports = React.createClass({
     };
   },
 
-  handleSelectChange: function(e) {
-    var updatedState = {};
-    updatedState[e.target.id] = e.target.value;
-    this.setState(updatedState);
+  handleChange: function(e) {
+    e.preventDefault();
+    this.update();
+    setTimeout(this.submit.bind(this), 0);
   },
 
-  handleChangeOrSubmit: function(e) {
-    e.preventDefault();
-    this.props.handleSubmit(this.getFormValues());
+  handleCheckboxChange: function(e) {
+    var updatedState = {};
+    updatedState[e.target.id] = e.target.checked;
+    this.setState(updatedState);
+    setTimeout(this.submit.bind(this), 0);
+  },
+
+  update: function() {
+    this.setState(this.getFormValues());
+  },
+
+  submit: function() {
+    this.props.handleSubmit(this.state);
   },
 
   renderTextInput: function(name, label) {
     return (
       <input
         ref={name}
+        onChange={this.handleChange}
         className="textbox"
         type="text"
         name={name}
@@ -49,6 +68,8 @@ module.exports = React.createClass({
         {this.renderLabel(name, value)}
         <input id={name}
           type="checkbox"
+          onChange={this.handleCheckboxChange}
+          checked={this.state[name]}
           name={name}
           ref={name} />
       </div>
@@ -73,8 +94,8 @@ module.exports = React.createClass({
       <div className="form-group">
         {this.renderLabel(id, label)}
         <select
-          onChange={this.handleSelectChange}
           ref={id}
+          onChange={this.handleChange}
           value={this.state.value}
           id={id}>
           {options}
@@ -100,9 +121,8 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-        <form onChange={this.handleChangeOrSubmit}
-              className="col-xs-12 col-sm-5 offeringsForm"
-              onSubmit={this.handleChangeOrSubmit} >
+        <form className="col-xs-12 col-sm-5 offeringsForm"
+              onSubmit={this.handleChange} >
           {this.renderTextInput('search', 'Search flavors...')}
           {this.renderSelect('origin', 'Origin', this.props.data.uniqueOriginNames)}
           {this.renderSelect('roaster', 'Roaster', this.props.data.uniqueRoasterNames)}

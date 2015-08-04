@@ -6,9 +6,28 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       map: null,
-      marker: null,
+      listeners: [],
+      markers: {},
       infoWindow: null
     };
+  },
+
+  // Get marker object for given coords.
+  getMarker: function(coords) {
+    return this.state.markers[this.createMarkerName(coords)];
+  },
+
+  // Open infoWindow for current marker.
+  setInfoWindow: function(content, map, marker) {
+    var infoWindow = this.state.infoWindow;
+
+    if (infoWindow) {
+      infoWindow.close();
+    }
+
+    infoWindow = new google.maps.InfoWindow({content: content});
+    infoWindow.open(map, marker);
+    this.setState({ infoWindow: infoWindow });
   },
 
   componentDidMount: function() {
@@ -17,56 +36,78 @@ module.exports = React.createClass({
 
   componentWillReceiveProps: function(nextProps) {
     var map = this.state.map,
-        marker = this.state.marker,
-        infoWindow = this.state.infoWindow,
-        coords = nextProps.coords;
+        coords = nextProps.coords,
+        marker = this.getMarker(coords);
 
-    var newPosition = new google.maps.LatLng(coords.lat, coords.lng);
+    // Change map location.
+    map.setCenter(new google.maps.LatLng(coords.lat, coords.lng));
 
-    map.setCenter(newPosition);
-    marker.setPosition(newPosition);
+    // Open infoWindow for currently selected roaster.
+    this.setInfoWindow(coords.name, map, marker);
 
-    this.setState({
-      map: map,
-      marker: marker,
-      infoWindow: infoWindow
+    this.setState({ map: map });
+  },
+
+  componentWillUnmount: function() {
+    this.state.listeners.forEach(function(listener) {
+      google.maps.event.removeListener(listener);
     });
   },
 
   createMap: function() {
-    var coords = this.props.coords;
+    var coords = this.props.coords,
+        marker = this.getMarker(coords),
+        allCoords = this.props.all,
+        self = this;
+
     var mapOptions = {
-          minZoom: 9,
-          zoom: 10,
+          minZoom: 4,
+          zoom: 14,
           center: new google.maps.LatLng(coords.lat, coords.lng)
         };
 
-    var map = new google.maps.Map(this.getDOMNode(), mapOptions),
-        marker = this.renderMarker(map),
-        infoWindow = this.renderInfoWindow(map, marker);
+    var map = new google.maps.Map(this.getDOMNode(), mapOptions);
 
-    this.setState({
-      map: map,
-      marker: marker,
-      infoWindow: infoWindow
+    // Create all markers.
+    Object.keys(allCoords).forEach(function(key) {
+      self.createMarker(allCoords[key].name, map, allCoords[key]);
     });
+
+    // Open infoWindow on current marker.
+    this.setInfoWindow(coords.name, map, marker);
+
+    this.setState({ map: map });
   },
 
-  renderMarker: function(map) {
-    var coords = this.props.coords;
+  createMarkerName: function(coords) {
+    return "" + coords.lat + coords.lng;
+  },
 
-    return new google.maps.Marker({
+  // Create marker on map that opens infoWindow on click event.
+  createMarker: function(name, map, coords) {
+    var listeners = this.state.listeners,
+        markers = this.state.markers,
+        self = this;
+
+    var marker = new google.maps.Marker({
       position: new google.maps.LatLng(coords.lat, coords.lng),
       map: map
     });
-  },
 
-  renderInfoWindow: function(map, marker) {
-    return new google.maps.InfoWindow({
-          map: map,
-          anchor: marker,
-          content: 'content'
-        });
+    var listener = google.maps.event.addListener(marker, "click", function() {
+      self.setInfoWindow(name, map, marker);
+    });
+
+    // Store reference to listener for later removal.
+    listeners.push(listener);
+
+    // Store reference to marker.
+    markers[this.createMarkerName(coords)] = marker;
+
+    this.setState({
+      listeners: listeners,
+      markers: markers
+    });
   },
 
   render: function() {

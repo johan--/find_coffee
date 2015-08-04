@@ -20,7 +20,11 @@ module.exports = React.createClass({
     var coords = {};
 
     this.props.data.roasters.forEach(function(roaster) {
-      coords[roaster._id] = roaster.location;
+      coords[roaster._id] = {
+        lat: roaster.location.lat,
+        lng: roaster.location.lng,
+        name: roaster.name
+      };
     });
 
     return {
@@ -48,8 +52,9 @@ module.exports = React.createClass({
           <List handleMouseOver={this.handleMouseOver}
                 roasters={this.props.data.roasters} />
         </div>
-        <div classname="col-xs-12 col-md-9">
-          <GoogleMap coords={ this.state.coords[this.state.current] } />
+        <div className="col-xs-12 col-md-9">
+          <GoogleMap all={this.state.coords}
+                     coords={ this.state.coords[this.state.current] } />
         </div>
       </div>
     );

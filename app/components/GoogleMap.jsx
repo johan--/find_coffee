@@ -56,7 +56,6 @@ module.exports = React.createClass({
 
   createMap: function() {
     var coords = this.props.coords,
-        marker = this.getMarker(coords),
         allCoords = this.props.all,
         self = this;
 
@@ -74,7 +73,7 @@ module.exports = React.createClass({
     });
 
     // Open infoWindow on current marker.
-    this.setInfoWindow(coords.name, map, marker);
+    this.setInfoWindow(coords.name, map, this.getMarker(coords));
 
     this.setState({ map: map });
   },

@@ -72,10 +72,6 @@ module.exports = React.createClass({
     return this.isFound() && !this.isLoading();
   },
 
-  hasLoadedOfferings: function() {
-    return this.state.offerings.length;
-  },
-
   isFollowingRoaster: function() {
     var roaster_id = this.props.params._id,
         roasters = this.props.user.roasteries;
@@ -107,14 +103,10 @@ module.exports = React.createClass({
   },
 
   renderOfferingsList: function() {
-    if (this.hasLoadedOfferings()) {
-      return <OfferingList hideRoaster={true}
-                           msg={'This roaster currently has no offerings.'}
-                           perPage={10}
-                           offerings={this.state.offerings} />;
-    } else {
-      return <div></div>;
-    }
+    return <OfferingList hideRoaster={true}
+                         msg={'This roaster currently has no offerings.'}
+                         perPage={10}
+                         offerings={this.state.offerings} />;
   },
 
   renderAddress: function() {

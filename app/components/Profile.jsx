@@ -149,6 +149,7 @@ module.exports = React.createClass({
           <h3>{msg}</h3>
           <OfferingList hideRoaster={false}
                         removeButton={true}
+                        msg={'You\'re not following any roasters.'}
                         handleClick={this.handleClick}
                         perPage={10}
                         offerings={offerings} />
@@ -168,6 +169,7 @@ module.exports = React.createClass({
           <h3>{msg}</h3>
           <OfferingList hideRoaster={false}
                         perPage={10}
+                        msg={'Follow some roasters to see offerings here.'}
                         offerings={offerings} />
         </div>
       );

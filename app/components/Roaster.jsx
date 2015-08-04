@@ -109,6 +109,7 @@ module.exports = React.createClass({
   renderOfferingsList: function() {
     if (this.hasLoadedOfferings()) {
       return <OfferingList hideRoaster={true}
+                           msg={'This roaster currently has no offerings.'}
                            perPage={10}
                            offerings={this.state.offerings} />;
     } else {

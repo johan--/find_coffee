@@ -32,6 +32,12 @@ var List = React.createClass({
 
 var OfferingsList = React.createClass({
 
+  getDefaultProps: function() {
+    return {
+      msg: 'Oh no! Looks like nothing matched that search criteria.'
+    };
+  },
+
   getInitialState: function() {
     return this.getInitial();
   },
@@ -88,8 +94,7 @@ var OfferingsList = React.createClass({
   },
 
   renderNotFound: function() {
-    var msg = 'Oh no! Looks like nothing matched that search criteria.';
-    return <NotFound className="col-xs-12 col-sm-7 offerings" msg={msg} />;
+    return <NotFound className="col-xs-12 col-sm-7 offerings" msg={this.props.msg} />;
   },
 
   renderFound: function() {

@@ -34,13 +34,6 @@ module.exports = React.createClass({
     setTimeout(this.submit.bind(this), 0);
   },
 
-  handleCheckboxChange: function(e) {
-    var updatedState = {};
-    updatedState[e.target.id] = e.target.checked;
-    this.setState(updatedState);
-    setTimeout(this.submit.bind(this), 0);
-  },
-
   update: function() {
     this.setState(this.getFormValues());
   },
@@ -68,7 +61,7 @@ module.exports = React.createClass({
         {this.renderLabel(name, value)}
         <input id={name}
           type="checkbox"
-          onChange={this.handleCheckboxChange}
+          onChange={this.handleChange}
           checked={this.state[name]}
           name={name}
           ref={name} />

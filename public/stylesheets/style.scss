@@ -175,7 +175,6 @@ label {
 
 .offerings {
   border: 1px solid rgba(0, 0, 0, 0);
-  height: 400px;
 }
 
 .list li:nth-child(odd) a {
@@ -194,10 +193,12 @@ label {
     border: none;
     padding: 0;
 
-    &:hover {
+    &:hover,
+    &:focus {
       color: $main-color;
       background-color: transparent;
     }
+
   }
 }
 

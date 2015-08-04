@@ -79,12 +79,19 @@ module.exports = React.createClass({
     return typeof localStorage !== 'undefined';
   },
 
-  handleClick: function(roaster_id) {
-    var baseURL = 'https://localhost:8000/users/unfollow/?',
-        user_id = 'user=' + this.state.user._id,
-        roaster_id = 'roaster=' + roaster_id;
 
-    var url = baseURL + user_id + '&' + roaster_id;
+  handleClick: function(info) {
+    var baseURL = 'https://localhost:8000/users/',
+        user = 'user=' + this.state.user._id,
+        roaster, offering, url;
+
+    if (info.roaster_id) {
+      roaster = 'roaster=' + info.roaster_id;
+      url = baseURL + 'unfollow/?' + user + '&' + roaster;
+    } else if (info.offering_id) {
+      offering = 'offering=' + info.offering_id;
+      url = baseURL + 'unwatch/?' + user + '&' + offering;
+    }
 
     request(url, function(err, res, body) {
       if (err) throw err;
@@ -108,7 +115,7 @@ module.exports = React.createClass({
               <Link to="roaster" params={{ _id: roaster._id }}>
                 {roaster.name}
               </Link>
-              <button onClick={self.handleClick.bind(self, roaster._id)}
+              <button onClick={self.handleClick.bind(self, {roaster_id: roaster._id})}
                       className="unfollowBtn" >
                 X
               </button>
@@ -141,6 +148,8 @@ module.exports = React.createClass({
         <div>
           <h3>{msg}</h3>
           <OfferingList hideRoaster={false}
+                        removeButton={true}
+                        handleClick={this.handleClick}
                         perPage={10}
                         offerings={offerings} />
         </div>

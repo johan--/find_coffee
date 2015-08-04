@@ -15,6 +15,8 @@ var List = React.createClass({
       offeringsList.push(
         <OfferingListItem params={self.props.params}
                           offering={offering}
+                          handleClick={self.props.handleClick}
+                          removeButton={self.props.removeButton}
                           hideRoaster={self.props.hideRoaster}
                           key={index} />
       );
@@ -65,7 +67,11 @@ var OfferingsList = React.createClass({
     this.setState(this.getInitial(newProps));
   },
 
-  handlePageClick: function(data) {
+  handleListClick: function(info) {
+    this.props.handleClick(info);
+  },
+
+  handlePaginationClick: function(data) {
     var offerings = this.props.offerings,
         perPage   = this.props.perPage,
         selected  = data.selected,
@@ -89,7 +95,10 @@ var OfferingsList = React.createClass({
   renderFound: function() {
     return (
       <div className="col-xs-12 col-sm-7 offerings">
-        <List hideRoaster={this.props.hideRoaster} offerings={this.state.offerings} />
+        <List hideRoaster={this.props.hideRoaster}
+              removeButton={this.props.removeButton}
+              handleClick={this.handleListClick}
+              offerings={this.state.offerings} />
         <ReactPaginate previousLabel={"previous"}
                        nextLabel={"next"}
                        breakLabel={<li className="break"><a href="">...</a></li>}
@@ -97,7 +106,7 @@ var OfferingsList = React.createClass({
                        pageNum={this.state.pageNum}
                        marginPagesDisplayed={2}
                        pageRangeDisplayed={5}
-                       clickCallback={this.handlePageClick}
+                       clickCallback={this.handlePaginationClick}
                        forceSelected={this.state.selected}
                        containerClassName={"pagination"}
                        subContainerClassName={"pages"}

@@ -314,17 +314,11 @@ label {
  User profile page
  ******************************************************/
 
-.profile .offerings {
-  height: 100%;
-  width: 100%;
-}
+.profile {
 
-
-.profile-roasters {
-  width: 200px;
-
-  a {
-    font-size: 1.2em;
+  .offerings {
+    height: 100%;
+    width: 100%;
   }
 
   button {
@@ -336,6 +330,15 @@ label {
     border-radius: 3px;
     padding: 2px;
     margin-left: 8px;
+  }
+}
+
+
+.profile-roasters {
+  width: 200px;
+
+  a {
+    font-size: 1.2em;
   }
 }
 

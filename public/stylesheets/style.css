@@ -101,6 +101,10 @@ label {
 .offeringsForm {
   width: 350px;
   float: right; }
+  .offeringsForm select {
+    max-width: 300px; }
+  .offeringsForm option {
+    max-width: 300px; }
 
 /* Signup/Login Forms
  ******************************************************/

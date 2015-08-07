@@ -140,7 +140,17 @@ label {
 .offeringsForm {
   width: 350px;
   float: right;
+
+  select {
+    max-width: 300px;
+  }
+
+  option {
+    max-width: 300px;
+  }
 }
+
+
 
 /* Signup/Login Forms
  ******************************************************/

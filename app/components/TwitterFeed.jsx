@@ -1,18 +1,18 @@
 /** @jsx React.DOM */
 var React = require('react'),
     request = require('request'),
-    Tweet = require('./Tweet.jsx');
+    Tweet = require('./Tweet.jsx'),
+    moment = require('moment');
 
 module.exports = React.createClass({
 
   getInitialState: function() {
-    var tweets = 'TWEETS_' + this.props._id;
     return {
-      tweets: JSON.parse(localStorage.getItem(tweets)) || null
+      tweets: this.checkForCurrentTweets()
     };
   },
 
-  getTweets: function() {
+  getTweetsFromTwitter: function() {
     var url  = 'https://localhost:8000/roasters/twitter/',
         _id  = this.props._id,
         self = this;
@@ -22,7 +22,7 @@ module.exports = React.createClass({
       if (res.statusCode < 400) {
         var tweets = JSON.parse(res.body);
         self.setState({ tweets: tweets });
-        localStorage.setItem('TWEETS_' + _id, JSON.stringify(tweets));
+        self.setTweetsOnLocalStorage(tweets);
       }
     });
   },
@@ -40,10 +40,33 @@ module.exports = React.createClass({
     return tweets;
   },
 
+  getTweetsFromLocalStorage: function() {
+    return JSON.parse(localStorage.getItem('TWEETS_' + this.props._id));
+  },
+
+  setTweetsOnLocalStorage: function(tweets) {
+    var toStore = { tweets: tweets, lastUpdated: moment() };
+    localStorage.setItem('TWEETS_' + this.props._id, JSON.stringify(toStore));
+  },
+
   componentWillMount: function() {
     if (!this.state.tweets) {
-      this.getTweets();
+      this.getTweetsFromTwitter();
     }
+  },
+
+  checkForCurrentTweets: function() {
+    var tweets = this.getTweetsFromLocalStorage();
+
+    if (tweets && this.isFromToday(tweets.lastUpdated)) {
+      return tweets.tweets;
+    } else {
+      return null;
+    }
+  },
+
+  isFromToday: function(date) {
+    return moment(date) >= moment().startOf('day');
   },
 
   hasLoaded: function() {

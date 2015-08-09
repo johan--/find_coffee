@@ -1,19 +1,18 @@
 /** @jsx React.DOM */
 var React = require('react'),
-    request = require('request');
+    request = require('request'),
+    moment = require('moment');
 
 module.exports = React.createClass({
 
   getInitialState: function() {
-    var pics = 'PICS_' + this.props._id;
-
     return {
       current: 0,
-      pics: JSON.parse(localStorage.getItem(pics)) || null
+      pics: this.checkForCurrentPics()
     };
   },
 
-  getNextPic: function() {
+  moveToNextPhoto: function() {
     var current = this.state.current,
         len     = this.state.pics.length;
 
@@ -24,7 +23,7 @@ module.exports = React.createClass({
     }
   },
 
-  getPics: function() {
+  getPicsFromInstagram: function() {
     var url  = 'https://localhost:8000/roasters/instagram/',
         _id  = this.props._id,
         self = this;
@@ -34,27 +33,50 @@ module.exports = React.createClass({
       if (res.statusCode < 400) {
         var pics = JSON.parse(res.body);
         self.setState({ pics: pics });
-        localStorage.setItem('PICS_' + _id, JSON.stringify(pics));
+        self.setPicsOnLocalStorage(pics);
       }
     });
+  },
+
+  getPicsFromLocalStorage: function() {
+    return JSON.parse(localStorage.getItem('PICS_' + this.props._id));
+  },
+
+  setPicsOnLocalStorage: function(pics) {
+    var toStore = { pics: pics, lastUpdated: moment() };
+    localStorage.setItem('PICS_' + this.props._id, JSON.stringify(toStore));
   },
 
   getCurrentPic: function() {
     return this.state.pics[this.state.current];
   },
 
+  isFromToday: function(date) {
+    return moment(date) >= moment().startOf('day');
+  },
+
   componentWillMount: function() {
     if (!this.state.pics) {
-      this.getPics();
+      this.getPicsFromInstagram();
     }
   },
 
   componentDidMount: function() {
-    this.interval = setInterval(this.getNextPic, 5000);
+    this.interval = setInterval(this.moveToNextPhoto, 5000);
   },
 
   componentWillUnmount: function() {
     clearInterval(this.interval);
+  },
+
+  checkForCurrentPics: function() {
+    var pics = this.getPicsFromLocalStorage();
+
+    if (pics && this.isFromToday(pics.lastUpdated)) {
+      return pics.pics;
+    } else {
+      return null;
+    }
   },
 
   hasLoaded: function() {

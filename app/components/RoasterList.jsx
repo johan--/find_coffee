@@ -47,12 +47,12 @@ module.exports = React.createClass({
   render: function() {
     return (
       <div className="roasteries col-xs-12 col-md-10 col-md-offset-2">
-        <div className="list col-xs-12 col-md-3">
+        <div className="list col-xs-12 col-sm-2">
           <h1>Roasters</h1>
           <List handleMouseOver={this.handleMouseOver}
                 roasters={this.props.data.roasters} />
         </div>
-        <div className="col-xs-12 col-md-9">
+        <div className="col-xs-12 col-sm-10">
           <GoogleMap all={this.state.coords}
                      coords={ this.state.coords[this.state.current] } />
         </div>

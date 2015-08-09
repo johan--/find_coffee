@@ -3,9 +3,12 @@
  General
  ******************************************************/
 body {
-  background-image: url("/images/background_2.png");
-  background-repeat: no-repeat;
+  background: url("/images/coffee_large.png") no-repeat center center fixed;
   background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   color: white;
   font-family: "Amatic SC", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif; }
 
@@ -47,9 +50,11 @@ header {
   text-align: center; }
 
 .greeting {
-  margin-top: 85px; }
+  margin-top: 185px; }
   .greeting h1 {
-    font-size: 3.35em; }
+    font-size: 3.35em;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; }
   .greeting a {
     display: block;
     margin-top: 50px;
@@ -160,8 +165,9 @@ label {
 
 /* Offering
  ******************************************************/
-/* overview */
-.background {
+/* Overview
+ *******************************/
+.background, .roasteries .list {
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 5px;
   border: 1px solid black;
@@ -229,6 +235,13 @@ label {
     margin-left: 20px;
     text-decoration: underline; }
 
+/* Roasters List Page
+ *******************************/
+.roasteries li {
+  font-size: 1.2em; }
+.roasteries .list {
+  margin: 0; }
+
 /******************************************************
  User profile page
  ******************************************************/
@@ -281,6 +294,8 @@ label {
 /* Google Map
  ******************************************************/
 .map_canvas {
+  position: relative;
+  top: 50px;
   float: left;
   height: 400px;
   width: 600px;

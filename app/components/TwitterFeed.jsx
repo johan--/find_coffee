@@ -17,7 +17,7 @@ module.exports = React.createClass({
         tweets;
 
     request(url + _id, function(err, res, body) {
-      if (err) throw err;
+      if (err) return self.setState({ tweets: 'ERR_WHILE_LOADING' });
 
       if (res.statusCode < 400) {
         tweets = JSON.parse(res.body);
@@ -72,7 +72,7 @@ module.exports = React.createClass({
   },
 
   renderNoTweets: function() {
-    return <p>It looks like this roastery doesn't have a Twitter account.</p>;
+    return <p>{"It looks like this roastery doesn't have a Twitter account."}</p>;
   },
 
   renderTweets: function() {
@@ -87,6 +87,20 @@ module.exports = React.createClass({
     return <p className="tweets">Loading...</p>;
   },
 
+  renderError: function() {
+    return (
+      <p>An error occured while fetching Tweets.
+        <button className="btn" onClick={this.getTweetsFromTwitter}>
+          Try again.
+        </button>
+      </p>
+    );
+  },
+
+  hadErrorWhileLoading: function() {
+    return this.state.tweets === 'ERR_WHILE_LOADING';
+  },
+
   hasTweets: function() {
     var tweets = this.state.tweets;
     return tweets && tweets.length;
@@ -95,10 +109,14 @@ module.exports = React.createClass({
   render: function() {
     var content;
 
-    if (this.state.hasLoaded) {
-      content = this.hasTweets() ? this.renderTweets() : this.renderNoTweets();
+    if (this.hadErrorWhileLoading()) {
+      content = this.renderError();
     } else {
-      content = this.renderLoading();
+      if (this.state.hasLoaded) {
+        content = this.hasTweets() ? this.renderTweets() : this.renderNoTweets();
+      } else {
+        content = this.renderLoading();
+      }
     }
 
     return (

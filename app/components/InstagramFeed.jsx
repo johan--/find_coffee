@@ -12,24 +12,14 @@ module.exports = React.createClass({
     };
   },
 
-  moveToNextPhoto: function() {
-    var current = this.state.current,
-        len     = this.state.pics.length;
-
-    if (current === len - 1) {
-      this.setState({ current: 0 });
-    } else {
-      this.setState({ current: ++current });
-    }
-  },
-
   getPicsFromInstagram: function() {
     var url  = 'https://localhost:8000/roasters/instagram/',
         _id  = this.props._id,
         self = this;
 
     request(url + _id, function(err, res, body) {
-      if (err) throw err;
+      if (err) return self.setState({ pics: 'ERR_WHILE_LOADING' });
+
       if (res.statusCode < 400) {
         var pics = JSON.parse(res.body);
         self.setState({ pics: pics });
@@ -51,12 +41,8 @@ module.exports = React.createClass({
     return this.state.pics[this.state.current];
   },
 
-  isFromToday: function(date) {
-    return moment(date) >= moment().startOf('day');
-  },
-
   componentWillMount: function() {
-    if (!this.state.pics) {
+    if (!this.hasLoaded()) {
       this.getPicsFromInstagram();
     }
   },
@@ -79,12 +65,46 @@ module.exports = React.createClass({
     }
   },
 
+  moveToNextPhoto: function() {
+    var current = this.state.current,
+        pics = this.state.pics,
+        len;
+
+    if (pics) {
+      len = pics.length;
+
+      if (current === len - 1) {
+        this.setState({ current: 0 });
+      } else {
+        this.setState({ current: ++current });
+      }
+    }
+  },
+
+  isFromToday: function(date) {
+    return moment(date) >= moment().startOf('day');
+  },
+
   hasLoaded: function() {
     return !!this.state.pics;
   },
 
+  hadErrorWhileLoading: function() {
+    return this.state.pics === 'ERR_WHILE_LOADING';
+  },
+
   renderLoading: function() {
     return <p>Loading...</p>;
+  },
+
+  renderError: function() {
+    return (
+      <p>An error occured while fetching photos.
+        <button className="btn" onClick={this.getPicsFromInstagram}>
+          Try again.
+        </button>
+      </p>
+    );
   },
 
   renderPic: function() {
@@ -93,7 +113,13 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var content = this.hasLoaded() ? this.renderPic() : this.renderLoading();
+    var content;
+
+    if (this.hadErrorWhileLoading()) {
+      content = this.renderError();
+    } else {
+      content = this.hasLoaded() ? this.renderPic() : this.renderLoading();
+    }
 
     return (
       <div className="text-center instagramFeed">

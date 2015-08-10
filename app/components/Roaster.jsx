@@ -14,62 +14,56 @@ module.exports = React.createClass({
 
   getInitialState: function() {
     return {
-      roaster:   {},
+      roaster:   null,
       offerings: []
     };
   },
 
-  setOfferings: function() {
-    var offerings = [],
-        self = this;
+  getOfferings: function(_id) {
+    var offerings = [];
 
     this.props.data.offerings.forEach(function(offering) {
-      if (offering.roastery._id === self.state.roaster._id) {
+      if (offering.roastery._id === _id) {
         offerings.push(offering);
       }
     });
 
-    this.setState({ offerings: offerings });
+    return offerings;
   },
 
-  setRoaster: function(_id) {
+  getRoaster: function(_id) {
     var roasters = this.props.data.roasters;
 
     for (var i = 0, len = roasters.length; i < len; i++) {
-      if (roasters[i]._id === _id) {
-        return this.setState({ roaster: roasters[i] });
+      if (roasters[i]._id.toString() === _id) {
+        return roasters[i];
       }
     }
-
-    this.setState({ roaster: {notFound: true} });
+    return 'NOT_FOUND';
   },
 
   componentWillMount: function() {
-    var self = this;
+    var _id = this.props.params._id,
+        roaster = this.getRoaster(_id);
 
-    this.setRoaster(this.props.params._id);
+    var offerings = roaster ? this.getOfferings(roaster._id) : [];
 
-    setTimeout(function() {
-      if (self.hasLoaded()) {
-        self.setOfferings();
-      }
-    }, 0);
-  },
-
-  isLoading: function() {
-    return Object.keys(this.state.roaster).length === 0;
+    this.setState({
+      roaster: roaster,
+      offerings: offerings,
+    });
   },
 
   isLoggedIn: function() {
     return !!this.props.user;
   },
 
-  isFound: function() {
-    return !this.state.roaster.notFound;
+  isLoading: function() {
+    return !this.state.roaster;
   },
 
-  hasLoaded: function() {
-    return this.isFound() && !this.isLoading();
+  wasntFound: function() {
+    return this.state.roaster === 'NOT_FOUND';
   },
 
   isFollowingRoaster: function() {
@@ -134,7 +128,8 @@ module.exports = React.createClass({
   },
 
   renderFound: function() {
-    var _id = this.props.params._id;
+    var _id = this.props.params._id,
+        onServer = this.isRenderingOnServer();
 
     return (
       <div className="row roasterPage">
@@ -146,11 +141,15 @@ module.exports = React.createClass({
           {this.renderOfferingsList()}
         </div>
         <div className="col-xs-12 col-md-8 background feeds">
-          <InstagramFeed _id={_id} />
-          <TwitterFeed _id={_id} />
+          <InstagramFeed _id={_id} isRenderingOnServer={onServer} />
+          <TwitterFeed _id={_id} isRenderingOnServer={onServer} />
         </div>
       </div>
     );
+  },
+
+  isRenderingOnServer: function() {
+    return typeof localStorage === 'undefined';
   },
 
   renderNotFound: function() {
@@ -169,7 +168,7 @@ module.exports = React.createClass({
 
     // Handle found or not found.
     } else {
-      if (this.hasLoaded()) {
+      if (!this.wasntFound()) {
         return this.renderFound();
       } else {
         return this.renderNotFound();

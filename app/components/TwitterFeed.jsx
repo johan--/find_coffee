@@ -7,7 +7,11 @@ var React = require('react'),
 module.exports = React.createClass({
 
   getInitialState: function() {
-    return this.checkForCurrentTweets();
+    if (this.props.isRenderingOnServer) {
+      return { tweets: null, hasLoaded: false };
+    } else {
+      return this.checkForCurrentTweets();
+    }
   },
 
   getTweetsFromTwitter: function() {
@@ -51,8 +55,10 @@ module.exports = React.createClass({
   },
 
   componentWillMount: function() {
-    if (!this.state.tweets) {
-      this.getTweetsFromTwitter();
+    if (!this.props.isRenderingOnServer) {
+      if (!this.state.tweets) {
+        this.getTweetsFromTwitter();
+      }
     }
   },
 

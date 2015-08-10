@@ -6,10 +6,8 @@ var React = require('react'),
 module.exports = React.createClass({
 
   getInitialState: function() {
-    return {
-      current: 0,
-      pics: this.checkForCurrentPics()
-    };
+    var pics = this.props.isRenderingOnServer ? null : this.checkForCurrentPics();
+    return { current: 0, pics: pics };
   },
 
   getPicsFromInstagram: function() {
@@ -42,8 +40,10 @@ module.exports = React.createClass({
   },
 
   componentWillMount: function() {
-    if (!this.hasLoaded()) {
-      this.getPicsFromInstagram();
+    if (!this.props.isRenderingOnServer) {
+      if (!this.hasLoaded()) {
+        this.getPicsFromInstagram();
+      }
     }
   },
 

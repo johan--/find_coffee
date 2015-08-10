@@ -1,9 +1,13 @@
 var cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
+    favicon = require('serve-favicon'),
     express = require('express'),
     path = require('path');
 
 module.exports = function(app) {
+
+  // Favicon
+  app.use(favicon(path.join(__dirname, '../public/images/coffee.ico')));
 
   // Parsers
   app.use(cookieParser());
@@ -16,5 +20,4 @@ module.exports = function(app) {
 
   // Static assets.
   app.use(express.static(path.join(__dirname, '../public')));
-
 };

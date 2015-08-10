@@ -31,7 +31,7 @@ module.exports = React.createClass({
   handleChange: function(e) {
     e.preventDefault();
     this.update();
-    setTimeout(this.submit.bind(this), 0);
+    setTimeout(this.submit, 0);
   },
 
   update: function() {

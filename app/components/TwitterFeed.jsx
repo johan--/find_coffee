@@ -7,21 +7,22 @@ var React = require('react'),
 module.exports = React.createClass({
 
   getInitialState: function() {
-    return {
-      tweets: this.checkForCurrentTweets()
-    };
+    return this.checkForCurrentTweets();
   },
 
   getTweetsFromTwitter: function() {
     var url  = 'https://localhost:8000/roasters/twitter/',
         _id  = this.props._id,
-        self = this;
+        self = this,
+        tweets;
 
     request(url + _id, function(err, res, body) {
       if (err) throw err;
+
       if (res.statusCode < 400) {
-        var tweets = JSON.parse(res.body);
-        self.setState({ tweets: tweets });
+        tweets = JSON.parse(res.body);
+
+        self.setState({ tweets: tweets, hasLoaded: true });
         self.setTweetsOnLocalStorage(tweets);
       }
     });
@@ -56,21 +57,22 @@ module.exports = React.createClass({
   },
 
   checkForCurrentTweets: function() {
-    var tweets = this.getTweetsFromLocalStorage();
+    var tweets = this.getTweetsFromLocalStorage(),
+        loadedTweets;
 
-    if (tweets && this.isFromToday(tweets.lastUpdated)) {
-      return tweets.tweets;
-    } else {
-      return null;
-    }
+    loadedTweets = tweets && this.isFromToday(tweets.lastUpdated) ?
+      tweets.tweets :
+      null;
+
+    return { tweets: loadedTweets, hasLoaded: true };
   },
 
   isFromToday: function(date) {
     return moment(date) >= moment().startOf('day');
   },
 
-  hasLoaded: function() {
-    return this.state.tweets && this.state.tweets.length;
+  renderNoTweets: function() {
+    return <p>It looks like this roastery doesn't have a Twitter account.</p>;
   },
 
   renderTweets: function() {
@@ -85,8 +87,19 @@ module.exports = React.createClass({
     return <p className="tweets">Loading...</p>;
   },
 
+  hasTweets: function() {
+    var tweets = this.state.tweets;
+    return tweets && tweets.length;
+  },
+
   render: function() {
-    var content = this.hasLoaded() ? this.renderTweets() : this.renderLoading();
+    var content;
+
+    if (this.state.hasLoaded) {
+      content = this.hasTweets() ? this.renderTweets() : this.renderNoTweets();
+    } else {
+      content = this.renderLoading();
+    }
 
     return (
       <div className="twitterFeed">

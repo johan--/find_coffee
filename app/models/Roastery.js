@@ -92,11 +92,17 @@ RoasterySchema.methods = {
 
   // Get recent tweets from roaster's Twitter account.
   getTweetsByUser: function(cb) {
-    Twitter.get('statuses/user_timeline', { screen_name: this.twitter.screen_name },
-      function(err, tweets, res) {
-        if (err) return cb(err);
-        cb(null, tweets);
-      });
+    var screenName = this.twitter.screen_name;
+
+    if (screenName) { // Ensure roastery has Twitter before sending request.
+      Twitter.get('statuses/user_timeline', { screen_name: screenName },
+        function(err, tweets, res) {
+          if (err) return cb(err);
+          cb(null, tweets);
+        });
+    } else {
+      cb(null, null);
+    }
   }
 
 };

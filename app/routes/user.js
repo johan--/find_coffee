@@ -51,7 +51,7 @@ module.exports = function(app) {
   // Load.
   app.get('/users/:_id', function(req, res) {
     User.load(req.params._id, function(err, userData) {
-      if (err) return res.status(404).end();
+      if (err) return res.status(500).end();
       return res.json(userData);
     });
   });
@@ -72,7 +72,7 @@ module.exports = function(app) {
         if (err.code === 11000) { // Duplicate key error
           return res.status(400).send('That username is already taken.');
         } else {
-          throw err;
+          return res.status(500).send('Error while saving user.');
         }
       }
 

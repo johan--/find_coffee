@@ -9,6 +9,8 @@ var React = require('react'),
     OfferingList = require('./OfferingList.jsx'),
     RouteHandler = Router.RouteHandler;
 
+var attempts = 0; // Used to retry requests.
+
 module.exports = React.createClass({
   mixins: [Router.State, Router.Navigation],
 
@@ -82,12 +84,23 @@ module.exports = React.createClass({
   handleClick: function() {
     var baseUrl = 'https://localhost:8000/users/follow/?',
         user_id = 'user=' + this.props.user._id,
-        roaster_id = 'roaster=' + this.state.roaster._id;
+        roaster_id = 'roaster=' + this.state.roaster._id,
+        self;
 
     var url = baseUrl + user_id + '&' + roaster_id;
 
     request(url, function(err, res, body) {
-      if (err) throw err;
+      if (err) {
+        if (attempts < 5) {
+          ++attempts;
+          self.handleClick();
+        }
+      }
+
+      if (res.statusCode === 500) {
+        // error while following user
+      }
+
       if (res.statusCode === 200) {
         var token = JSON.parse(body).token;
         LoginActions.updateUser(token);

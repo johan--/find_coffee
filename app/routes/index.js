@@ -1,13 +1,9 @@
 var react = require('./react'),
     session = require('./session'),
     user = require('./user'),
-    roastery = require('./roastery'),
-    offering = require('./offering');
+    roastery = require('./roastery');
 
 module.exports = function(app) {
-
-  // Offering routes.
-  offering(app);
 
   // User routes.
   user(app);

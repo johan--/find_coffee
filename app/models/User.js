@@ -107,7 +107,7 @@ UserSchema.statics = {
 
   sendToken: function(_id, res) {
     this.findOne({ _id: _id }, function(err, user) {
-      if (err) throw err;
+      if (err) return res.status(404).end();
       return res.status(200).json({ token: user.createToken() });
     });
   }
@@ -161,20 +161,6 @@ UserSchema.methods = {
     Offering.find(query, function(err, offerings) {
       if (err) return cb(err);
       cb(null, offerings);
-    });
-  },
-
-  // Remove roaster from list of roasteries.
-  removeRoaster: function(roasterToRemove) {
-    var list = this.roasteries.filter(function(roaster) {
-      return roaster !== roasterToRemove;
-    });
-
-    var query  = { _id: this._id },
-        update = { roasteries: list };
-
-    this.update(query, update, function(err, num) {
-      if (err) throw err;
     });
   }
 

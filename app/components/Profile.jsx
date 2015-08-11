@@ -9,6 +9,13 @@ var React = require('react'),
     LoginActions = require('../actions/LoginActions.js'),
     LoginStore = require('../stores/LoginStore.js');
 
+// Used for additional requests.
+var timesAttempted = {
+  getUser: 0,
+  unfollow: 0,
+  unwatch: 0
+};
+
 module.exports = React.createClass({
   mixins: [Router.Navigation],
 
@@ -51,7 +58,16 @@ module.exports = React.createClass({
         self = this;
 
     request(url + _id, function(err, res, body) {
-      if (err) throw err;
+      if (err) {
+        if (timesAttempted.getUser < 5) {
+          ++timesAttempted.getUser;
+          self.getUserFromServer();
+        }
+      }
+
+      if (res.statusCode === 500) {
+        // TODO: user with id wasn't found
+      }
 
       if (res.statusCode < 400) {
         var userData = JSON.parse(body);
@@ -79,22 +95,40 @@ module.exports = React.createClass({
     return typeof localStorage !== 'undefined';
   },
 
-
-  handleClick: function(info) {
+  getTypeOfClick: function(info) {
     var baseURL = 'https://localhost:8000/users/',
         user = 'user=' + this.state.user._id,
-        roaster, offering, url;
+        type, url;
 
     if (info.roaster_id) {
-      roaster = 'roaster=' + info.roaster_id;
-      url = baseURL + 'unfollow/?' + user + '&' + roaster;
+      type = 'unfollow';
+      url = baseURL + type + '/?' + user + '&' + 'roaster=' + info.roaster_id;
+
     } else if (info.offering_id) {
-      offering = 'offering=' + info.offering_id;
-      url = baseURL + 'unwatch/?' + user + '&' + offering;
+      type = 'unwatch';
+      url = baseURL + type + '/?' + user + '&' + 'offering=' + info.offering_id;
     }
 
+    return { type: type, url: url };
+  },
+
+  handleClick: function(info) {
+    var clickInfo = this.getTypeOfClick(info),
+        type = clickInfo.type,
+        url = clickInfo.url;
+
     request(url, function(err, res, body) {
-      if (err) throw err;
+      if (err) {
+        if (timesAttempted[type] < 5) {
+          ++timesAttempted[type];
+          self.handleClick(info);
+        }
+      }
+
+      if (res.statusCode === 500) {
+        // TODO: Inform user that op wasn't successful
+      }
+
       if (res.statusCode === 200) {
         var token = JSON.parse(body).token;
         LoginActions.updateUser(token);

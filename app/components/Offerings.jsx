@@ -41,7 +41,7 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div className="row">
+      <div className="row offeringsPage">
         <RouteHandler {...this.props}
                       perPage={10}
                       offerings={this.getOfferings()} />

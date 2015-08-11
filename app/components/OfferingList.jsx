@@ -99,7 +99,7 @@ var OfferingsList = React.createClass({
 
   renderFound: function() {
     return (
-      <div className="col-xs-12 col-sm-7 background offerings">
+      <div className="col-xs-12 col-sm-7 offerings">
         <List hideRoaster={this.props.hideRoaster}
               removeButton={this.props.removeButton}
               handleClick={this.handleListClick}

@@ -23,7 +23,7 @@ module.exports = function(app) {
 
       // Called once all info is loaded.
       function(err, results) {
-        if (err) throw err;
+        if (err) return res.status(500).end();
 
         var data = {
           uniqueRoasterNames: results[0],
@@ -38,10 +38,6 @@ module.exports = function(app) {
         var router = Router.create({
           location: req.url,
           routes: reactRoutes,
-
-          onError: function(err) {
-            throw err;
-          },
 
           onAbort: function(reason) {
             res.redirect('https://localhost:8000/login');

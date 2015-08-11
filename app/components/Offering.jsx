@@ -5,6 +5,8 @@ var React = require('react'),
     request = require('request'),
     Link = require('react-router').Link;
 
+var attempts = 0; // Used to retry requests.
+
 module.exports = React.createClass({
 
   getInitialState: function() {
@@ -37,11 +39,12 @@ module.exports = React.createClass({
     var offerings = this.props.offerings;
 
     for (var i = 0, len = offerings.length; i < len; i++) {
-      if (offerings[i]._id === _id) {
-        this.setState({ offering: offerings[i] });
-        break;
+      if (offerings[i]._id.toString() === _id) {
+        return this.setState({ offering: offerings[i] });
       }
     }
+
+    return this.setState({ offering: 'NOT_FOUND' });
   },
 
   componentDidMount: function() {
@@ -52,12 +55,23 @@ module.exports = React.createClass({
     var user = this.props.user,
         baseUrl = 'https://localhost:8000/users/watch/?',
         user_id = 'user=' + this.props.user._id,
-        offering_id = 'offering=' + this.props.params._id;
+        offering_id = 'offering=' + this.props.params._id,
+        self = this;
 
     var url = baseUrl + user_id + '&' + offering_id;
 
     request(url, function(err, res, body) {
-      if (err) throw err;
+      if (err) {
+        if (attempts < 5) {
+          ++attempts;
+          self.handleClick();
+        }
+      }
+
+      if (res.statusCode === 404) {
+        // TODO: User wasn't found.
+      }
+
       if (res.statusCode === 200) {
         var token = JSON.parse(body).token;
         LoginActions.updateUser(token);
@@ -80,6 +94,10 @@ module.exports = React.createClass({
 
   hasBackground: function() {
     return !!this.state.offering.background;
+  },
+
+  wasntFound: function() {
+    return this.state.offering === 'NOT_FOUND';
   },
 
   hasFlavors: function() {
@@ -198,20 +216,44 @@ module.exports = React.createClass({
     }
   },
 
+  renderNotFound: function() {
+    return (
+      <div className="col-xs-12 col-sm-7">
+        <h1>No offering was found.</h1>
+      </div>
+    );
+  },
+
+  renderLoading: function() {
+    return <div className="col-xs-12 col-sm-7"><h1>Loading...</h1></div>;
+  },
+
+  renderFound: function() {
+    return (
+      <div className="col-xs-12 col-sm-7 background overview">
+        {this.renderTitle()}
+        {this.renderFollowButton()}
+        {this.renderFlavors()}
+        {this.renderBackground()}
+        {this.renderInfo()}
+        {this.renderBooleans()}
+      </div>
+    );
+  },
+
   render: function() {
+
+    // Handle loading.
     if (this.isEmpty()) {
-      return <div className="col-xs-12 col-sm-7 offerings"><h1>Loading...</h1></div>;
+      return this.renderLoading();
+
+    // Handle found or not found.
     } else {
-      return (
-        <div className="col-xs-12 col-sm-7 background overview">
-          {this.renderTitle()}
-          {this.renderFollowButton()}
-          {this.renderFlavors()}
-          {this.renderBackground()}
-          {this.renderInfo()}
-          {this.renderBooleans()}
-        </div>
-      );
+      if (this.wasntFound()) {
+        return this.renderNotFound();
+      } else {
+        return this.renderFound();
+      }
     }
   }
 

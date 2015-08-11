@@ -12,7 +12,7 @@ module.exports = function(app) {
     }
 
     User.findOne({ username: req.body.username }, function(err, user) {
-      if (err) throw err;
+      if (err) return res.status(500).end();
 
       if (!user) {
         return res.status(400).send('No user with that username was found.');

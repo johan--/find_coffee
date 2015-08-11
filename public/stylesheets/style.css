@@ -167,7 +167,7 @@ label {
  ******************************************************/
 /* Overview
  *******************************/
-.background, .roasteries .list {
+.background, .offeringsPage .offerings, .roasteries .list {
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 5px;
   border: 1px solid black;
@@ -221,6 +221,7 @@ label {
   .roasterProfile .offerings {
     float: none;
     height: 100%;
+    width: 100%;
     overflow-y: scroll;
     overflow-x: hidden; }
   .roasterProfile .btn {

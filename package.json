@@ -17,6 +17,7 @@
     "express": "~4.12.2",
     "express-session": "~1.0.0",
     "flux": "^2.0.3",
+    "forever-monitor": "^1.6.0",
     "fresh": "^0.3.0",
     "instagram-node": "^0.5.7",
     "jsonwebtoken": "^5.0.2",

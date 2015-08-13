@@ -38,7 +38,7 @@ module.exports = React.createClass({
     for (var i = 0; i < 10; i++) {
       tweet = this.state.tweets[i];
       if (tweet) {
-        tweets.push(<Tweet created={tweet.created_at} text={tweet.text} />);
+        tweets.push(<Tweet key={i} created={tweet.created_at} text={tweet.text} />);
       }
     }
 

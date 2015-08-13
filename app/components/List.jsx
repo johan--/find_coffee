@@ -11,8 +11,9 @@ module.exports = React.createClass({
   renderList: function() {
     var list = [], self = this;
 
-    this.props.roasters.forEach(function(roaster) {
+    this.props.roasters.forEach(function(roaster, index) {
       list.push(<ListItem handleMouseOver={self.handleMouseOver}
+                          key={index}
                           roaster={roaster} />);
     });
 

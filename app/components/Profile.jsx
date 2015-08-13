@@ -143,9 +143,9 @@ module.exports = React.createClass({
     if (this.isRenderingOnClient() && this.hasValidToken()) {
 
       if (roasters.length) {
-        roasters = roasters.slice(0).map(function(roaster) {
+        roasters = roasters.slice(0).map(function(roaster, index) {
           return (
-            <li>
+            <li key={index}>
               <Link to="roaster" params={{ _id: roaster._id }}>
                 {roaster.name}
               </Link>

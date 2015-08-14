@@ -5,8 +5,8 @@ var AppDispatcher = require('../dispatcher/AppDispatcher'),
     assign = require('object-assign');
 
 var CHANGE_EVENT = 'change',
-    _user        = null,
-    _error       = null;
+    _user = null,
+    _flashMsg = null;
 
 var LoginStore = assign({}, EventEmitter.prototype, {
 
@@ -18,12 +18,12 @@ var LoginStore = assign({}, EventEmitter.prototype, {
     _user = user;
   },
 
-  getError: function() {
-    return _error;
+  getFlashMsg: function() {
+    return _flashMsg;
   },
 
-  setError: function(err) {
-    _error = err;
+  setFlashMsg: function(err) {
+    _flashMsg = err;
   },
 
   isLoggedIn: function() {
@@ -53,7 +53,7 @@ AppDispatcher.register(function(payload) {
         localStorage.setItem('jwt', action.token);
         Cookies.set('jwt', action.token);
       } 
-      LoginStore.setError(null);
+      LoginStore.setFlashMsg(null);
       LoginStore.setUser(jwt.decode(action.token));
       LoginStore.emitChange();
       break;
@@ -63,7 +63,7 @@ AppDispatcher.register(function(payload) {
         localStorage.removeItem('jwt');
         Cookies.expire('jwt');
       }
-      LoginStore.setError(null);
+      LoginStore.setFlashMsg(null);
       LoginStore.setUser(null);
       LoginStore.emitChange();
       break;
@@ -73,19 +73,19 @@ AppDispatcher.register(function(payload) {
         localStorage.setItem('jwt', action.token);
         Cookies.set('jwt', action.token);
       }
-      LoginStore.setError(null);
+      LoginStore.setFlashMsg(null);
       LoginStore.setUser(jwt.decode(action.token));
       LoginStore.emitChange();
       break;
 
-    case Constants.LOGIN_ERROR:
-      LoginStore.setError(action.error);
+    case Constants.UPDATE_FLASH_MSG:
+      LoginStore.setFlashMsg(action.msg);
       LoginStore.emitChange();
       break;
 
     default:
       break;
-  };
+  }
 });
 
 module.exports = LoginStore;

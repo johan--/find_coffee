@@ -20,7 +20,9 @@ if (token) {
 }
 
 router.run(function(Root, state) {
-  var params = state.params;
-  React.render(<Root params={params} data={data}/>,
+  var params = state.params,
+      path = state.path;
+
+  React.render(<Root params={params} path={path} data={data}/>,
       document.getElementById('mount-point'));
 });

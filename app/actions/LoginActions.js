@@ -34,11 +34,11 @@ module.exports = {
     });
   },
 
-  // Error
-  handleLoginError: function(error) {
+  // Flash Message
+  updateFlashMessage: function(message) {
     AppDispatcher.handleViewAction({
-      actionType: Constants.LOGIN_ERROR,
-      error: error
+      actionType: Constants.UPDATE_FLASH_MSG,
+      msg: message
     });
   }
 };

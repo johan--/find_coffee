@@ -5,7 +5,7 @@ var Constants = require('../constants/Constants.js'),
 function handleAuth(options, cb) {
   request.post(options, function(err, res, body) {
     if (res.statusCode >= 400) {
-      LoginActions.handleLoginError(body);
+      LoginActions.updateFlashMessage({ msg: 'XX', type: 'warning' });
     } else {
       var parsedBody = JSON.parse(body);
       LoginActions.loginUserClient(parsedBody.token);

@@ -65,6 +65,26 @@ header {
 }
 
 /******************************************************
+ Flash Messages
+ ******************************************************/
+
+.flash {
+  @extend .background;
+  width: 50%;
+  margin: 0 auto !important;
+  text-align: center;
+
+  button {
+    float: right;
+    color: black;
+  }
+
+  * {
+    display: inline-block;
+  }
+}
+
+/******************************************************
  Homepage
  ******************************************************/
 

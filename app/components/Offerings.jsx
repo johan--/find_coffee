@@ -3,7 +3,7 @@ var React = require('react'),
     Router = require('react-router'),
     RouteHandler = Router.RouteHandler,
     CoffeeForm = require('./CoffeeForm.jsx'),
-    Filter = require('../../lib/utils.js').Filter;
+    Filter = require('../../lib/Filter.js');
 
 module.exports = React.createClass({
   mixins: [Router.State, Router.Navigation],

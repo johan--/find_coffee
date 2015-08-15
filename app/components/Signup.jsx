@@ -21,18 +21,26 @@ module.exports = React.createClass({
   },
 
   handleClick: function(e) {
-    var state = this.state,
-        self = this;
-
+    var state = this.state, self = this;
     e.preventDefault();
-    AuthService.signup(state.username, state.password, state.email, function() {
-      self.transitionTo('/profile');
+
+    AuthService.signup(state.username, state.password, state.email,
+        function(validation) {
+          if (validation && validation.failed) {
+            self.setPasswordToBlank();
+          } else {
+            self.transitionTo('/profile');
+            self.setFormToBlank();
+          }
     });
-    this.setFormToBlank();
   },
 
   setFormToBlank: function() {
     this.setState({ username: '', password: '', email: '' });
+  },
+
+  setPasswordToBlank: function() {
+    this.setState({ password: '' });
   },
 
   render: function() {

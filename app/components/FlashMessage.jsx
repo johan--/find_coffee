@@ -1,6 +1,6 @@
 /** @jsx React.DOM */
 var React = require('react'),
-    LoginStore = require('../stores/LoginStore.js');
+    LoginActions = require('../actions/LoginActions.js');
 
 module.exports = React.createClass({
 
@@ -9,16 +9,11 @@ module.exports = React.createClass({
   },
 
   handleClick: function() {
-    LoginStore.setFlashMsg(null);
-    LoginStore.emitChange();
+    LoginActions.updateFlashMessage(null);
   },
 
   renderRemoveButton: function() {
-    return <button className="btn"
-                   type="button"
-                   onClick={this.handleClick}>
-            X
-          </button>;
+    return <button type="button" onClick={this.handleClick}>X</button>;
   },
 
   render: function() {

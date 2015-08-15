@@ -44,6 +44,19 @@ header {
     margin-right: 10px; }
 
 /******************************************************
+ Flash Messages
+ ******************************************************/
+.flash {
+  width: 50%;
+  margin: 0 auto !important;
+  text-align: center; }
+  .flash button {
+    float: right;
+    color: black; }
+  .flash * {
+    display: inline-block; }
+
+/******************************************************
  Homepage
  ******************************************************/
 .text-center {
@@ -167,7 +180,7 @@ label {
  ******************************************************/
 /* Overview
  *******************************/
-.background, .offeringsPage .offerings, .roasteries .list {
+.background, .flash, .offeringsPage .offerings, .roasteries .list {
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 5px;
   border: 1px solid black;

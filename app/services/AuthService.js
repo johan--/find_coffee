@@ -1,15 +1,27 @@
 var Constants = require('../constants/Constants.js'),
     LoginActions = require('../actions/LoginActions'),
+    validateInputs = require('../../lib/utils.js'),
     request = require('request');
 
 function handleAuth(options, cb) {
+  var validation = validateInputs(options.form);
+
+  // Client side validation.
+  if (validation.failed) {
+    LoginActions.updateFlashMessage({
+      msg: validation.errors[0].msg,
+      type: 'warning'
+    });
+    return cb(validation);
+  }
+
   request.post(options, function(err, res, body) {
     if (res.statusCode >= 400) {
-      LoginActions.updateFlashMessage({ msg: 'XX', type: 'warning' });
+      LoginActions.updateFlashMessage({ msg: body, type: 'warning' });
     } else {
       var parsedBody = JSON.parse(body);
       LoginActions.loginUserClient(parsedBody.token);
-      cb();
+      cb(null);
     }
   });
 }

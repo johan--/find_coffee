@@ -1,7 +1,8 @@
 /** @jsx React.DOM */
 var React = require('react'),
     request = require('request'),
-    moment = require('moment');
+    moment = require('moment'),
+    Constants = require('../constants/Constants.js');
 
 module.exports = React.createClass({
 
@@ -11,7 +12,7 @@ module.exports = React.createClass({
   },
 
   getPicsFromInstagram: function() {
-    var url  = 'https://localhost:8000/roasters/instagram/',
+    var url = Constants.INSTAGRAM_URL,
         _id  = this.props._id,
         self = this;
 

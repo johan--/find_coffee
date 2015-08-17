@@ -5,6 +5,7 @@ var React = require('react'),
     jwt = require('jsonwebtoken'),
     request = require('request'),
     mongoose = require('mongoose'),
+    Constants = require('../constants/Constants.js'),
     OfferingList = require('./OfferingList.jsx'),
     LoginActions = require('../actions/LoginActions.js'),
     LoginStore = require('../stores/LoginStore.js');
@@ -53,7 +54,7 @@ module.exports = React.createClass({
   },
 
   getUserFromServer: function() {
-    var url = 'https://localhost:8000/users/',
+    var url = Constants.USER_URL,
         _id = this.props.user._id,
         self = this;
 
@@ -96,13 +97,13 @@ module.exports = React.createClass({
   },
 
   getTypeOfClick: function(info) {
-    var baseURL = 'https://localhost:8000/users/',
+    var baseUrl = Constants.USER_URL,
         user = 'user=' + this.state.user._id,
         type, url;
 
     if (info.roaster_id) {
       type = 'unfollow';
-      url = baseURL + type + '/?' + user + '&' + 'roaster=' + info.roaster_id;
+      url = baseUrl + type + '/?' + user + '&' + 'roaster=' + info.roaster_id;
 
     } else if (info.offering_id) {
       type = 'unwatch';

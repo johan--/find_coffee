@@ -6,6 +6,7 @@ var React = require('react'),
     LoginStore = require('../stores/LoginStore.js'),
     InstagramFeed = require('./InstagramFeed.jsx'),
     TwitterFeed = require('./TwitterFeed.jsx'),
+    Constants = require('../constants/Constants.js'),
     OfferingList = require('./OfferingList.jsx'),
     RouteHandler = Router.RouteHandler;
 
@@ -82,7 +83,7 @@ module.exports = React.createClass({
   },
 
   handleClick: function() {
-    var baseUrl = 'https://localhost:8000/users/follow/?',
+    var baseUrl = Constants.FOLLOW_ROASTER_URL,
         user_id = 'user=' + this.props.user._id,
         roaster_id = 'roaster=' + this.state.roaster._id,
         self;

@@ -31,7 +31,7 @@ module.exports = {
   // Login
   login: function(username, password, cb) {
     var options = {
-      url:  Constants.LOGIN_URL,
+      url:  Constants.NEW_SESSION_URL,
       form: { username: username, password: password }
     };
 

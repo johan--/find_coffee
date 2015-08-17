@@ -2,6 +2,7 @@
 var React = require('react'),
     request = require('request'),
     Tweet = require('./Tweet.jsx'),
+    Constants = require('../constants/Constants.js'),
     moment = require('moment');
 
 module.exports = React.createClass({
@@ -15,7 +16,7 @@ module.exports = React.createClass({
   },
 
   getTweetsFromTwitter: function() {
-    var url  = 'https://localhost:8000/roasters/twitter/',
+    var url = Constants.TWITTER_URL,
         _id  = this.props._id,
         self = this,
         tweets;

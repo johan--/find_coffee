@@ -2,6 +2,7 @@
 var React = require('react'),
     mongoose = require('mongoose'),
     LoginActions = require('../actions/LoginActions.js'),
+    Constants = require('../constants/Constants.js'),
     request = require('request'),
     Link = require('react-router').Link;
 
@@ -53,7 +54,7 @@ module.exports = React.createClass({
 
   handleClick: function() {
     var user = this.props.user,
-        baseUrl = 'https://localhost:8000/users/watch/?',
+        baseUrl = Constants.WATCH_OFFERING_URL,
         user_id = 'user=' + this.props.user._id,
         offering_id = 'offering=' + this.props.params._id,
         self = this;

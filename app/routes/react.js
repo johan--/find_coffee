@@ -6,6 +6,7 @@ var React = require('react'),
     Offering = mongoose.model('Offering'),
     Roastery = mongoose.model('Roastery'),
     async = require('async'),
+    Constants = require('../constants/Constants.js'),
     LoginActions = require('../actions/LoginActions.js');
 
 module.exports = function(app) {
@@ -40,7 +41,7 @@ module.exports = function(app) {
           routes: reactRoutes,
 
           onAbort: function(reason) {
-            res.redirect('https://localhost:8000/login');
+            res.redirect(Constants.LOGIN_URL);
           }
         });
 

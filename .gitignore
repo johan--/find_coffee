@@ -2,5 +2,4 @@
 node_modules
 .sass-cache
 ssl
-public/scripts
 todo.txt

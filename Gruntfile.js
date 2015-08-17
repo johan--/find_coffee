@@ -33,5 +33,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-sass');
 
-  grunt.registerTask('default', [ 'browserify', 'sass' ]);
+  grunt.registerTask('default', [ 'browserify', 'uglify', 'sass' ]);
 };

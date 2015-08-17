@@ -7,8 +7,6 @@ var middleware = require('./app/middleware'),
     express    = require('express'),
     routes     = require('./app/routes'),
     http       = require('http'),
-    path       = require('path'),
-    fs         = require('fs'),
     app        = express();
 
 // Dokku will handle HTTPS, so use HTTP here.

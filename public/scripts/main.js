@@ -522,7 +522,8 @@ module.exports = React.createClass({displayName: "exports",
 /** @jsx React.DOM */
 var React = require('react'),
     request = require('request'),
-    moment = require('moment');
+    moment = require('moment'),
+    Constants = require('../constants/Constants.js');
 
 module.exports = React.createClass({displayName: "exports",
 
@@ -532,7 +533,7 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   getPicsFromInstagram: function() {
-    var url  = 'https://localhost:8000/roasters/instagram/',
+    var url = Constants.INSTAGRAM_URL,
         _id  = this.props._id,
         self = this;
 
@@ -652,7 +653,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"moment":241,"react":679,"request":680}],11:[function(require,module,exports){
+},{"../constants/Constants.js":27,"moment":241,"react":679,"request":680}],11:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     ListItem = require('./RoasterListItem.jsx');
@@ -771,6 +772,7 @@ module.exports = React.createClass({displayName: "exports",
 var React = require('react'),
     mongoose = require('mongoose'),
     LoginActions = require('../actions/LoginActions.js'),
+    Constants = require('../constants/Constants.js'),
     request = require('request'),
     Link = require('react-router').Link;
 
@@ -822,7 +824,7 @@ module.exports = React.createClass({displayName: "exports",
 
   handleClick: function() {
     var user = this.props.user,
-        baseUrl = 'https://localhost:8000/users/watch/?',
+        baseUrl = Constants.WATCH_OFFERING_URL,
         user_id = 'user=' + this.props.user._id,
         offering_id = 'offering=' + this.props.params._id,
         self = this;
@@ -1028,7 +1030,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"../actions/LoginActions.js":1,"mongoose":242,"react":679,"react-router":510,"request":680}],14:[function(require,module,exports){
+},{"../actions/LoginActions.js":1,"../constants/Constants.js":27,"mongoose":242,"react":679,"react-router":510,"request":680}],14:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     NotFound = require('./404.jsx');
@@ -1291,6 +1293,7 @@ var React = require('react'),
     jwt = require('jsonwebtoken'),
     request = require('request'),
     mongoose = require('mongoose'),
+    Constants = require('../constants/Constants.js'),
     OfferingList = require('./OfferingList.jsx'),
     LoginActions = require('../actions/LoginActions.js'),
     LoginStore = require('../stores/LoginStore.js');
@@ -1339,7 +1342,7 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   getUserFromServer: function() {
-    var url = 'https://localhost:8000/users/',
+    var url = Constants.USER_URL,
         _id = this.props.user._id,
         self = this;
 
@@ -1382,13 +1385,13 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   getTypeOfClick: function(info) {
-    var baseURL = 'https://localhost:8000/users/',
+    var baseUrl = Constants.USER_URL,
         user = 'user=' + this.state.user._id,
         type, url;
 
     if (info.roaster_id) {
       type = 'unfollow';
-      url = baseURL + type + '/?' + user + '&' + 'roaster=' + info.roaster_id;
+      url = baseUrl + type + '/?' + user + '&' + 'roaster=' + info.roaster_id;
 
     } else if (info.offering_id) {
       type = 'unwatch';
@@ -1528,7 +1531,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"../actions/LoginActions.js":1,"../stores/LoginStore.js":32,"./OfferingList.jsx":15,"jsonwebtoken":229,"mongoose":242,"react":679,"react-router":510,"request":680}],19:[function(require,module,exports){
+},{"../actions/LoginActions.js":1,"../constants/Constants.js":27,"../stores/LoginStore.js":32,"./OfferingList.jsx":15,"jsonwebtoken":229,"mongoose":242,"react":679,"react-router":510,"request":680}],19:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     Router = require('react-router'),
@@ -1537,6 +1540,7 @@ var React = require('react'),
     LoginStore = require('../stores/LoginStore.js'),
     InstagramFeed = require('./InstagramFeed.jsx'),
     TwitterFeed = require('./TwitterFeed.jsx'),
+    Constants = require('../constants/Constants.js'),
     OfferingList = require('./OfferingList.jsx'),
     RouteHandler = Router.RouteHandler;
 
@@ -1613,7 +1617,7 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   handleClick: function() {
-    var baseUrl = 'https://localhost:8000/users/follow/?',
+    var baseUrl = Constants.FOLLOW_ROASTER_URL,
         user_id = 'user=' + this.props.user._id,
         roaster_id = 'roaster=' + this.state.roaster._id,
         self;
@@ -1722,7 +1726,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"../actions/LoginActions.js":1,"../stores/LoginStore.js":32,"./InstagramFeed.jsx":10,"./OfferingList.jsx":15,"./TwitterFeed.jsx":26,"react":679,"react-router":510,"request":680}],20:[function(require,module,exports){
+},{"../actions/LoginActions.js":1,"../constants/Constants.js":27,"../stores/LoginStore.js":32,"./InstagramFeed.jsx":10,"./OfferingList.jsx":15,"./TwitterFeed.jsx":26,"react":679,"react-router":510,"request":680}],20:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     Router = require('react-router'),
@@ -1968,6 +1972,7 @@ module.exports = React.createClass({displayName: "exports",
 var React = require('react'),
     request = require('request'),
     Tweet = require('./Tweet.jsx'),
+    Constants = require('../constants/Constants.js'),
     moment = require('moment');
 
 module.exports = React.createClass({displayName: "exports",
@@ -1981,7 +1986,7 @@ module.exports = React.createClass({displayName: "exports",
   },
 
   getTweetsFromTwitter: function() {
-    var url  = 'https://localhost:8000/roasters/twitter/',
+    var url = Constants.TWITTER_URL,
         _id  = this.props._id,
         self = this,
         tweets;
@@ -2101,21 +2106,29 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"./Tweet.jsx":25,"moment":241,"react":679,"request":680}],27:[function(require,module,exports){
-var BASE_URL = 'https://localhost:8000';
+},{"../constants/Constants.js":27,"./Tweet.jsx":25,"moment":241,"react":679,"request":680}],27:[function(require,module,exports){
+(function (process){
+var BASE_URL = process.env.SITE_URL || 'http://coffee.lyleblack.com';
 
 module.exports = {
-  BASE_URL:    BASE_URL,
-  SIGNUP_URL:  BASE_URL + '/users/new',
-  LOGIN_URL:   BASE_URL + '/sessions/new',
-  LOGOUT_URL:  BASE_URL + '/logout',
-  LOGIN_USER:  'LOGIN_USER',
-  LOGOUT_USER: 'LOGOUT-USER',
-  UPDATE_USER: 'UPDATE_USER',
-  UPDATE_FLASH_MSG: 'UPDATE_FLASH_MSG'
+  BASE_URL:           BASE_URL,
+  SIGNUP_URL:         BASE_URL + '/users/new',
+  LOGIN_URL:          BASE_URL + '/login',
+  NEW_SESSION_URL:    BASE_URL + '/sessions/new',
+  LOGOUT_URL:         BASE_URL + '/logout',
+  INSTAGRAM_URL:      BASE_URL + '/roasters/instagram/',
+  TWITTER_URL:        BASE_URL + '/roasters/twitter/',
+  WATCH_OFFERING_URL: BASE_URL + '/users/watch/?',
+  FOLLOW_ROASTER_URL: BASE_URL + '/users/follow/?',
+  USER_URL:           BASE_URL + '/users/',
+  LOGIN_USER:         'LOGIN_USER',
+  LOGOUT_USER:        'LOGOUT-USER',
+  UPDATE_USER:        'UPDATE_USER',
+  UPDATE_FLASH_MSG:   'UPDATE_FLASH_MSG'
 };
 
-},{}],28:[function(require,module,exports){
+}).call(this,require('_process'))
+},{"_process":206}],28:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher,
     assign = require('object-assign');
 
@@ -2253,7 +2266,7 @@ module.exports = {
   // Login
   login: function(username, password, cb) {
     var options = {
-      url:  Constants.LOGIN_URL,
+      url:  Constants.NEW_SESSION_URL,
       form: { username: username, password: password }
     };
 

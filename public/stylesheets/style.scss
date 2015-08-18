@@ -9,12 +9,7 @@ $font-stack: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", He
  ******************************************************/
 
 body {
-  background: url("/images/coffee_large.png") no-repeat center center fixed;
-  background-attachment: fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  background: #222;
   color: white;
   font-family: "Amatic SC", $font-stack;
 }
@@ -70,12 +65,15 @@ header {
 
 .flash {
   @extend .background;
+  position: relative;
   width: 50%;
   margin: 0 auto !important;
   text-align: center;
 
   button {
-    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
     color: black;
   }
 
@@ -94,12 +92,6 @@ header {
 
 .greeting {
   margin-top: 185px;
-
-  h1 {
-    @extend .background;
-    font-size: 3.35em;
-    color: white;
-  }
 
   a {
     display: block;
@@ -163,15 +155,16 @@ label {
  ******************************************************/
 
 .offeringsForm {
-  width: 350px;
+  max-width: 350px;
   float: right;
+  margin-bottom: 15px;
 
   select {
-    max-width: 300px;
+    max-width: 200px;
   }
 
   option {
-    max-width: 300px;
+    max-width: 200px;
   }
 }
 
@@ -314,7 +307,6 @@ label {
 
 .feeds {
   float: right;
-  min-width: 400px;
   width: 60%;
 }
 
@@ -416,9 +408,10 @@ label {
 }
 
 .tweets {
-  height: 100px;
+  height: 150px;
   overflow-y: scroll;
   margin-left: 20px;
+  padding: 0;
 }
 
 .tweetText {
@@ -484,7 +477,7 @@ label {
 
   .feeds,
   .roasterProfile {
-    margin: 10px, auto;
+    margin: 10px auto;
     width: 90%;
     float: none;
     text-align: center;
@@ -497,6 +490,21 @@ label {
 
   .roasterProfile .offerings {
     margin: 0 auto;
+  }
+}
+
+@media screen and (min-width: 401px) {
+  body {
+    background: url("/images/coffee_large.png") no-repeat center center fixed;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+
+  .greeting a {
+    color: black
   }
 }
 

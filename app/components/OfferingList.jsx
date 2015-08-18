@@ -109,8 +109,8 @@ var OfferingsList = React.createClass({
                        breakLabel={<li className="break"><a href="">...</a></li>}
                        buttons={this.getButtons()}
                        pageNum={this.state.pageNum}
-                       marginPagesDisplayed={2}
-                       pageRangeDisplayed={5}
+                       marginPagesDisplayed={1}
+                       pageRangeDisplayed={1}
                        clickCallback={this.handlePaginationClick}
                        forceSelected={this.state.selected}
                        containerClassName={"pagination"}

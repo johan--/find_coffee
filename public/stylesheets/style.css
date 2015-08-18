@@ -3,12 +3,7 @@
  General
  ******************************************************/
 body {
-  background: url("/images/coffee_large.png") no-repeat center center fixed;
-  background-attachment: fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  background: #222;
   color: white;
   font-family: "Amatic SC", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif; }
 
@@ -47,11 +42,14 @@ header {
  Flash Messages
  ******************************************************/
 .flash {
+  position: relative;
   width: 50%;
   margin: 0 auto !important;
   text-align: center; }
   .flash button {
-    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
     color: black; }
   .flash * {
     display: inline-block; }
@@ -64,9 +62,6 @@ header {
 
 .greeting {
   margin-top: 185px; }
-  .greeting h1 {
-    font-size: 3.35em;
-    color: white; }
   .greeting a {
     display: block;
     margin-top: 50px;
@@ -116,12 +111,13 @@ label {
 /* Coffee Form
  ******************************************************/
 .offeringsForm {
-  width: 350px;
-  float: right; }
+  max-width: 350px;
+  float: right;
+  margin-bottom: 15px; }
   .offeringsForm select {
-    max-width: 300px; }
+    max-width: 200px; }
   .offeringsForm option {
-    max-width: 300px; }
+    max-width: 200px; }
 
 /* Signup/Login Forms
  ******************************************************/
@@ -179,7 +175,7 @@ label {
  ******************************************************/
 /* Overview
  *******************************/
-.background, .flash, .greeting h1, .offeringsPage .offerings, .roasteries .list {
+.background, .flash, .offeringsPage .offerings, .roasteries .list {
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 5px;
   border: 1px solid black;
@@ -223,7 +219,6 @@ label {
 
 .feeds {
   float: right;
-  min-width: 400px;
   width: 60%; }
 
 .roasterProfile {
@@ -293,9 +288,10 @@ label {
   margin-bottom: 10px; }
 
 .tweets {
-  height: 100px;
+  height: 150px;
   overflow-y: scroll;
-  margin-left: 20px; }
+  margin-left: 20px;
+  padding: 0; }
 
 .tweetText {
   font-family: Helvetica, sans-serif;
@@ -346,7 +342,7 @@ label {
 
   .feeds,
   .roasterProfile {
-    margin: 10px, auto;
+    margin: 10px auto;
     width: 90%;
     float: none;
     text-align: center; }
@@ -357,6 +353,17 @@ label {
 
   .roasterProfile .offerings {
     margin: 0 auto; } }
+@media screen and (min-width: 401px) {
+  body {
+    background: url("/images/coffee_large.png") no-repeat center center fixed;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover; }
+
+  .greeting a {
+    color: black; } }
 @media screen and (max-width: 600px) {
   .offeringsForm,
   .overview {

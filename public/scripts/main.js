@@ -504,14 +504,13 @@ var React = require('react'),
 module.exports = React.createClass({displayName: "exports",
 
   getMessage: function() {
-    return "Search the latest coffees from the country's best roasters.";
+    return "Find your next coffee";
   },
 
   render: function() {
     return (
       React.createElement("div", {className: "text-center greeting"}, 
-        React.createElement("h1", null, this.getMessage()), 
-        React.createElement(Link, {to: "offerings"}, "Search all Offerings")
+        React.createElement(Link, {to: "offerings"}, this.getMessage())
       )
     );
   }
@@ -1159,8 +1158,8 @@ var OfferingsList = React.createClass({displayName: "OfferingsList",
                        breakLabel: React.createElement("li", {className: "break"}, React.createElement("a", {href: ""}, "...")), 
                        buttons: this.getButtons(), 
                        pageNum: this.state.pageNum, 
-                       marginPagesDisplayed: 2, 
-                       pageRangeDisplayed: 5, 
+                       marginPagesDisplayed: 1, 
+                       pageRangeDisplayed: 1, 
                        clickCallback: this.handlePaginationClick, 
                        forceSelected: this.state.selected, 
                        containerClassName: "pagination", 

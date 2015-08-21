@@ -772,6 +772,7 @@ var React = require('react'),
     mongoose = require('mongoose'),
     LoginActions = require('../actions/LoginActions.js'),
     Constants = require('../constants/Constants.js'),
+    getDecodedText = require('../../lib/utils.js').getDecodedText,
     request = require('request'),
     Link = require('react-router').Link;
 
@@ -783,12 +784,6 @@ module.exports = React.createClass({displayName: "exports",
     return {
       offering: {}
     };
-  },
-
-  getFlavors: function() {
-    if (this.hasFlavors()) {
-      return this.state.offering.flavors.join(', ');
-    }
   },
 
   getValue: function(value) {
@@ -908,7 +903,9 @@ module.exports = React.createClass({displayName: "exports",
       return (
         React.createElement("p", null, 
           React.createElement("span", {className: "background-info category"}, "Background:"), 
-          React.createElement("span", {className: "value"}, this.state.offering.background)
+          React.createElement("span", {className: "value"}, 
+            getDecodedText(this.state.offering.background)
+          )
         )
       );
     }
@@ -916,21 +913,33 @@ module.exports = React.createClass({displayName: "exports",
 
   renderFlavors: function() {
     if (this.hasFlavors()) {
+      var flavors = this.state.offering.flavors.join(', ');
+
       return (
         React.createElement("p", null, 
           React.createElement("span", {className: "flavors category"}, "Flavors:"), 
-          React.createElement("span", {className: "value"}, this.getFlavors())
+          React.createElement("span", {className: "value"}, 
+            getDecodedText(flavors)
+          )
         )
       );
     }
   },
 
   renderValue: function(value) {
-    return React.createElement("span", {className: "value"}, this.getValue(value));
+    return (
+      React.createElement("span", {className: "value"}, 
+        getDecodedText(this.getValue(value))
+      )
+    );
   },
 
   renderCategory: function(category) {
-    return React.createElement("span", {className: "category"}, category, ":");
+    return (
+      React.createElement("span", {className: "category"}, 
+        getDecodedText(category), ":"
+      )
+    );
   },
 
   renderList: function(categories) {
@@ -1029,7 +1038,7 @@ module.exports = React.createClass({displayName: "exports",
 
 });
 
-},{"../actions/LoginActions.js":1,"../constants/Constants.js":27,"mongoose":308,"react":745,"react-router":576,"request":746}],14:[function(require,module,exports){
+},{"../../lib/utils.js":34,"../actions/LoginActions.js":1,"../constants/Constants.js":27,"mongoose":308,"react":745,"react-router":576,"request":746}],14:[function(require,module,exports){
 /** @jsx React.DOM */
 var React = require('react'),
     NotFound = require('./404.jsx');
@@ -1990,8 +1999,6 @@ module.exports = React.createClass({displayName: "exports",
         _id  = this.props._id,
         self = this,
         tweets;
-
-    var url = 'http://localhost:8000/roasters/twitter/';
 
     request(url + _id, function(err, res, body) {
       if (err) return self.setState({ tweets: 'ERR_WHILE_LOADING' });

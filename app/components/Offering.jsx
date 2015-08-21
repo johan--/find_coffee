@@ -3,6 +3,7 @@ var React = require('react'),
     mongoose = require('mongoose'),
     LoginActions = require('../actions/LoginActions.js'),
     Constants = require('../constants/Constants.js'),
+    getDecodedText = require('../../lib/utils.js').getDecodedText,
     request = require('request'),
     Link = require('react-router').Link;
 
@@ -14,12 +15,6 @@ module.exports = React.createClass({
     return {
       offering: {}
     };
-  },
-
-  getFlavors: function() {
-    if (this.hasFlavors()) {
-      return this.state.offering.flavors.join(', ');
-    }
   },
 
   getValue: function(value) {
@@ -139,7 +134,9 @@ module.exports = React.createClass({
       return (
         <p>
           <span className="background-info category">Background:</span>
-          <span className="value">{this.state.offering.background}</span>
+          <span className="value">
+            {getDecodedText(this.state.offering.background)}
+          </span>
         </p>
       );
     }
@@ -147,21 +144,33 @@ module.exports = React.createClass({
 
   renderFlavors: function() {
     if (this.hasFlavors()) {
+      var flavors = this.state.offering.flavors.join(', ');
+
       return (
         <p>
           <span className="flavors category">Flavors:</span>
-          <span className="value">{this.getFlavors()}</span>
+          <span className="value">
+            {getDecodedText(flavors)}
+          </span>
         </p>
       );
     }
   },
 
   renderValue: function(value) {
-    return <span className="value">{this.getValue(value)}</span>;
+    return (
+      <span className="value">
+        {getDecodedText(this.getValue(value))}
+      </span>
+    );
   },
 
   renderCategory: function(category) {
-    return <span className="category">{category}:</span>;
+    return (
+      <span className="category">
+        {getDecodedText(category)}:
+      </span>
+    );
   },
 
   renderList: function(categories) {

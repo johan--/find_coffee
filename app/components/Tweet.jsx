@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react'),
-    moment = require('moment');
+    moment = require('moment'),
+    getDecodedText = require('../../lib/utils.js').getDecodedText;
 
 module.exports = React.createClass({
 
@@ -13,7 +14,7 @@ module.exports = React.createClass({
     return (
       <li className="tweet">
         <span className="tweetTime">{this.getFormattedTime()}</span><br/>
-        <span className="tweetText">{this.props.text}</span>
+        <span className="tweetText">{getDecodedText(this.props.text)}</span>
       </li>
     );
   }

@@ -1,6 +1,6 @@
 var Constants = require('../constants/Constants.js'),
     LoginActions = require('../actions/LoginActions'),
-    validateInputs = require('../../lib/utils.js'),
+    validateInputs = require('../../lib/utils.js').validateInputs,
     request = require('request');
 
 function handleAuth(options, cb) {

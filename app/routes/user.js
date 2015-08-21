@@ -1,8 +1,7 @@
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     async = require('async'),
-    validateInputs = require('../../lib/utils.js');
-
+    validateInputs = require('../../lib/utils.js').validateInputs;
 
 module.exports = function(app) {
 

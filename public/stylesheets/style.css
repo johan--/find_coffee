@@ -4,11 +4,6 @@
  ******************************************************/
 body {
   background: #222;
-  background-attachment: fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   color: white;
   font-family: "Amatic SC", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif; }
 
@@ -220,11 +215,12 @@ label {
 /* Roaster Page
  *******************************/
 .feeds, .roasterProfile {
-  margin: 10px; }
+  margin: 10px;
+  overflow: hidden; }
 
 .feeds {
   float: right;
-  width: 100%; }
+  width: 60%; }
 
 .roasterProfile {
   float: left;
@@ -360,10 +356,12 @@ label {
     margin: 0 auto; } }
 @media screen and (min-width: 401px) {
   body {
-    background: url("/images/coffee_large.png") no-repeat center center fixed; }
-
-  .feeds {
-    width: 60%; }
+    background: url("/images/coffee_large.png") no-repeat center center fixed;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover; }
 
   .greeting a {
     color: black; } }
